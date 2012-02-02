@@ -1,7 +1,7 @@
 <?php	##################
 	#
 	#	rah_sitemap-plugin for Textpattern
-	#	version 0.8
+	#	version 0.9
 	#	by Jukka Svahn
 	#	http://rahforum.biz
 	#
@@ -114,10 +114,12 @@
 			);
 		
 		foreach($rs as $a) {
-			
+
 			if(in_array($a['type'].'_||_'.$a['name'],$not))
 				continue;
-			
+
+			$c = $thiscategory['c'] = $pretext['c'] = $thispage['c'] = $a['name'];
+
 			if($pref['permlink_category'])
 				$out[] = 
 					
