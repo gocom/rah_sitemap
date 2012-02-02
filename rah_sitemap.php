@@ -23,7 +23,8 @@
 		register_callback('rah_sitemap_head', 'admin_side', 'head_end');
 		register_callback('rah_sitemap_prefs', 'plugin_prefs.rah_sitemap');
 		register_callback('rah_sitemap_install', 'plugin_lifecycle.rah_sitemap');
-	} else 
+	}
+	elseif(@txpinterface == 'public')
 		register_callback('rah_sitemap', 'textpattern');
 
 /**
