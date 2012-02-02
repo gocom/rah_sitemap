@@ -1,20 +1,24 @@
-<?php	##################
-	#
-	#	rah_sitemap-plugin for Textpattern
-	#	version 1.3
-	#	by Jukka Svahn
-	#	http://rahforum.biz
-	#
-	#	Copyright (C) 2011 Jukka Svahn <http://rahforum.biz>
-	#	Licensed under GNU Genral Public License version 2
-	#	http://www.gnu.org/licenses/gpl-2.0.html
-	#
-	###################
+<?php
+
+/**
+ * Rah_sitemap plugin for Textpattern CMS
+ *
+ * @author Jukka Svahn
+ * @date 2008-
+ * @license GNU GPLv2
+ * @link http://rahforum.biz/plugins/rah_sitemap
+ *
+ * Requires Textpattern v4.4.1 or newer.
+ *
+ * Copyright (C) 2012 Jukka Svahn <http://rahforum.biz>
+ * Licensed under GNU Genral Public License version 2
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 	if(@txpinterface == 'admin') {
 		add_privs('rah_sitemap','1,2');
 		add_privs('plugin_prefs.rah_sitemap','1,2');
-		register_tab('extensions','rah_sitemap',gTxt('rah_sitemap') == 'rah_sitemap' ? 'Sitemap' : gTxt('rah_sitemap'));
+		register_tab('extensions', 'rah_sitemap', gTxt('rah_sitemap'));
 		register_callback('rah_sitemap_page','rah_sitemap');
 		register_callback('rah_sitemap_head','admin_side','head_end');
 		register_callback('rah_sitemap_prefs','plugin_prefs.rah_sitemap');
@@ -23,12 +27,12 @@
 		register_callback('rah_sitemap','textpattern');
 
 /**
-	Installer. Creates tables and adds the default rows
-	@param $event string Admin-side callback event.
-	@param $step string Admin-side plugin-lifecycle step.
-*/
+ * Installer. Creates tables and adds the default rows
+ * @param string $event Admin-side callback event.
+ * @param string $step Admin-side plugin-lifecycle step.
+ */
 
-	function rah_sitemap_install($event='',$step='') {
+	function rah_sitemap_install($event='', $step='') {
 		
 		if($step == 'deleted') {
 			
