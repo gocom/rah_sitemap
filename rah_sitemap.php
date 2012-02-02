@@ -16,15 +16,15 @@
  */
 
 	if(@txpinterface == 'admin') {
-		add_privs('rah_sitemap','1,2');
-		add_privs('plugin_prefs.rah_sitemap','1,2');
+		add_privs('rah_sitemap', '1,2');
+		add_privs('plugin_prefs.rah_sitemap', '1,2');
 		register_tab('extensions', 'rah_sitemap', gTxt('rah_sitemap'));
-		register_callback('rah_sitemap_page','rah_sitemap');
-		register_callback('rah_sitemap_head','admin_side','head_end');
-		register_callback('rah_sitemap_prefs','plugin_prefs.rah_sitemap');
-		register_callback('rah_sitemap_install','plugin_lifecycle.rah_sitemap');
+		register_callback('rah_sitemap_page', 'rah_sitemap');
+		register_callback('rah_sitemap_head', 'admin_side', 'head_end');
+		register_callback('rah_sitemap_prefs', 'plugin_prefs.rah_sitemap');
+		register_callback('rah_sitemap_install', 'plugin_lifecycle.rah_sitemap');
 	} else 
-		register_callback('rah_sitemap','textpattern');
+		register_callback('rah_sitemap', 'textpattern');
 
 /**
  * Installer. Creates tables and adds the default rows
