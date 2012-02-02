@@ -1,19 +1,19 @@
 <?php	##################
 	#
 	#	rah_sitemap-plugin for Textpattern
-	#	version 0.6
+	#	version 0.7
 	#	by Jukka Svahn
 	#	http://rahforum.biz
 	#
 	###################
 
 	if(@txpinterface == 'admin') {
-		add_privs('rah_sitemap', '1,2');
-		register_tab('extensions', 'rah_sitemap', 'Sitemap');
-		register_callback('rah_sitemap_page', 'rah_sitemap');
+		add_privs('rah_sitemap','1,2');
+		register_tab('extensions','rah_sitemap','Sitemap');
+		register_callback('rah_sitemap_page','rah_sitemap');
 		register_callback('rah_sitemap_head','admin_side','head_end');
 	} else 
-		register_callback('rah_sitemap', 'textpattern');
+		register_callback('rah_sitemap','textpattern');
 
 	function rah_sitemap_delivery() {
 		global $pretext;
@@ -352,12 +352,12 @@
 			
 			'		<div class="rah_sitemap_more">'.n.
 			
-			'		<p class="rah_sitemap_paragraph"><strong>Timestamps.</strong> Customize the date format used in last modified timestamps. Use <a href="http://php.net/manual/en/function.date.php">date()</a> string values. If unset (left empty) default ISO 8601 date (<code>c</code>) is used. Use this setting if you want to hard-code/override timestamps, timezones or if your server doesn\'t support <code>c</code> format.</p>'.n.
+			'			<p class="rah_sitemap_paragraph"><strong>Timestamps.</strong> Customize the date format used in last modified timestamps. Use <a href="http://php.net/manual/en/function.date.php">date()</a> string values. If unset (left empty) default ISO 8601 date (<code>c</code>) is used. Use this setting if you want to hard-code/override timestamps, timezones or if your server doesn\'t support <code>c</code> format.</p>'.n.
 			
-			'		<p>'.n.
-			'			<label for="rah_sitemap_timestampformat">Format:</label><br />'.n.
-			'			<input type="text" class="edit" style="width: 940px;" name="timestampformat" id="rah_sitemap_timestampformat" value="'.htmlspecialchars($pref['timestampformat']).'" />'.n.
-			'		</p>'.n.
+			'			<p>'.n.
+			'				<label for="rah_sitemap_timestampformat">Format:</label><br />'.n.
+			'				<input type="text" class="edit" style="width: 940px;" name="timestampformat" id="rah_sitemap_timestampformat" value="'.htmlspecialchars($pref['timestampformat']).'" />'.n.
+			'			</p>'.n.
 			
 			'		</div>'.n.
 			
@@ -367,19 +367,19 @@
 			
 			'		<div class="rah_sitemap_more">'.n.
 			
-			'		<p class="rah_sitemap_paragraph"><strong>Permlinks.</strong> With these settings you can make the Sitemap\'s URLs to match your own URL rewriting rules, or permlinks made by a <em>custom permlink rule</em> plugin. You can leave these fields empty, if using TXP\'s inbuild permlink rules. Note that these setting do not rewrite TXP\'s permlinks for you, use only for matching not rewriting!</p>'.n.
-			'		<p>'.n.
-			'			<label for="rah_sitemap_permlink_category">Category URLs:</label><br />'.n.
-			'			<input type="text" class="edit" style="width: 940px;" name="permlink_category" id="rah_sitemap_permlink_category" value="'.htmlspecialchars($pref['permlink_category']).'" />'.n.
-			'		</p>'.n.
-			'		<p>'.n.
-			'			<label for="rah_sitemap_permlink_section">Section URLs:</label><br />'.n.
-			'			<input type="text" class="edit" style="width: 940px;" name="permlink_section" id="rah_sitemap_permlink_section" value="'.htmlspecialchars($pref['permlink_section']).'" />'.n.
-			'		</p>'.n.
-			'		<p>'.n.
-			'			<label for="rah_sitemap_permlink_article">Article URLs:</label><br />'.n.
-			'			<input type="text" class="edit" style="width: 940px;" name="permlink_article" id="rah_sitemap_permlink_article" value="'.htmlspecialchars($pref['permlink_article']).'" />'.n.
-			'		</p>'.n.
+			'			<p class="rah_sitemap_paragraph"><strong>Permlinks.</strong> With these settings you can make the Sitemap\'s URLs to match your own URL rewriting rules, or permlinks made by a <em>custom permlink rule</em> plugin. You can leave these fields empty, if using TXP\'s inbuild permlink rules. Note that these setting do not rewrite TXP\'s permlinks for you, use only for matching not rewriting!</p>'.n.
+			'			<p>'.n.
+			'				<label for="rah_sitemap_permlink_category">Category URLs:</label><br />'.n.
+			'				<input type="text" class="edit" name="permlink_category" id="rah_sitemap_permlink_category" value="'.htmlspecialchars($pref['permlink_category']).'" />'.n.
+			'			</p>'.n.
+			'			<p>'.n.
+			'				<label for="rah_sitemap_permlink_section">Section URLs:</label><br />'.n.
+			'				<input type="text" class="edit" name="permlink_section" id="rah_sitemap_permlink_section" value="'.htmlspecialchars($pref['permlink_section']).'" />'.n.
+			'			</p>'.n.
+			'			<p>'.n.
+			'				<label for="rah_sitemap_permlink_article">Article URLs:</label><br />'.n.
+			'				<input type="text" class="edit" name="permlink_article" id="rah_sitemap_permlink_article" value="'.htmlspecialchars($pref['permlink_article']).'" />'.n.
+			'			</p>'.n.
 			
 			'		</div>'.n.
 			
@@ -567,7 +567,7 @@
 		rah_sitemap_custom_list('URL added.');
 		return;
 	}
-	
+
 	function rah_sitemap_head() {
 		
 		global $event;
@@ -849,6 +849,6 @@ EOF;
 				"url='".doSlash($name)."'"
 			);
 		
-		rah_sitemap_custom_form('Deleted.');
+		rah_sitemap_custom_list('Selection deleted');
 	}
 ?>

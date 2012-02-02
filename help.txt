@@ -2,8 +2,8 @@ h1. rah_sitemap
 
 p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. Easily build valid "Sitemap.org":http://www.sitemap.org XML(eXtensible Markup Language) sitemaps for search engines, including Google. Supports categories, sections, articles and even custom URLs. All settings can be managed from clean interface. No dive to code required.
 
-* Version: 0.6
-* Updated: 2010/05/30 07:45 AM UTC
+* Version: 0.7
+* Updated: 2010/05/30 12:30 PM UTC
 
 h3. Table of Contents
 
@@ -67,6 +67,11 @@ p. These URL settings are used for section links that appear in the sitemap. To 
 bc. <txp:site_url />section/<txp:section />
 
 h3(#changelog). Changelog
+
+p. *Version 0.7*
+
+* Fixed: now deleting custom url leads back to the list view, not to the editing form.
+* Removed some leftover inline style from v0.6.
 
 p. *Version 0.6*
 
