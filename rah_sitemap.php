@@ -34,6 +34,8 @@
 
 	function rah_sitemap_install($event='', $step='') {
 		
+		global $prefs;
+		
 		if($step == 'deleted') {
 			
 			@safe_query(
@@ -47,22 +49,6 @@
 			
 			return;
 		}
-		
-		global $textarray, $prefs;
-		
-		/*
-			Make sure language strings are set
-		*/
-		
-		foreach(
-			array(
-				'with_selected' => 'With selected...',
-				'delete' => 'Delete',
-				'select_something' => 'Nothing selected',
-			) as $string => $translation
-		)
-			if(!isset($textarray['rah_sitemap_'.$string]))
-				$textarray['rah_sitemap_'.$string] = $translation;
 		
 		$version = '1.3';
 		
@@ -117,10 +103,6 @@
 				);
 			}
 		}
-		
-		/*
-			Set version
-		*/
 		
 		set_pref('rah_sitemap_version',$version,'rah_sitemap',2,'',0);
 		$prefs['rah_sitemap_version'] = $version;

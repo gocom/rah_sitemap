@@ -1,0 +1,6 @@
+#@admin
+#Default language, en-us, en-gb
+rah_sitemap = Sitemap
+rah_sitemap_with_selected => With selected...
+rah_sitemap_delete => Delete
+rah_sitemap_select_something => Nothing selected
