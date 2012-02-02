@@ -1,38 +1,125 @@
 <?php	##################
 	#
 	#	rah_sitemap-plugin for Textpattern
-	#	version 1.2
+	#	version 1.3
 	#	by Jukka Svahn
 	#	http://rahforum.biz
+	#
+	#	Copyright (C) 2011 Jukka Svahn <http://rahforum.biz>
+	#	Licensed under GNU Genral Public License version 2
+	#	http://www.gnu.org/licenses/gpl-2.0.html
 	#
 	###################
 
 	if(@txpinterface == 'admin') {
 		add_privs('rah_sitemap','1,2');
-		register_tab('extensions','rah_sitemap','Sitemap');
+		add_privs('plugin_prefs.rah_sitemap','1,2');
+		register_tab('extensions','rah_sitemap',gTxt('rah_sitemap') == 'rah_sitemap' ? 'Sitemap' : gTxt('rah_sitemap'));
 		register_callback('rah_sitemap_page','rah_sitemap');
 		register_callback('rah_sitemap_head','admin_side','head_end');
+		register_callback('rah_sitemap_prefs','plugin_prefs.rah_sitemap');
+		register_callback('rah_sitemap_install','plugin_lifecycle.rah_sitemap');
 	} else 
 		register_callback('rah_sitemap','textpattern');
 
 /**
-	Checks if the sitemap should be returned
+	Installer. Creates tables and adds the default rows
+	@param $event string Admin-side callback event.
+	@param $step string Admin-side plugin-lifecycle step.
 */
 
-	function rah_sitemap_delivery() {
-		global $pretext;
+	function rah_sitemap_install($event='',$step='') {
 		
-		$uri = $pretext['request_uri'];
-		$uri = explode('/',$uri);
-		$uri = array_reverse($uri);
+		if($step == 'deleted') {
+			
+			@safe_query(
+				'DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap').', '.safe_pfx('rah_sitemap_prefs')
+			);
+			
+			safe_delete(
+				'txp_prefs',
+				"name like 'rah_sitemap_%'"
+			);
+			
+			return;
+		}
 		
-		if(in_array($uri[0],array('sitemap.xml.gz','sitemap.xml')))
-			return true;
+		global $textarray, $prefs;
 		
-		if(gps('rah_sitemap') == 'sitemap')	
-			return true;
+		/*
+			Make sure language strings are set
+		*/
 		
-		return false;
+		foreach(
+			array(
+				'with_selected' => 'With selected...',
+				'delete' => 'Delete',
+				'select_something' => 'Nothing selected',
+			) as $string => $translation
+		)
+			if(!isset($textarray['rah_sitemap_'.$string]))
+				$textarray['rah_sitemap_'.$string] = $translation;
+		
+		$version = '1.3';
+		
+		$current = isset($prefs['rah_sitemap_version']) ?
+			$prefs['rah_sitemap_version'] : 'base';
+		
+		if($current == $version)
+			return;
+		
+		/*
+			Stores custom URLs added manually to the sitemap.
+			
+			* url: The page URL.
+			* posted: Lastmod date.
+			* include: Wheter use the 'posted' time as the lastmod in the sitemap.
+		*/
+		
+		safe_query(
+			"CREATE TABLE IF NOT EXISTS ".safe_pfx('rah_sitemap')." (
+				`url` VARCHAR(255) NOT NULL,
+				`posted` DATETIME NOT NULL,
+				`include` INT(1) NOT NULL,
+				PRIMARY KEY(`url`)
+			) PACK_KEYS=1 CHARSET=utf8"
+		);
+		
+		/*
+			Stores sitemap's preferences.
+			
+			* name: Preference string's name.
+			* value: Preference string's value.
+		*/
+
+		safe_query(
+			"CREATE TABLE IF NOT EXISTS ".safe_pfx('rah_sitemap_prefs')." (
+				`name` VARCHAR(255) NOT NULL,
+				`value` LONGTEXT NOT NULL,
+				PRIMARY KEY(`name`)
+			) PACK_KEYS=1 CHARSET=utf8"
+		);
+		
+		foreach(rah_sitemap_pref_fields() as $key => $val) {
+			if(
+				safe_count(
+					'rah_sitemap_prefs',
+					"name='".doSlash($key)."'"
+				) == 0
+			) {
+				safe_insert(
+					'rah_sitemap_prefs',
+					"name='".doSlash($key)."', value='".doSlash($val)."'"
+				);
+			}
+		}
+		
+		/*
+			Set version
+		*/
+		
+		set_pref('rah_sitemap_version',$version,'rah_sitemap',2,'',0);
+		$prefs['rah_sitemap_version'] = $version;
 	}
 
 /**
@@ -40,10 +127,14 @@
 */
 
 	function rah_sitemap() {
-		if(rah_sitemap_delivery() == false)
-			return;
 		
 		global $s, $thissection, $thiscategory, $c, $pretext, $thispage, $thisarticle;
+		
+		$uri = end(explode('/', $pretext['request_uri']));
+		
+		if(gps('rah_sitemap') != 'sitemap' && $uri != 'sitemap.xml.gz' && $uri != 'sitemap.xml')
+			return;	
+		
 		
 		@$pref = rah_sitemap_prefs();
 		
@@ -51,21 +142,40 @@
 			rah_sitemap_install();
 			$pref = rah_sitemap_prefs();
 		}
+		
+		/*
+			Check if MLP is installed
+		*/
+		
+		$mlp = is_callable('l10n_installed') ? call_user_func('l10n_installed',true) : false;
+		
+		/*
+			List site languages
+		*/
+		
+		if($mlp) {
+			$langs = MLPLanguageHandler::get_site_langs();
+		}
 
 		header('Content-type: application/xml');
 
-		if($pref['compress'] == 1 && function_exists('gzencode'))
+		if($pref['compress'] == 1 && function_exists('gzencode')) {
 			header('Content-Encoding: gzip');
+		}
 		
 		if($pref['zlib_output'] == 1)
 			ini_set('zlib.output_compression','Off');
 	
-		$timestampformat = (!empty($pref['timestampformat'])) ? $pref['timestampformat'] : 'c';
+		$timestampformat = !empty($pref['timestampformat']) ? $pref['timestampformat'] : 'c';
 		
 		$out[] = 
-			'<?xml version="1.0" encoding="utf-8"?>'.
+			'<'.'?xml version="1.0" encoding="utf-8"?'.'>'.
 			'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
 			'<url><loc>'.hu.'</loc></url>';
+			
+		/*
+			Sections
+		*/
 		
 		if($pref['nosections'] != 1) {
 			
@@ -77,21 +187,38 @@
 					" order by name asc"
 				);
 			
-			$thisarticle['section'] = '';
-			
 			foreach($rs as $a) {
 				
-				$s = $thispage['s'] = $thissection['section'] =  $pretext['s'] = $a['name'];
+				/*
+					List sections in all languages
+				*/
 				
-				if($pref['permlink_section'])
+				if($mlp) {
+					foreach($langs as $lang)
+						$out[] = '<url><loc>'.hu.substr($lang,0,2).'/'.urlencode($section).'/</loc></url>';
+					
+					continue;
+				}
+				
+				/*
+					Custom format
+				*/
+				
+				if($pref['permlink_section']) {
+					$thisarticle['section'] = '';
+					$s = $thispage['s'] = $thissection['section'] = $pretext['s'] = $a['name'];
 					$out[] = '<url><loc>'.parse($pref['permlink_section']).'</loc></url>';
-				else 
-					$out[] = '<url><loc>'.pagelinkurl(array('s' => $a['name'])).'</loc></url>';
+					$s = $thispage['s'] = $thissection['section'] = $pretext['s'] = '';
+					continue;
+				}
+				
+				$out[] = '<url><loc>'.pagelinkurl(array('s' => $a['name'])).'</loc></url>';
 			}
-			
-			$s =  $thissection['section'] = $thispage['s'] = $pretext['s'] = '';
-			
 		}
+		
+		/*
+			Categories
+		*/
 		
 		$notypes = '';
 		
@@ -207,8 +334,10 @@
 					;
 					
 					@$url = htmlspecialchars(parse($pref['permlink_article']));
+					
+					if(!$url)
+						continue;
 				}
-				
 				else {
 					@$url = permlinkurl($a);
 					
@@ -262,14 +391,22 @@
 	function rah_sitemap_page() {
 		require_privs('rah_sitemap');
 		global $step;
-		if(in_array($step,array(
-			'rah_sitemap_save',
-			'rah_sitemap_custom_list',
-			'rah_sitemap_custom_form',
-			'rah_sitemap_custom_save',
-			'rah_sitemap_delete'
-		))) $step();
-		else rah_sitemap_list();
+		
+		$steps = 
+			array(
+				'list' => false,
+				'save' => true,
+				'delete' => true,
+				'custom_list' => false,
+				'custom_form' => false,
+				'custom_save' => true
+			);
+		
+		if(!$step || !bouncer($step, $steps))
+			$step = 'list';
+		
+		$func = 'rah_sitemap_' . $step;
+		$func();
 	}
 
 /**
@@ -291,7 +428,7 @@
 			'		<p><strong>General preferences</strong></p>'.n.
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <span>Exclude sections and categories from the sitemap</span>'.n.
+			'			+ <a href="#">Exclude sections and categories from the sitemap</a>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -314,7 +451,7 @@
 			'		</div>'.n.
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <span>Filter articles from the sitemap</span>'.n.
+			'			+ <a href="#">Filter articles from the sitemap</a>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -337,7 +474,7 @@
 			'		<p><strong>Advanced settings</strong></p>'.n.
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <span>Compression methods</span>'.n.
+			'			+ <a href="#">Compression methods</a>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -383,7 +520,7 @@
 			
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <span>Override timestamp format</span>'.n.
+			'			+ <a href="#">Override timestamp format</a>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -398,7 +535,7 @@
 			'		</div>'.n.
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <span>Override permlink formats</span>'.n.
+			'			+ <a href="#">Override permlink formats</a>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -420,7 +557,10 @@
 			'		</div>'.n.
 			
 			'		<input type="hidden" name="event" value="rah_sitemap" />'.n.
-			'		<input type="hidden" name="step" value="rah_sitemap_save" />'.n.
+			'		<input type="hidden" name="step" value="save" />'.n.
+			
+			'		'.tInput().n.
+			
 			
 			'		<p><input type="submit" value="'.gTxt('save').'" class="publish" /></p>'.n.
 			
@@ -463,7 +603,7 @@
 				$uri = rah_sitemap_uri($a['url'],1);
 				$out[] = 
 					'			<tr>'.n.
-					'				<td><a href="?event=rah_sitemap&amp;step=rah_sitemap_custom_form&amp;edit='.urlencode($a['url']).'">'.$uri.'</a></td>'.n.
+					'				<td><a href="?event=rah_sitemap&amp;step=custom_form&amp;edit='.urlencode($a['url']).'">'.$uri.'</a></td>'.n.
 					'				<td>'.$a['posted'].'</td>'.n.
 					'				<td>'.(($a['include'] == 1) ? 'Yes' : 'No').'</td>'.n.
 					'				<td><a target="_blank" href="'.htmlspecialchars($uri).'">'.gTxt('view').'</a></td>'.n.
@@ -477,12 +617,13 @@
 			'		</table>'.n.
 			'		<p id="rah_sitemap_step">'.n.
 			'			<select name="step">'.n.
-			'				<option value="">With selected...</option>'.n.
-			'				<option value="rah_sitemap_delete">Delete</option>'.n.
+			'				<option value="">'.gTxt('rah_sitemap_with_selected').'</option>'.n.
+			'				<option value="delete">'.gTxt('rah_sitemap_delete').'</option>'.n.
 			'			</select>'.n.
-			'			<input type="submit" class="smallerbox" value="Go" />'.n.
+			'			<input type="submit" class="smallerbox" value="'.gTxt('go').'" />'.n.
 			'		</p>'.n.
 			'		<input type="hidden" name="event" value="rah_sitemap" />'.n.
+			'		'.tInput().n.
 			'	</form>'.n;
 		
 		rah_sitemap_header(
@@ -528,28 +669,33 @@
 		rah_sitemap_header(
 			'	<form method="post" action="index.php">'.n.
 			'		<p>'.n.
-			'			<label for="rah_sitemap_url">URL:</label><br />'.n.
-			'			<input id="rah_sitemap_url" class="edit" type="text" name="url" value="'.htmlspecialchars($url).'" />'.n.
+			'			<label>'.n.
+			'				URL:<br />'.n.
+			'				<input class="edit" type="text" name="url" value="'.htmlspecialchars($url).'" />'.n.
+			'			</label>'.n.
 			'		</p>'.n.
 			'		<p>'.n.
-			'			<label for="rah_sitemap_posted">LastMod (YYYY-mm-dd HH:MM:SS). Leave empty to use current time:</label><br />'.n.
-			'			<input id="rah_sitemap_posted" class="edit" type="text" name="posted" value="'.htmlspecialchars($posted).'" />'.n.
+			'			<label>'.n.
+			'				LastMod (YYYY-mm-dd HH:MM:SS). Leave empty to use current time:<br />'.n.
+			'				<input class="edit" type="text" name="posted" value="'.htmlspecialchars($posted).'" />'.n.
+			'			</label>'.n.
 			'		</p>'.n.
 			'		<p>'.n.
-			'			<label for="rah_sitemap_lastmod">Include LastMod:</label><br />'.n.
-			'			<select id="rah_sitemap_lastmod" name="include">'.n.
-			'					<option value="0"'.(($include == 0) ? ' selected="selected"' : '').'>'.gTxt('no').' (Recommended)</option>'.n.
-			'					<option value="1"'.(($include == 1) ? ' selected="selected"' : '').'>'.gTxt('yes').'</option>'.n.
-			'			</select>'.n.
+			'			<label>'.n.
+			'				Include LastMod:<br />'.n.
+			'				<select name="include">'.n.
+			'					<option value="0"'.($include == 0 ? ' selected="selected"' : '').'>'.gTxt('no').' (Recommended)</option>'.n.
+			'					<option value="1"'.($include == 1 ? ' selected="selected"' : '').'>'.gTxt('yes').'</option>'.n.
+			'				</select>'.n.
+			'			</label>'.n.
 			'		</p>'.n.
 			'		<p><input type="submit" value="'.gTxt('save').'" class="publish" /></p>'.n.
 			
-			(($edit) ? 
-				'		<input type="hidden" name="edit" value="'.htmlspecialchars($edit).'" />' : ''
-			).
+			($edit ? '		<input type="hidden" name="edit" value="'.htmlspecialchars($edit).'" />' : '').
 			
 			'		<input type="hidden" name="event" value="rah_sitemap" />'.n.
-			'		<input type="hidden" name="step" value="rah_sitemap_custom_save" />'.n.
+			'		<input type="hidden" name="step" value="custom_save" />'.n.
+			'		'.tInput().n.
 			
 			'	</form>'
 			
@@ -653,13 +799,6 @@
 					border-top: 1px solid #ccc;
 					border-bottom: 1px solid #ccc;
 				}
-				#rah_sitemap_container .rah_sitemap_heading span {
-					cursor: pointer;
-					color: #963;
-				}
-				#rah_sitemap_container .rah_sitemap_heading span:hover {
-					text-decoration: underline;
-				}
 				#rah_sitemap_container .rah_sitemap_more {
 					overflow: hidden;
 				}
@@ -680,9 +819,13 @@
 			<script type="text/javascript">
 				$(document).ready(function(){
 					$('.rah_sitemap_more').hide();
-					$('.rah_sitemap_heading').click(function(){
-						$(this).next('div.rah_sitemap_more').slideToggle();
-					});
+					$('.rah_sitemap_heading, .rah_sitemap_heading a').click(
+						function(){
+							$(this).next('div.rah_sitemap_more').slideToggle();
+							$(this).parent('p').next('div.rah_sitemap_more').slideToggle();
+							return false;
+						}
+					);
 				});
 			</script>
 EOF;
@@ -701,13 +844,13 @@ EOF;
 		
 		echo 
 			n.
-			'	<div id="rah_sitemap_container">'.n.
+			'	<div id="rah_sitemap_container" class="rah_ui_container">'.n.
 			'		<h1><strong>'.$title.'</strong> | '.$msg.'</h1>'.n.
-			'		<p id="rah_sitemap_nav">'.
-					' &#187; <a href="?event=rah_sitemap">Preferences</a>'.
-					' &#187; <a href="?event=rah_sitemap&amp;step=rah_sitemap_custom_form">Add custom URL</a>'.
-					' &#187; <a href="?event=rah_sitemap&amp;step=rah_sitemap_custom_list">List of custom URLs</a>'.
-					' &#187; <a target="_blank" href="'.hu.'?rah_sitemap=sitemap">View the sitemap</a>'.
+			'		<p id="rah_sitemap_nav" class="rah_ui_nav">'.
+					' <span class="rah_ui_sep">&#187;</span> <a href="?event=rah_sitemap">Preferences</a>'.
+					' <span class="rah_ui_sep">&#187;</span> <a href="?event=rah_sitemap&amp;step=custom_form">Add custom URL</a>'.
+					' <span class="rah_ui_sep">&#187;</span> <a href="?event=rah_sitemap&amp;step=custom_list">List of custom URLs</a>'.
+					' <span class="rah_ui_sep">&#187;</span> <a target="_blank" href="'.hu.'?rah_sitemap=sitemap">View the sitemap</a>'.
 					'</p>'.n.
 			$content.n.	
 			'	</div>'.n;
@@ -823,42 +966,6 @@ EOF;
 	}
 
 /**
-	Installer. Creates tables and adds the default rows
-*/
-
-	function rah_sitemap_install() {
-		safe_query(
-			"CREATE TABLE IF NOT EXISTS ".safe_pfx('rah_sitemap')." (
-				`url` VARCHAR(255) NOT NULL,
-				`posted` DATETIME NOT NULL,
-				`include` INT(1) NOT NULL,
-				PRIMARY KEY(`url`)
-			)"
-		);
-		safe_query(
-			"CREATE TABLE IF NOT EXISTS ".safe_pfx('rah_sitemap_prefs')." (
-				`name` VARCHAR(255) NOT NULL,
-				`value` LONGTEXT NOT NULL,
-				PRIMARY KEY(`name`)
-			)"
-		);
-		
-		foreach(rah_sitemap_pref_fields() as $key => $val) {
-			if(
-				safe_count(
-					'rah_sitemap_prefs',
-					"name='".doSlash($key)."'"
-				) == 0
-			) {
-				safe_insert(
-					'rah_sitemap_prefs',
-					"name='".doSlash($key)."', value='".doSlash($val)."'"
-				);
-			}
-		}
-	}
-
-/**
 	Builds the list of filters
 */
 
@@ -928,17 +1035,36 @@ EOF;
 		
 		$selected = ps('selected');
 		
-		if(!is_array($selected)) {
-			rah_sitemap_custom_list('Nothing selected');
+		if(!is_array($selected) || empty($selected)) {
+			rah_sitemap_custom_list('nothing_selected');
 			return;
 		}
 		
-		foreach($selected as $name) 
+		foreach($selected as $url)
+			$in[] = "'".doSlash($url)."'";
+		
+		if(
 			safe_delete(
 				'rah_sitemap',
-				"url='".doSlash($name)."'"
-			);
+				'url in('.implode(',', $in).')'
+			) == false
+		) {
+			rah_sitemap_custom_list('error_removing');
+			return;	
+		}
 		
-		rah_sitemap_custom_list('Selection deleted');
+		rah_sitemap_custom_list('removed');
+	}
+
+/**
+	Redirect to the admin-side interface
+*/
+
+	function rah_sitemap_options() {
+		header('Location: ?event=rah_sitemap');
+		echo 
+			'<p>'.n.
+			'	<a href="?event=rah_sitemap">'.gTxt('continue').'</a>'.n.
+			'</p>';
 	}
 ?>
