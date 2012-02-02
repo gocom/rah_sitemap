@@ -1,9 +1,9 @@
 h1. rah_sitemap
 
-p. A Textpattern plugin to build valid "Sitemap.org":http://www.sitemap.org sitemaps for search engines, including Google, with out hazle. Supports category, section, article and even custom URLs.
+p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. Easily build valid "Sitemap.org":http://www.sitemap.org XML(eXtensible Markup Language) sitemaps for search engines, including Google. Supports categories, sections, articles and even custom URLs. All settings can be managed from clean interface. No dive to code required.
 
-* Version: 0.5
-* Updated: 2010/03/01 08:00 PM GMT+2
+* Version: 0.6
+* Updated: 2010/05/30 07:45 AM UTC
 
 h3. Table of Contents
 
@@ -11,7 +11,6 @@ h3. Table of Contents
 * "Requirements":#requirements
 * "Installation and usage":#installation-and-usage
 ** "Permlink rules":#permlink-rules
-** "Optional: Rewrite the Sitemap URL":#rewrite-the-sitemap-url
 * "Changelog":#changelog
 
 h3(#list-of-features). List of features
@@ -20,12 +19,14 @@ h3(#list-of-features). List of features
 * Filter, include and exclude section, category and article URLs from the sitemap.
 * Create and insert custom URLs to the sitemap with couple simple clicks.
 * No need to create files nor set permissions, instead just use the plugin and eventually submit the sitemap URL to Google (via Webmaster tools) or other searh engine.
-* Sitemap is automatically gzipped as much as possible - atleast if server supports gzipping.
+* Sitemap is automatically gzipped as much as possible -- atleast if server supports gzipping.
 
 h3(#requirements). Requirements
 
+Minimum:
+
 * Textpattern 4.0.7+
-* PHP 5+
+* PHP 5+ (or 4.3.0 when custom timestamp format is used)
 * Optional: PHP zlib extension
 
 Recommended:
@@ -35,17 +36,17 @@ Recommended:
 
 h3(#installation-and-usage). Installation and usage
 
-p. The general behavior stands: paste plugin code to the plugin installer textarea and run the automatic setup. Then just activate the plugin and you are ready to use sitemap interface.
+p. The general behavior stands: paste the plugin code to the plugin installer textarea and run the automatic setup. Then just activate the plugin and you are ready to use the sitemap.
 
-p. You can locate rah_sitemap's panel from "Textpattern > Extensions > Sitemap.":?event=rah_sitemap Via that interface you can modify and view the sitemap.
+p. You can locate rah_sitemap's userinterface panel from "Textpattern > Extensions > Sitemap.":?event=rah_sitemap From there you can modify preferences and view the sitemap.
 
-h4(#permlink-rules). Permlink rules
+h4(#permlink-rules). Permlink schemes and rules
 
-Rah_sitemap version 0.4 included a new feature: permlink settings. With these simple setting you can define the form which URLs in the Sitemap will use. For example, this is a ideal tool for matching the URLs to your own .httaccess rules or a plugin created custom URL rules. If you want to use in-build urls defined by Textpattern itself, you can leave these setting unset. Now to the different permlink types and details.
+Rah_sitemap version 0.4 included a new feature: permlink settings. These setting, found in the panel, will let you define the permlink form for the URLs in the Sitemap. This is a ideal tool for matching the URLs to your own .httaccess rules or a plugin created custom URL rules. If you want to use in-build urls defined by Textpattern itself, you can leave these setting unset.
 
 h5. Article permlinks
 
-These URL settings are used for Articles that appear in the sitemap. To form the URLs you can use any individual article context TXP article tag. These tags include the big names like @<txp:permlink />@, @<txp:posted />@, @<txp:title />@, @<txp:category1 />@, @<txp:category2 />@, @<txp:section />@, @<txp:if_article_author />@, @<txp:if_article_category />@, @<txp:if_article_id />@ and so on.
+These URL settings are used for articles that appear in the sitemap. To form the URLs you can use any individual article context's @<txp:/>@ tag. Big shots like @<txp:permlink />@, @<txp:posted />@, @<txp:title />@, @<txp:category1 />@, @<txp:category2 />@, @<txp:section />@, @<txp:if_article_author />@, @<txp:if_article_category />@, @<txp:if_article_id />@ and so on.
 
 Example Article permlink URL:
 
@@ -53,7 +54,7 @@ bc. <txp:site_url />sections/<txp:section/>/articles/<txp:article_id />/<txp:art
 
 h5. Category permlinks
 
-p. These URL settings are used for Category links that appear in the sitemap. To form the URLs you can use plain category context TXP tags, including @<txp:category />@ and @<txp:if_category />@. Also the plugin provides two extra tagish tags, @[type]@ and @[id]@ which basically output category's type and id.
+p. These URL settings are used for Category links that appear in the sitemap. To form the URLs you can use plain category context TXP tags @<txp:category />@ and @<txp:if_category />@. The plugin also provides two extra tagish tags, @[type]@ and @[id]@ which will basically output category's type and id.
 
 Example Category permlink URL:
 
@@ -61,22 +62,28 @@ bc. <txp:site_url />view/category/[id]/<txp:category link="0" title="0" />
 
 h5. Section permlinks
 
-p. These URL settings are used for Section links that appear in the sitemap. To form the URLs you can use plain section context TXP tags, including @<txp:section />@ and @<txp:if_section />@.
+p. These URL settings are used for section links that appear in the sitemap. To form the URLs you can use the two section tags, @<txp:section />@ and @<txp:if_section />@.
 
 bc. <txp:site_url />section/<txp:section />
 
-h4(#rewrite-the-sitemap-url). Optional: Rewrite the sitemap URL
-
-This is truly optional thing, 'cause this isn't needed, just somewhat perfectionism. If you don't like the look of the "messy" dynamic sitemap URL, you can always rewrite it. Remember that mostly only bots will read your Sitemap so the URL rewriting is waste of time, atleast if you have already submitted the sitemap to Google via webmaster tools.
-
-But anyway, to rewrite the URL, put the following code to the top of your root @.htaccess@ (the same that Textpattern uses) file.
-
-bc. RewriteEngine On
-RewriteRule ^sitemap.xml.gz?$ ?rah_sitemap=sitemap
-
-Now the sitemap can be accessed by @/sitemap.xml.gz@.
-
 h3(#changelog). Changelog
+
+p. *Version 0.6*
+
+* Rewriten the code that generetes the sitemap.
+* New admin panel look.
+* Now custom permlink modes and custom urls are escaped. Users can input unescaped URLs/markup from now on.
+* Now custom URL list shows the full formated URL after auto-fill instead of the user input.
+* Now custom URLs that start with www. are completed with http:// protocol.
+* Now all urls that do not start with either http, https, www, ftp or ftps protocol are auto-completed with the site's address.
+* Custom url editor got own panel. No longer the form is above the URL list.
+* Added ability to manually turn gzib compression off and change the compression level.
+* Added setting to set zlib.output_compression off. "See here":http://forum.textpattern.com/viewtopic.php?pid=224931#p224931, thank you for reporting superfly.
+* Preferences are now trimmed during save.
+* Merged @rah_sitemap_update()@ with @rah_sitemap_save()@.
+* From now on all new installations have default settings defined that will automatically exclude link, file and image categories from the sitemap. This won't effect updaters.
+* Changed sitemap's callback register from pre @pretext@ to callback after it (callback is now @textpattern@). Now @$pretext@ is set before the sitemap and thus more plugins might work within permlink settings and custom urls.
+* When using TXP's clean URLs, requesting @/sitemap.xml.gz@ and @/sitemap.xml@ URLs will return the sitemap, not just the @/?rah_sitemap=sitemap@. This will of course require existing fully working clean urls.
 
 p. *Version 0.5*
 
