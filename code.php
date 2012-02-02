@@ -246,9 +246,8 @@
 */
 
 	function rah_sitemap_page() {
-		global $step;
 		require_privs('rah_sitemap');
-		rah_sitemap_install();
+		global $step;
 		if(in_array($step,array(
 			'rah_sitemap_save',
 			'rah_sitemap_custom_list',
@@ -264,10 +263,13 @@
 */
 
 	function rah_sitemap_list($message='') {
-		
-		$pref = 
-			rah_sitemap_prefs();
-		
+		@$pref = rah_sitemap_prefs();
+
+		if(!isset($pref['zlib_output'])) {
+			rah_sitemap_install();
+			$pref = rah_sitemap_prefs();
+		}
+
 		rah_sitemap_header(
 			
 			'	<form method="post" action="index.php">'.n.
