@@ -44,7 +44,7 @@
 			
 			safe_delete(
 				'txp_prefs',
-				"name like 'rah_sitemap_%'"
+				"name like 'rah\_sitemap\_%'"
 			);
 			
 			return;
