@@ -2,8 +2,8 @@ h1. rah_sitemap
 
 p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. Easily build valid "Sitemap.org":http://www.sitemap.org XML(eXtensible Markup Language) sitemaps for search engines, including Google. Supports categories, sections, articles and even custom URLs. All settings can be managed from clean interface. No dive to code required.
 
-* Version: 0.7
-* Updated: 2010/05/30 12:30 PM UTC
+* Version: 0.8
+* Updated: 2010/07/27 10:30 PM UTC
 
 h3. Table of Contents
 
@@ -67,6 +67,13 @@ p. These URL settings are used for section links that appear in the sitemap. To 
 bc. <txp:site_url />section/<txp:section />
 
 h3(#changelog). Changelog
+
+p. *Version 0.8*
+
+* Now compression level field's label now links to the correct field id.
+* Now suppresses E_WARNING/E_STRICT notices in live mode caused by Textpattern's timezone code when some conditions are met (TXP 4.2.0, PHP 5.1.0+, TXP's Auto-DST feature disabled, TXP in Live mode). Error suppression will be removed when TXP version is realeased with fully working timezone settings.
+* Now generates UNIX timestamps within the SQL query, not with PHP.
+* Changed sliding panels' links (@a@ elements) into spans.
 
 p. *Version 0.7*
 

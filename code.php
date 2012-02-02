@@ -1,7 +1,7 @@
 <?php	##################
 	#
 	#	rah_sitemap-plugin for Textpattern
-	#	version 0.7
+	#	version 0.8
 	#	by Jukka Svahn
 	#	http://rahforum.biz
 	#
@@ -14,6 +14,10 @@
 		register_callback('rah_sitemap_head','admin_side','head_end');
 	} else 
 		register_callback('rah_sitemap','textpattern');
+
+/**
+	Checks if the sitemap should be returned
+*/
 
 	function rah_sitemap_delivery() {
 		global $pretext;
@@ -31,6 +35,10 @@
 		return false;
 	}
 
+/**
+	The sitemap
+*/
+
 	function rah_sitemap() {
 		if(rah_sitemap_delivery() == false)
 			return;
@@ -43,7 +51,7 @@
 			rah_sitemap_install();
 			$pref = rah_sitemap_prefs();
 		}
-		
+
 		header('Content-type: application/xml');
 
 		if($pref['compress'] == 1 && function_exists('gzencode'))
@@ -156,7 +164,7 @@
 						($pref['permlink_article']) ? 
 							'*,  unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod'
 						: 
-							'ID, Posted, LastMod'
+							'ID, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod'
 					),
 					'textpattern',
 					'1=1' . implode('',$sql). ' order by Posted desc'
@@ -189,7 +197,8 @@
 						)
 					;
 				}
-				$out[] = 
+				
+				@$out[] = 
 					'<url><loc>'.
 					(($pref['permlink_article']) ? 
 							htmlspecialchars(parse($pref['permlink_article']))
@@ -197,19 +206,20 @@
 							permlinkurl_id($ID)
 					).
 					'</loc><lastmod>'.
-					(($LastMod < $Posted) ? 
-						date($timestampformat,strtotime($Posted)) : 
-						date($timestampformat,strtotime($LastMod))
+					(($uLastMod < $uPosted) ? 
+						date($timestampformat,$uPosted) : 
+						date($timestampformat,$uLastMod)
 					).
 					'</lastmod></url>'
 				;
+				
 			}
 			$thisarticle = '';
 		}
 		
 		$rs = 
 			safe_rows(
-				'*',
+				'*, unix_timestamp(posted) as uposted',
 				'rah_sitemap',
 				'1=1 order by posted desc'
 			);
@@ -218,7 +228,7 @@
 			$url = parse($a['url']);
 			$out[] = '<url><loc>'.rah_sitemap_uri($url,1).'</loc>';
 			if($a['include'] == 1)
-				$out[] = '<lastmod>'.date($timestampformat,strtotime($a['posted'])).'</lastmod>';
+				@$out[] = '<lastmod>'.date($timestampformat,$a['uposted']).'</lastmod>';
 			$out[] = '</url>';
 		}
 		
@@ -228,6 +238,10 @@
 		echo (@$pref['compress'] == 1 && function_exists('gzencode')) ? gzencode($out,$pref['compression_level']) : $out;
 		exit();
 	}
+
+/**
+	Delivers the panels
+*/
 
 	function rah_sitemap_page() {
 		global $step;
@@ -243,6 +257,10 @@
 		else rah_sitemap_list();
 	}
 
+/**
+	Preferences panel
+*/
+
 	function rah_sitemap_list($message='') {
 		
 		$pref = 
@@ -255,7 +273,7 @@
 			'		<p><strong>General preferences</strong></p>'.n.
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <a href="#">Exclude sections and categories from the sitemap</a>'.n.
+			'			+ <span>Exclude sections and categories from the sitemap</span>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -278,7 +296,7 @@
 			'		</div>'.n.
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <a href="#">Filter articles from the sitemap</a>'.n.
+			'			+ <span>Filter articles from the sitemap</span>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -301,7 +319,7 @@
 			'		<p><strong>Advanced settings</strong></p>'.n.
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <a href="#">Compression methods</a>'.n.
+			'			+ <span>Compression methods</span>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -317,7 +335,7 @@
 			
 			'			</p>'.n.
 			'			<p>'.n.
-			'				<label for="rah_sitemap_compress">Compression level:</label><br />'.n.
+			'				<label for="rah_sitemap_compression_level">Compression level:</label><br />'.n.
 			
 			'				<select name="compression_level" id="rah_sitemap_compression_level">'.n.
 			'					<option value="0"'.(($pref['compression_level'] == 0) ? ' selected="selected"' : '').'>0</option>'.n.
@@ -347,7 +365,7 @@
 			
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <a href="#">Override timestamp format</a>'.n.
+			'			+ <span>Override timestamp format</span>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -362,7 +380,7 @@
 			'		</div>'.n.
 			
 			'		<p title="Click to expand" class="rah_sitemap_heading">'.n.
-			'			+ <a href="#">Override permlink formats</a>'.n.
+			'			+ <span>Override permlink formats</span>'.n.
 			'		</p>'.n.
 			
 			'		<div class="rah_sitemap_more">'.n.
@@ -397,6 +415,10 @@
 			
 		);
 	}
+
+/**
+	Panel, lists custom URLs
+*/
 
 	function rah_sitemap_custom_list($message='') {
 
@@ -453,6 +475,10 @@
 			$message
 		);
 	}
+
+/**
+	Panel to add custom URLs
+*/
 
 	function rah_sitemap_custom_form($message='') {
 		
@@ -518,6 +544,10 @@
 		
 	}
 
+/**
+	Saves custom URL
+*/
+
 	function rah_sitemap_custom_save() {
 		extract(doSlash(gpsa(array(
 			'url',
@@ -568,6 +598,10 @@
 		return;
 	}
 
+/**
+	Outputs the panel's CSS and JavaScript to page's <head> segment
+*/
+
 	function rah_sitemap_head() {
 		
 		global $event;
@@ -578,15 +612,15 @@
 		echo <<<EOF
 			<style type="text/css">
 				#rah_sitemap_container {
-					width:950px;
-					margin:0 auto;
+					width: 950px;
+					margin: 0 auto;
 				}
 				#rah_sitemap_container #rah_sitemap_step {
 					text-align: right;
-					padding-top:10px;
+					padding-top: 10px;
 				}
 				#rah_sitemap_container .rah_sitemap_table {
-					width:100%;
+					width: 100%;
 				}
 				#rah_sitemap_container .rah_sitemap_column {
 					width: 315px;
@@ -600,6 +634,13 @@
 					margin: 0 0 10px 0;
 					border-top: 1px solid #ccc;
 					border-bottom: 1px solid #ccc;
+				}
+				#rah_sitemap_container .rah_sitemap_heading span {
+					cursor: pointer;
+					color: #963;
+				}
+				#rah_sitemap_container .rah_sitemap_heading span:hover {
+					text-decoration: underline;
 				}
 				#rah_sitemap_container .rah_sitemap_more {
 					overflow: hidden;
@@ -616,23 +657,22 @@
 				.rah_sitemap_paragraph {
 					margin: 0 0 10px 0;
 					padding: 0;
-					
 				}
 			</style>
 			<script type="text/javascript">
 				$(document).ready(function(){
-					
 					$('.rah_sitemap_more').hide();
-					
 					$('.rah_sitemap_heading').click(function(){
 						$(this).next('div.rah_sitemap_more').slideToggle();
 					});
-
 				});
 			</script>
 EOF;
-
 	}
+
+/**
+	The panel's navigation bar
+*/
 
 	function rah_sitemap_header($content='',$title='rah_sitemap',$msg='Manage your sitemap',$pagetop='',$message='') {
 		
@@ -654,6 +694,10 @@ EOF;
 			$content.n.	
 			'	</div>'.n;
 	}
+
+/**
+	Builds the required in array for SQL statements
+*/
 
 	function rah_sitemap_in($field='',$array='',$default='',$sql=' not in') {
 		
@@ -683,6 +727,10 @@ EOF;
 		
 	}
 
+/**
+	Default settings
+*/
+
 	function rah_sitemap_pref_fields() {
 		return
 			array(
@@ -710,6 +758,10 @@ EOF;
 			);
 	}
 
+/**
+	Returns preferences as an array
+*/
+
 	function rah_sitemap_prefs() {
 		
 		$out = array();
@@ -727,6 +779,10 @@ EOF;
 		return $out;
 		
 	}
+
+/**
+	Build the custom URLs
+*/
 
 	function rah_sitemap_uri($uri='',$escape=0) {
 		
@@ -747,6 +803,10 @@ EOF;
 		
 		return $uri;
 	}
+
+/**
+	Installer. Creates tables and adds the default rows
+*/
 
 	function rah_sitemap_install() {
 		safe_query(
@@ -779,6 +839,10 @@ EOF;
 			}
 		}
 	}
+
+/**
+	Builds the list of filters
+*/
 
 	function rah_sitemap_listing($label='',$field='',$table='',$where='') {
 		
@@ -818,6 +882,10 @@ EOF;
 		return implode('',$out);
 	}
 
+/**
+	Saves preferences
+*/
+
 	function rah_sitemap_save() {
 		foreach(rah_sitemap_pref_fields() as $key => $val) {
 			$ps = ps($key);
@@ -833,6 +901,10 @@ EOF;
 		}
 		rah_sitemap_list('Sitemap preferences saved');
 	}
+
+/**
+	Deletes custom URIs
+*/
 
 	function rah_sitemap_delete() {
 		
