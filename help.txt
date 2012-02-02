@@ -2,8 +2,8 @@ h1. rah_sitemap
 
 p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. Easily build valid "Sitemap.org":http://www.sitemap.org XML(eXtensible Markup Language) sitemaps for search engines, including Google. Supports categories, sections, articles and even custom URLs. All settings can be managed from clean interface. No dive to code required.
 
-* Version: 1.0
-* Updated: 2010/10/29 12:10 PM UTC
+* Version: 1.1
+* Updated: 2010/10/30 10:35 PM UTC
 
 h3. Table of Contents
 
@@ -19,7 +19,7 @@ h3(#list-of-features). List of features
 * Filter, include and exclude section, category and article URLs from the sitemap.
 * Create and insert custom URLs to the sitemap with couple simple clicks.
 * No need to create files nor set permissions, instead just use the plugin and eventually submit the sitemap URL to Google (via Webmaster tools) or other searh engine.
-* Sitemap is automatically gzipped as much as possible -- atleast if server supports gzipping.
+* Sitemap is automatically gzipped as much as possible -- at least if server supports gzipping.
 
 h3(#requirements). Requirements
 
@@ -38,7 +38,7 @@ h3(#installation-and-usage). Installation and usage
 
 p. The general behavior stands: paste the plugin code to the plugin installer textarea and run the automatic setup. Then just activate the plugin and you are ready to use the sitemap.
 
-p. You can locate rah_sitemap's userinterface panel from "Textpattern > Extensions > Sitemap.":?event=rah_sitemap From there you can modify preferences and view the sitemap.
+p. You can locate rah_sitemap's user-interface panel from "Textpattern > Extensions > Sitemap.":?event=rah_sitemap From there you can modify preferences and view the sitemap.
 
 h4(#permlink-rules). Permlink schemes and rules
 
@@ -68,6 +68,10 @@ bc. <txp:site_url />section/<txp:section />
 
 h3(#changelog). Changelog
 
+p. *Version 1.1*
+
+* Fixed issues appearing with the installer when MySQL is in strict mode. "Thank you for reporting, Gallex":http://forum.textpattern.com/viewtopic.php?pid=236637#p236637.
+
 p. *Version 1.0*
 
 * Slightly changed backend's installer call; only check for installing if there is no preferences available.
@@ -79,21 +83,21 @@ p. *Version 0.9*
 p. *Version 0.8*
 
 * Now compression level field's label now links to the correct field id.
-* Now suppresses E_WARNING/E_STRICT notices in live mode caused by Textpattern's timezone code when some conditions are met (TXP 4.2.0, PHP 5.1.0+, TXP's Auto-DST feature disabled, TXP in Live mode). Error suppression will be removed when TXP version is realeased with fully working timezone settings.
+* Now suppresses E_WARNING/E_STRICT notices in live mode caused by Textpattern's timezone code when some conditions are met (TXP 4.2.0, PHP 5.1.0+, TXP's Auto-DST feature disabled, TXP in Live mode). Error suppression will be removed when TXP version is released with fully working timezone settings.
 * Now generates UNIX timestamps within the SQL query, not with PHP.
 * Changed sliding panels' links (@a@ elements) into spans.
 
 p. *Version 0.7*
 
 * Fixed: now deleting custom url leads back to the list view, not to the editing form.
-* Removed some leftover inline style from v0.6.
+* Removed some leftover inline styles from v0.6.
 
 p. *Version 0.6*
 
-* Rewriten the code that generetes the sitemap.
+* Rewritten the code that generates the sitemap.
 * New admin panel look.
 * Now custom permlink modes and custom urls are escaped. Users can input unescaped URLs/markup from now on.
-* Now custom URL list shows the full formated URL after auto-fill instead of the user input.
+* Now custom URL list shows the full formatted URL after auto-fill instead of the user input.
 * Now custom URLs that start with www. are completed with http:// protocol.
 * Now all urls that do not start with either http, https, www, ftp or ftps protocol are auto-completed with the site's address.
 * Custom url editor got own panel. No longer the form is above the URL list.
@@ -109,11 +113,11 @@ p. *Version 0.5*
 
 * Added customizable timestamp formats.
 * Cleaned backend markup.
-* Compined individual preference queries.
+* Combined individual preference queries.
 
 p. *Version 0.4*
 
-* Added support for custom permlink rules: Now you can easily set anykind of permlink rules for articles, section and categories.
+* Added support for custom permlink rules: Now you can easily set any kind of permlink rules for articles, section and categories.
 * Added option to exclude future articles.
 * Added option to exclude past articles.
 * Added option to exclude expired articles.
@@ -137,7 +141,7 @@ p. *Version 0.2*
 * Added option to exclude/include sticky articles.
 * Added option to exclude categories directly by type.
 * Fixed bug: now shows all categories, and not only article-type, in admin panel.
-* Fixed bug: removed douple install query (didn't do a thing, just checked table status twice).
+* Fixed bug: removed double install query (didn't do a thing, just checked table status twice).
 
 p. *Version 0.1.2*
 

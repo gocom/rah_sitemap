@@ -1,7 +1,7 @@
 <?php	##################
 	#
 	#	rah_sitemap-plugin for Textpattern
-	#	version 0.9
+	#	version 1.1
 	#	by Jukka Svahn
 	#	http://rahforum.biz
 	#
@@ -823,8 +823,8 @@ EOF;
 		);
 		safe_query(
 			"CREATE TABLE IF NOT EXISTS ".safe_pfx('rah_sitemap_prefs')." (
-				`name` VARCHAR(255) NOT NULL DEFAULT '',
-				`value` LONGTEXT NOT NULL DEFAULT '',
+				`name` VARCHAR(255) NOT NULL,
+				`value` LONGTEXT NOT NULL,
 				PRIMARY KEY(`name`)
 			)"
 		);
