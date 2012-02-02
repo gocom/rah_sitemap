@@ -2,8 +2,8 @@ h1. rah_sitemap
 
 p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. Easily build valid "Sitemap.org":http://www.sitemap.org XML(eXtensible Markup Language) sitemaps for search engines, including Google. Supports categories, sections, articles and even custom URLs. All settings can be managed from clean interface. No dive to code required.
 
-* Version: 1.1
-* Updated: 2010/10/30 10:35 PM UTC
+* Version: 1.2
+* Updated: 2011/03/09 12:20 AM UTC
 
 h3. Table of Contents
 
@@ -67,6 +67,11 @@ p. These URL settings are used for section links that appear in the sitemap. To 
 bc. <txp:site_url />section/<txp:section />
 
 h3(#changelog). Changelog
+
+p. *Version 1.2*
+
+* Added: adds site URL to relative article permlinks. Basically a fix for gbp_permanent_links.
+* Changed: from permlinkurl_id() to permlinkurl(). Greatly reduced the amount of queries generating article permlinks makes.
 
 p. *Version 1.1*
 

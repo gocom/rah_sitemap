@@ -1,7 +1,7 @@
 <?php	##################
 	#
 	#	rah_sitemap-plugin for Textpattern
-	#	version 1.1
+	#	version 1.2
 	#	by Jukka Svahn
 	#	http://rahforum.biz
 	#
@@ -160,14 +160,21 @@
 			if($pref['articleexpired'])
 				$sql[] = " and (Expires = '0000-00-00 00:00:00' or Expires >= now())";
 			
+			
+			if($pref['permlink_article'])
+				$columns = 
+				 	'*,  unix_timestamp(Posted) as posted, '.
+				 	'unix_timestamp(Expires) as uExpires, '.
+				 	'unix_timestamp(LastMod) as uLastMod';
+			else
+				$columns = 
+					'ID as thisid, Section as section, '.
+					'Title as title, url_title, unix_timestamp(Posted)'.
+					' as posted, unix_timestamp(LastMod) as uLastMod';
+			
 			$rs = 
 				safe_rows(
-					(
-						($pref['permlink_article']) ? 
-							'*,  unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod'
-						: 
-							'ID, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod'
-					),
+					$columns,
 					'textpattern',
 					'1=1' . implode('',$sql). ' order by Posted desc'
 				);
@@ -179,7 +186,7 @@
 					$thisarticle = 
 						array(
 							'thisid' => $ID,
-							'posted' => $uPosted,
+							'posted' => $posted,
 							'modified' => $uLastMod,
 							'annotate' => $Annotate,
 							'comments_invite' => $AnnotateInvite,
@@ -198,18 +205,25 @@
 							'status'=> $Status
 						)
 					;
+					
+					@$url = htmlspecialchars(parse($pref['permlink_article']));
+				}
+				
+				else {
+					@$url = permlinkurl($a);
+					
+					/*
+						Fix for gbp_permanent_links
+					*/
+					
+					if(strpos($url,'/') === 0)
+						$url = hu . ltrim($url,'/');
 				}
 				
 				@$out[] = 
-					'<url><loc>'.
-					(($pref['permlink_article']) ? 
-							htmlspecialchars(parse($pref['permlink_article']))
-						: 
-							permlinkurl_id($ID)
-					).
-					'</loc><lastmod>'.
-					(($uLastMod < $uPosted) ? 
-						date($timestampformat,$uPosted) : 
+					'<url><loc>'.$url.'</loc><lastmod>'.
+					($uLastMod < $posted ? 
+						date($timestampformat,$posted) : 
 						date($timestampformat,$uLastMod)
 					).
 					'</lastmod></url>'
