@@ -19,21 +19,26 @@
 		add_privs('rah_sitemap', '1,2');
 		add_privs('plugin_prefs.rah_sitemap', '1,2');
 		register_tab('extensions', 'rah_sitemap', gTxt('rah_sitemap'));
-		register_callback('rah_sitemap_page', 'rah_sitemap');
-		register_callback('rah_sitemap_head', 'admin_side', 'head_end');
-		register_callback('rah_sitemap_prefs', 'plugin_prefs.rah_sitemap');
-		register_callback('rah_sitemap_install', 'plugin_lifecycle.rah_sitemap');
+		register_callback(array('rah_sitemap', 'panes'), 'rah_sitemap');
+		register_callback(array('rah_sitemap', 'head'), 'admin_side', 'head_end');
+		register_callback(array('rah_sitemap', 'prefs'), 'plugin_prefs.rah_sitemap');
+		register_callback(array('rah_sitemap', 'install'), 'plugin_lifecycle.rah_sitemap');
 	}
-	elseif(@txpinterface == 'public')
-		register_callback('rah_sitemap', 'textpattern');
+	elseif(@txpinterface == 'public') {
+		register_callback(array('rah_sitemap', 'get_sitemap'), 'textpattern');
+	}
 
-/**
- * Installer. Creates tables and adds the default rows
- * @param string $event Admin-side callback event.
- * @param string $step Admin-side plugin-lifecycle step.
- */
+class rah_sitemap {
 
-	function rah_sitemap_install($event='', $step='') {
+	static public $version = '1.2';
+
+	/**
+	 * Installer. Creates tables and adds the default rows
+	 * @param string $event Admin-side callback event.
+	 * @param string $step Admin-side plugin-lifecycle step.
+	 */
+
+	static public function install($event='', $step='') {
 		
 		global $prefs;
 		
@@ -51,12 +56,10 @@
 			return;
 		}
 		
-		$version = '1.3';
-		
 		$current = isset($prefs['rah_sitemap_version']) ?
 			$prefs['rah_sitemap_version'] : 'base';
 		
-		if($current == $version)
+		if($current == self::$version)
 			return;
 		
 		/*
@@ -105,15 +108,15 @@
 			}
 		}
 		
-		set_pref('rah_sitemap_version',$version,'rah_sitemap',2,'',0);
-		$prefs['rah_sitemap_version'] = $version;
+		set_pref('rah_sitemap_version', self::$version, 'rah_sitemap', 2, '', 0);
+		$prefs['rah_sitemap_version'] = self::$version;
 	}
 
-/**
-	The sitemap
-*/
+	/**
+	 * The sitemap
+	 */
 
-	function rah_sitemap() {
+	static public function get_sitemap() {
 		
 		global $s, $thissection, $thiscategory, $c, $pretext, $thispage, $thisarticle;
 		
@@ -371,17 +374,18 @@
 		exit();
 	}
 
-/**
-	Delivers the panels
-*/
+	/**
+	 * Delivers the panels
+	 */
 
-	function rah_sitemap_page() {
-		require_privs('rah_sitemap');
+	static public function panes() {
 		global $step;
+	
+		require_privs('rah_sitemap');
 		
 		$steps = 
 			array(
-				'list' => false,
+				'browse' => false,
 				'save' => true,
 				'delete' => true,
 				'custom_list' => false,
@@ -390,17 +394,18 @@
 			);
 		
 		if(!$step || !bouncer($step, $steps))
-			$step = 'list';
+			$step = 'browse';
 		
-		$func = 'rah_sitemap_' . $step;
-		$func();
+		$panels = new rah_sitemap();
+		$panels->$step();
 	}
 
-/**
-	Preferences panel
-*/
+	/**
+	 * Preferences panel
+	 */
 
-	function rah_sitemap_list($message='') {
+	public function browse($message='') {
+
 		@$pref = rah_sitemap_prefs();
 
 		if(!isset($pref['zlib_output'])) {
@@ -408,7 +413,7 @@
 			$pref = rah_sitemap_prefs();
 		}
 
-		rah_sitemap_header(
+		$this->pane(
 			
 			'	<form method="post" action="index.php">'.n.
 			
@@ -561,11 +566,61 @@
 		);
 	}
 
-/**
-	Panel, lists custom URLs
-*/
+	/**
+	 * Saves preferences
+	 */
 
-	function rah_sitemap_custom_list($message='') {
+	public function save() {
+		foreach(rah_sitemap_pref_fields() as $key => $val) {
+			$ps = ps($key);
+			
+			if(is_array($ps))
+				$ps = implode(',',$ps);
+			
+			safe_update(
+				'rah_sitemap_prefs',
+				"value='".doSlash(trim($ps))."'",
+				"name='".$key."'"
+			);
+		}
+
+		$this->browse('Sitemap preferences saved');
+	}
+
+	/**
+	 * Deletes custom URIs
+	 */
+
+	public function delete() {
+		
+		$selected = ps('selected');
+		
+		if(!is_array($selected) || empty($selected)) {
+			$this->custom_list('nothing_selected');
+			return;
+		}
+		
+		foreach($selected as $url)
+			$in[] = "'".doSlash($url)."'";
+		
+		if(
+			safe_delete(
+				'rah_sitemap',
+				'url in('.implode(',', $in).')'
+			) == false
+		) {
+			$this->custom_list('error_removing');
+			return;	
+		}
+		
+		$this->custom_list('removed');
+	}
+
+	/**
+	 * Lists custom URLs
+	 */
+
+	public function custom_list($message='') {
 
 		$out[] = 
 			'	<form method="post" action="index.php">'.n.
@@ -613,7 +668,7 @@
 			'		'.tInput().n.
 			'	</form>'.n;
 		
-		rah_sitemap_header(
+		$this->pane(
 			$out,
 			'rah_sitemap',
 			'List of custom URLs',
@@ -622,11 +677,11 @@
 		);
 	}
 
-/**
-	Panel to add custom URLs
-*/
+	/**
+	 * Panel to add custom URLs
+	 */
 
-	function rah_sitemap_custom_form($message='') {
+	public function custom_form($message='') {
 		
 		$edit = gps('edit');
 		
@@ -640,7 +695,7 @@
 				);
 			
 			if(!$rs) {
-				rah_sitemap_custom_list('Selection not found.');
+				$this->custom_list('Selection not found.');
 				return;
 			}
 			
@@ -653,7 +708,7 @@
 				'url','include','posted'
 			)));
 		
-		rah_sitemap_header(
+		$this->pane(
 			'	<form method="post" action="index.php">'.n.
 			'		<p>'.n.
 			'			<label>'.n.
@@ -695,11 +750,11 @@
 		
 	}
 
-/**
-	Saves custom URL
-*/
+	/**
+	 * Saves a custom URL
+	 */
 
-	function rah_sitemap_custom_save() {
+	public function custom_save() {
 		extract(doSlash(gpsa(array(
 			'url',
 			'posted',
@@ -714,14 +769,14 @@
 			$posted = "posted='$posted'";
 		
 		if(!$edit && safe_count('rah_sitemap',"url='$url'") != 0) {
-			rah_sitemap_custom_form('URL already exists.');
+			$this->custom_form('URL already exists.');
 			return;
 		}
 		
 		if($edit && safe_count('rah_sitemap',"url='$edit'") == 1) {
 			
 			if($url != $edit && safe_count('rah_sitemap',"url='$url'") == 1) {
-				rah_sitemap_custom_form('New URL already exists.');
+				$this->custom_form('New URL already exists.');
 				return;
 			}
 			
@@ -733,7 +788,7 @@
 				"url='$edit'"
 			);
 			
-			rah_sitemap_custom_list('URL updated.');
+			$this->custom_list('URL updated.');
 			return;
 			
 		}
@@ -745,15 +800,15 @@
 			include='$include'"
 		);
 		
-		rah_sitemap_custom_list('URL added.');
+		$this->custom_list('URL added.');
 		return;
 	}
 
-/**
-	Outputs the panel's CSS and JavaScript to page's <head> segment
-*/
+	/**
+	 * Adss CSS and JavaScript to the <head>
+	 */
 
-	function rah_sitemap_head() {
+	static public function head() {
 		
 		global $event;
 		
@@ -818,21 +873,22 @@
 EOF;
 	}
 
-/**
-	The panel's navigation bar
-*/
+	/**
+	 * Returns panel's markup
+	 */
 
-	function rah_sitemap_header($content='',$title='rah_sitemap',$msg='Manage your sitemap',$pagetop='',$message='') {
+	public function pane($content='',$title='rah_sitemap',$msg='Manage your sitemap',$pagetop='',$message='') {
 		
-		pagetop($pagetop,$message);
+		pagetop($pagetop, $message);
 		
-		if(is_array($content))
+		if(is_array($content)) {
 			$content = implode('',$content);
+		}
 		
 		echo 
 			n.
 			'	<div id="rah_sitemap_container" class="rah_ui_container">'.n.
-			'		<h1><strong>'.$title.'</strong> | '.$msg.'</h1>'.n.
+			//'		<h1><strong>'.$title.'</strong> | '.$msg.'</h1>'.n.
 			'		<p id="rah_sitemap_nav" class="rah_ui_nav">'.
 					' <span class="rah_ui_sep">&#187;</span> <a href="?event=rah_sitemap">Preferences</a>'.
 					' <span class="rah_ui_sep">&#187;</span> <a href="?event=rah_sitemap&amp;step=custom_form">Add custom URL</a>'.
@@ -843,9 +899,23 @@ EOF;
 			'	</div>'.n;
 	}
 
+	/**
+	 * Redirect to the admin-side interface
+	 */
+
+	static public function prefs() {
+		header('Location: ?event=rah_sitemap');
+		echo 
+			'<p>'.n.
+			'	<a href="?event=rah_sitemap">'.gTxt('continue').'</a>'.n.
+			'</p>';
+	}
+}
+
+
 /**
-	Builds the required in array for SQL statements
-*/
+ * Builds the required in array for SQL statements
+ */
 
 	function rah_sitemap_in($field='',$array='',$default='',$sql=' not in') {
 		
@@ -992,66 +1062,5 @@ EOF;
 		$out[] = 
 			'					</div>'.n;
 		return implode('',$out);
-	}
-
-/**
-	Saves preferences
-*/
-
-	function rah_sitemap_save() {
-		foreach(rah_sitemap_pref_fields() as $key => $val) {
-			$ps = ps($key);
-			
-			if(is_array($ps))
-				$ps = implode(',',$ps);
-			
-			safe_update(
-				'rah_sitemap_prefs',
-				"value='".doSlash(trim($ps))."'",
-				"name='".$key."'"
-			);
-		}
-		rah_sitemap_list('Sitemap preferences saved');
-	}
-
-/**
-	Deletes custom URIs
-*/
-
-	function rah_sitemap_delete() {
-		
-		$selected = ps('selected');
-		
-		if(!is_array($selected) || empty($selected)) {
-			rah_sitemap_custom_list('nothing_selected');
-			return;
-		}
-		
-		foreach($selected as $url)
-			$in[] = "'".doSlash($url)."'";
-		
-		if(
-			safe_delete(
-				'rah_sitemap',
-				'url in('.implode(',', $in).')'
-			) == false
-		) {
-			rah_sitemap_custom_list('error_removing');
-			return;	
-		}
-		
-		rah_sitemap_custom_list('removed');
-	}
-
-/**
-	Redirect to the admin-side interface
-*/
-
-	function rah_sitemap_options() {
-		header('Location: ?event=rah_sitemap');
-		echo 
-			'<p>'.n.
-			'	<a href="?event=rah_sitemap">'.gTxt('continue').'</a>'.n.
-			'</p>';
 	}
 ?>
