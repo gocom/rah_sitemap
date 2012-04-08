@@ -4,60 +4,33 @@ p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.
 
 h2. List of features
 
-* Simple interface under _Textpattern > Extensions > Sitemap_: build, view, modify and customize sitemap.
+* Simple interface and options integrated to Textpattern's native preferences panel.
 * Filter, include and exclude section, category and article URLs from the sitemap.
-* Create and insert custom URLs to the sitemap with couple simple clicks.
-* No need to create files nor set permissions, instead just use the plugin and eventually submit the sitemap URL to Google (via Webmaster tools) or other searh engine.
-* Sitemap is automatically gzipped as much as possible -- at least if server supports gzipping.
+* No need to create files nor set permissions, instead of just use the plugin and eventually submit the sitemap URL to Google (via Webmaster tools) and other search engines.
+* Sitemap is automatically compressed.
 
 h2. Requirements
 
-Minimum:
+Rah_sitemap's minimum requirements:
 
-* Textpattern 4.4.1 or newer
-* PHP 5+
-* Optional: PHP zlib extension
+* Textpattern v4.4.1 or newer.
+* PHP 5 or newer.
 
 h2. Installation and usage
 
 p. The general behavior stands: paste the plugin code to the plugin installer textarea and run the automatic setup. Then just activate the plugin and you are ready to use the sitemap.
 
-p. You can locate rah_sitemap's user-interface panel from "Textpattern > Extensions > Sitemap.":?event=rah_sitemap From there you can modify preferences and view the sitemap.
-
-h3. Permlink schemes and rules
-
-Rah_sitemap version 0.4 included a new feature: permlink settings. These setting, found in the panel, will let you define the permlink form for the URLs in the Sitemap. This is a ideal tool for matching the URLs to your own .httaccess rules or a plugin created custom URL rules. If you want to use in-build urls defined by Textpattern itself, you can leave these setting unset.
-
-h4. Article permlinks
-
-These URL settings are used for articles that appear in the sitemap. To form the URLs you can use any individual article context's @<txp:/>@ tag. Big shots like @<txp:permlink />@, @<txp:posted />@, @<txp:title />@, @<txp:category1 />@, @<txp:category2 />@, @<txp:section />@, @<txp:if_article_author />@, @<txp:if_article_category />@, @<txp:if_article_id />@ and so on.
-
-Example Article permlink URL:
-
-bc. <txp:site_url />sections/<txp:section/>/articles/<txp:article_id />/<txp:article_url_title />
-
-h4. Category permlinks
-
-p. These URL settings are used for Category links that appear in the sitemap. To form the URLs you can use plain category context TXP tags @<txp:category />@ and @<txp:if_category />@. The plugin also provides two extra tagish tags, @[type]@ and @[id]@ which will basically output category's type and id.
-
-Example Category permlink URL:
-
-bc. <txp:site_url />view/category/[id]/<txp:category link="0" title="0" />
-
-h4. Section permlinks
-
-p. These URL settings are used for section links that appear in the sitemap. To form the URLs you can use the two section tags, @<txp:section />@ and @<txp:if_section />@.
-
-bc. <txp:site_url />section/<txp:section />
+p. You can locate rah_sitemap's user-interface panel from Textpattern's Advanced Preferences panel, Textpattern / Admin / Preferences / Advanced.
 
 h2. Changelog
 
 h3. Version 1.3 - upcoming
 
-* Changed the spans in the panel to links. Added JavaScript to disable the links default action.
-* Added: language strings.
-* Added: rah_ui-classes for easier theming.
-* Added: skips empty article URLs.
+* Changed: Integrated preferences to Textpattern's native preferences panel.
+* Added: Language strings, interface is now translatable using Textpacks.
+* Removed: Number of extra configuration options including zlib-fixes, compression and custom URL formats.
+* Removed: Link and file category support.
+* Improved: Zlib and gzip options are checked and dealt with automatically.
 
 h3. Version 1.2 - 2011/03/09
 
