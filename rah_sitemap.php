@@ -31,7 +31,7 @@ class rah_sitemap {
 	static public $version = '1.2';
 
 	/**
-	 * Installer. Creates tables and adds the default rows
+	 * Installer
 	 * @param string $event Admin-side callback event.
 	 * @param string $step Admin-side plugin-lifecycle step.
 	 */
@@ -347,7 +347,7 @@ class rah_sitemap {
 }
 
 /**
- * List all available sections
+ * Lists all available sections
  * @param string $name
  * @param string $value
  * @return string HTML
@@ -372,7 +372,7 @@ class rah_sitemap {
 	}
 
 /**
- * List all available categories
+ * Lists all available categories
  * @param string $name
  * @param string $value
  * @return string HTML
@@ -397,7 +397,7 @@ class rah_sitemap {
 	}
 
 /**
- * List all excluded article fields
+ * Lists all excluded article fields
  * @param string $name
  * @param string $value
  * @return string HTML textarea
