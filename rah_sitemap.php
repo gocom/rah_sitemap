@@ -178,13 +178,6 @@ class rah_sitemap {
 		set_pref('rah_sitemap_version', self::$version, 'rah_sitemap', 2, '', 0);
 		$prefs['rah_sitemap_version'] = self::$version;
 	}
-
-	/**
-	 * Constructor
-	 */
-	
-	public function __construct() {
-	}
 	
 	/**
 	 * Handles preference saving
