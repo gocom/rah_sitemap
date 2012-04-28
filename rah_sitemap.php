@@ -327,7 +327,11 @@ class rah_sitemap {
 	}
 	
 	/**
-	 * Returns a multi-select field
+	 * Returns a multi-select option
+	 * @param string $name
+	 * @param array $values
+	 * @param string|array $selected
+	 * @return HTML markup
 	 */
 	
 	static public function multiselect($name, $values, $selected) {
