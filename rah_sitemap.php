@@ -261,21 +261,21 @@ class rah_sitemap {
 			$sql[] = 'Status != 5';
 		}
 		
-		if($prefs['rah_sitemap_future_articles']) {
+		if(!$prefs['rah_sitemap_future_articles']) {
 			$sql[] = 'Posted <= now()';
 		}
 		
-		if($prefs['rah_sitemap_past_articles']) {
-			$sql[] = 'Posted > now()';
+		if(!$prefs['rah_sitemap_past_articles']) {
+			$sql[] = 'Posted >= now()';
 		}
 		
-		if($prefs['rah_sitemap_expired_articles']) {
-			$sql[] = "(Expires = '0000-00-00 00:00:00' or Expires >= now())";
+		if(!$prefs['rah_sitemap_expired_articles']) {
+			$sql[] = "(Expires = ".NULLDATETIME." or Expires >= now())";
 		}
 		
 		$rs = 
 			safe_rows(
-				'*',
+				'*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod',
 				'textpattern',
 				implode(' and ', $sql) . ' ORDER BY Posted DESC'
 			);
@@ -283,7 +283,7 @@ class rah_sitemap {
 		foreach($rs as $a) {
 			@$out[] = 
 				'<url><loc>'.permlinkurl($a).'</loc>'.
-				'<lastmod>'.($uLastMod < $posted ? date('c', $posted) : date('c', $uLastMod)).'</lastmod>'.
+				'<lastmod>'.($a['uLastMod'] < $a['uPosted'] ? date('c', $a['uPosted']) : date('c', $a['uLastMod'])).'</lastmod>'.
 				'</url>';
 		}
 		
