@@ -287,6 +287,10 @@ class rah_sitemap {
 				'</url>';
 		}
 		
+		if($callback = callback_event('rah_sitemap.urlset')) {
+			$out[] = $callback;
+		}
+		
 		$out[] = '</urlset>';
 		$xml = implode('', $out);
 		
