@@ -226,13 +226,13 @@ class rah_sitemap {
 			$out[] = '<url><loc>'.pagelinkurl(array('s' => $a['name'])).'</loc></url>';
 		}
 		
-		$c = array_merge(array('root'), quote_list(do_list($prefs['rah_sitemap_exclude_categories'])));
+		$c = array_merge(array("'root'"), quote_list(do_list($prefs['rah_sitemap_exclude_categories'])));
 		
 		$rs = 
 			safe_rows(
 				'name',
 				'txp_category',
-				"name != 'root' AND type='article' ORDER BY name asc"
+				"name NOT IN(".implode(',', $c).") AND type='article' ORDER BY name asc"
 			);
 		
 		foreach($rs as $a) {
