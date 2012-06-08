@@ -23,12 +23,14 @@
 		register_callback(array('rah_sitemap', 'prefs_save'), 'prefs', 'advanced_prefs_save', 1);
 	}
 	elseif(@txpinterface == 'public') {
-		register_callback(array('rah_sitemap', 'get_sitemap'), 'textpattern');
+		register_callback(array('rah_sitemap', 'page_handler'), 'textpattern');
 	}
 
 class rah_sitemap {
-	
+
 	static public $version = '1.2';
+	static public $instance = NULL;
+	protected $urlset = array();
 
 	/**
 	 * Installer
@@ -180,6 +182,19 @@ class rah_sitemap {
 	}
 	
 	/**
+	 * Gets an instance of the class
+	 */
+	
+	static public function get($new_instance=false) {
+		
+		if(self::$instance === NULL || $new_instance) {
+			self::$instance = new rah_sitemap();
+		}
+		
+		return self::$instance;
+	}
+	
+	/**
 	 * Handles preference saving
 	 */
 	
@@ -195,23 +210,31 @@ class rah_sitemap {
 			}
 		}
 	}
-
+	
 	/**
-	 * The sitemap
+	 * Handles returning the sitemap
 	 */
-
-	static public function get_sitemap() {
+	
+	static public function page_handler() {
 		
-		global $prefs, $pretext;
+		global $pretext;
 		
 		if(!gps('rah_sitemap') && strpos(end(explode('/', $pretext['request_uri'])), 'sitemap.xml') !== 0) {
 			return;
 		}
 		
-		$out[] = 
-			'<?xml version="1.0" encoding="utf-8"?>'.
-			'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
-			'<url><loc>'.hu.'</loc></url>';
+		return self::get()->get_sitemap();
+	}
+
+	/**
+	 * Generates and outputs the sitemap
+	 */
+
+	protected function get_sitemap() {
+		
+		global $prefs;
+		
+		$this->url(hu);
 		
 		$s = array_merge(array("'default'"), quote_list(do_list($prefs['rah_sitemap_exclude_sections'])));
 		
@@ -223,7 +246,7 @@ class rah_sitemap {
 			);
 		
 		foreach($rs as $a) {
-			$out[] = '<url><loc>'.pagelinkurl(array('s' => $a['name'])).'</loc></url>';
+			$this->url(pagelinkurl(array('s' => $a['name'])));
 		}
 		
 		$c = array_merge(array("'root'"), quote_list(do_list($prefs['rah_sitemap_exclude_categories'])));
@@ -236,7 +259,7 @@ class rah_sitemap {
 			);
 		
 		foreach($rs as $a) {
-			$out[] = '<url><loc>'.pagelinkurl(array('c' => $a['name'])).'</loc></url>';
+			$this->url(pagelinkurl(array('c' => $a['name'])));
 		}
 		
 		$fields = $prefs['rah_sitemap_exclude_fields'] ? 
@@ -281,22 +304,20 @@ class rah_sitemap {
 			);
 		
 		foreach($rs as $a) {
-			@$out[] = 
-				'<url><loc>'.permlinkurl($a).'</loc>'.
-				'<lastmod>'.($a['uLastMod'] < $a['uPosted'] ? date('c', $a['uPosted']) : date('c', $a['uLastMod'])).'</lastmod>'.
-				'</url>';
+			$this->url(permlinkurl($a), (int) max($a['uLastMod'], $a['uPosted']));
 		}
 		
 		foreach(do_list($prefs['rah_sitemap_urls']) as $url) {
-			$out[] = '<url><loc>'.$url.'</loc></url>';
+			$this->url($url);
 		}
 		
-		if($callback = callback_event('rah_sitemap.urlset')) {
-			$out[] = $callback;
-		}
+		callback_event('rah_sitemap.urlset');
 		
-		$out[] = '</urlset>';
-		$xml = implode('', $out);
+		$xml = 
+			'<?xml version="1.0" encoding="utf-8"?>'.
+			'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
+			implode('', $this->urlset).
+			'</urlset>';
 		
 		header('Content-type: application/xml');
 		
@@ -313,6 +334,39 @@ class rah_sitemap {
 		
 		echo $xml;
 		exit;
+	}
+	
+	/**
+	 * Generates XML sitemap url item
+	 * @param string $url
+	 * @param int|string $lastmod
+	 * @return obj
+	 */
+	
+	public function url($url, $lastmod=NULL) {
+	
+		if(strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0) {
+			$url = hu . ltrim(htmlspecialchars($url), '/');
+		}
+		
+		if($lastmod !== NULL) {
+		
+			if(is_string($lastmod)) {
+				$lastmod = strtotime($lastmod);
+			}
+			
+			if($lastmod !== false) {
+				$lastmod = date('c', $lastmod);
+			}
+		}
+		
+		$this->urlset[] = 
+			'<url>'.
+				'<loc>'.$url.'</loc>'.
+				($lastmod ? '<lastmod>'.$lastmod.'</lastmod>' : '').
+			'</url>';
+		
+		return $this;
 	}
 
 	/**
