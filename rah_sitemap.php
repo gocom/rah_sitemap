@@ -29,7 +29,17 @@
 class rah_sitemap {
 
 	static public $version = '1.2';
+	
+	/**
+	 * @var obj Stores instances
+	 */
+	
 	static public $instance = NULL;
+	
+	/**
+	 * @var array Stores XML urlset
+	 */
+	
 	protected $urlset = array();
 
 	/**
@@ -183,6 +193,8 @@ class rah_sitemap {
 	
 	/**
 	 * Gets an instance of the class
+	 * @param bool $new_instance
+	 * @return obj
 	 */
 	
 	static public function get($new_instance=false) {
