@@ -203,10 +203,17 @@ class rah_sitemap {
 		if(empty($_POST) || !is_array($_POST)) {
 			return;
 		}
-	
-		foreach($_POST as $name => $value) {
-			if(strpos($name, 'rah_sitemap_') === 0 && is_array($value)) {
-				$_POST[$name] = implode(', ', $value);
+		
+		foreach(array('exclude_sections', 'exclude_categories') as $name) {
+		
+			$name = 'rah_sitemap_' . $name;
+		
+			if(isset($_POST[$name]) && is_array($_POST[$name])) {
+				$_POST[$name] = implode(', ', $_POST[$name]);
+			}
+			
+			else {
+				$_POST[$name] = '';
 			}
 		}
 	}
