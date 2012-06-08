@@ -308,7 +308,9 @@ class rah_sitemap {
 		}
 		
 		foreach(do_list($prefs['rah_sitemap_urls']) as $url) {
-			$this->url($url);
+			if($url) {
+				$this->url($url);
+			}
 		}
 		
 		callback_event('rah_sitemap.urlset');
