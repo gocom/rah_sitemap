@@ -287,6 +287,10 @@ class rah_sitemap {
 				'</url>';
 		}
 		
+		foreach(do_list($prefs['rah_sitemap_urls']) as $url) {
+			$out[] = '<url><loc>'.$url.'</loc></url>';
+		}
+		
 		if($callback = callback_event('rah_sitemap.urlset')) {
 			$out[] = $callback;
 		}
