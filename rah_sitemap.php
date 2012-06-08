@@ -73,8 +73,6 @@ class rah_sitemap {
 			'exclude_categories' => '',
 			'exclude_sections' => '',
 			'exclude_fields' => array(),
-			//'exclude_article_c' => array(),
-			//'exclude_article_s' => array(),
 			'urls' => '',
 			'future_articles' => 0,
 			'past_articles' => 1,
@@ -127,7 +125,7 @@ class rah_sitemap {
 				}
 			}
 			
-			//@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap_prefs'));	
+			@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap_prefs'));	
 		}
 		
 		@$rs = 
@@ -139,7 +137,7 @@ class rah_sitemap {
 		
 		if($rs) {
 			$opt['urls'] = implode(',', $rs);
-			//@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap'));
+			@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap'));
 		}
 		
 		$position = 259;
