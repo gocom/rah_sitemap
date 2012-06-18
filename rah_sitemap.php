@@ -63,9 +63,9 @@ class rah_sitemap {
 		}
 		
 		$current = isset($prefs['rah_sitemap_version']) ?
-			$prefs['rah_sitemap_version'] : 'base';
+			(string) $prefs['rah_sitemap_version'] : 'base';
 		
-		if($current == self::$version) {
+		if($current === self::$version) {
 			return;
 		}
 		
