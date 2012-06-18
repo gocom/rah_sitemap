@@ -414,10 +414,13 @@ class rah_sitemap {
 			$selected = do_list($selected);
 		}
 		
+		$name = htmlspecialchars($name);
 		$out = array();
+		$i = 0;
 		
 		foreach($values as $v => $t) {
-			$out[] = '<label><input type="checkbox" name="'.htmlspecialchars($name).'[]" value="'.htmlspecialchars($v).'"'.(in_array($v, $selected) ? ' checked="checked"' : '').' />'.htmlspecialchars($t).'</label>';
+			$id = $name.($i++);
+			$out[] = '<input type="checkbox" id="'.$id.'" name="'.$name.'[]" value="'.htmlspecialchars($v).'"'.(in_array($v, $selected) ? ' checked="checked"' : '').' /> <label for="'.$id.'">'.htmlspecialchars($t).'</label><br />';
 		}
 		
 		return implode(n, $out);
