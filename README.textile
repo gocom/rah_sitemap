@@ -14,7 +14,7 @@ h2. Requirements
 Rah_sitemap's minimum requirements:
 
 * Textpattern v4.4.1 or newer.
-* PHP 5 or newer.
+* PHP 5.2 or newer.
 
 h2. Installation and usage
 
