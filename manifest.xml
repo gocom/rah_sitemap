@@ -4,7 +4,7 @@
 	<description>Build a valid advanced XML sitemap</description>
 
 	<version>1.2</version>
-	<type public="0" pub-admin="1" library="2" admin-only="3">1</type>
+	<type>1</type>
 
 	<author>Jukka Svahn</author>
 	<author_uri>http://rahforum.biz</author_uri>
