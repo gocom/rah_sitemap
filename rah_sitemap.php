@@ -41,6 +41,12 @@ class rah_sitemap {
 	 */
 	
 	protected $urlset = array();
+	
+	/**
+	 * @var array Stores allowed article fields
+	 */
+	
+	protected $article_fields = array();
 
 	/**
 	 * Installer
@@ -240,7 +246,7 @@ class rah_sitemap {
 			return;
 		}
 		
-		return self::get()->get_sitemap();
+		return self::get()->populate_article_fields()->get_sitemap();
 	}
 
 	/**
@@ -279,14 +285,18 @@ class rah_sitemap {
 			$this->url(pagelinkurl(array('c' => $a['name'])));
 		}
 		
+		$sql = array('Status >= 4');
+		
 		foreach(do_list($prefs['rah_sitemap_exclude_fields']) as $field) {
-			if($field && strpos($field, ':')) {
+			if($field) {
 				$f = explode(':', $field);
-				$sql[] = trim($f[0]) . " NOT LIKE '".doSlash(trim(implode(':', array_slice($f, 1))))."'";
+				$n = strtolower(trim($f[0]));
+
+				if(isset($this->article_fields[$n])) {
+					$sql[] = $this->article_fields[$n]." NOT LIKE '".doSlash(trim(implode(':', array_slice($f, 1))))."'";
+				}
 			}
 		}
-		
-		$sql[] = 'Status >= 4';
 		
 		if($prefs['rah_sitemap_exclude_sticky_articles']) {
 			$sql[] = 'Status != 5';
@@ -375,6 +385,26 @@ class rah_sitemap {
 				'<loc>'.$url.'</loc>'.
 				($lastmod ? '<lastmod>'.$lastmod.'</lastmod>' : '').
 			'</url>';
+		
+		return $this;
+	}
+
+	/**
+	 * Populates allowed article fields
+	 * @return obj
+	 */
+
+	protected function populate_article_fields() {
+	
+		$columns = (array) @getThings('describe '.safe_pfx('textpattern'));
+		
+		foreach($columns as $name) {
+			$this->article_fields[strtolower($name)] = $name;
+		}
+		
+		foreach(getCustomFields() as $id => $name) {
+			$this->article_fields[$name] = 'custom_'.intval($id);
+		}
 		
 		return $this;
 	}
