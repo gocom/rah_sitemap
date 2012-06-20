@@ -22,6 +22,46 @@ p. The general behavior stands: paste the plugin code to the plugin installer te
 
 p. You can locate rah_sitemap's user-interface panel from Textpattern's Advanced Preferences panel, Textpattern / Admin / Preferences / Advanced.
 
+h2. Configuration
+
+p. Rah_sitemap comes with number of preferences which all came be found from "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences, organized under *Sitemap* section. Preferences allow excluding sections, categories and articles from the XML sitemap. Following options will be present.
+
+h3. Exclude categories
+
+p. Any of the selected categories will be excluded from the sitemap. Rest of the categories will be shown in the sitemap.
+
+h3. Exclude sections
+
+p. Works similarly to categories. Any of the selected sections will be excluded from the sitemap. The option will only effect the landing page, but not content published on the section.
+
+h3. Exclude articles based on fields
+
+p. The field can be used to exclude articles from the sitemap based on any article field and its value. The field takes a comma-separated list of @articlefield: value@ pairs. Where field is the of the database field and value is the field's value that will be excluded. Available fields include: @Title@, @AuthorID@, @Body@, @Excerpt@, @Category1@, @Category2@, @Section@, @Keywords@, @url_title@, @custom_1@ to @custom_10@ and @Image@.
+
+p. If you wanted to exclude articles posted in "sections":http://textpattern.net/wiki/index.php?title=sections _notes_ and _private_ you could use something as following in the option:
+
+bc. Section: notes, Section: private
+
+h3. Additional URLs
+
+p. Comma-separated list of additional local URLs added to the sitemap. This URLs or paths will be added to the XML sitemap. Note that sitemaps only allow local URLs, all linked content needs to reside under same domain as the website.
+
+h3. Include future articles?
+
+p. If set to Yes, articles with publishing date set to a future date, are visible in the sitemap. Please note that by default "article":http://textpattern.net/wiki/index.php?title=article tag doesn't display future articles, unless its @time@ attribute is set to include @future@.
+
+h3. Include published articles?
+
+p. If set to Yes, published articles are visible in the sitemap. If both this option and _Include future articles?_ are set to No, no articles will be visible in the sitemap.
+
+h3. Include expired articles?
+
+p. If set to No, expired articles are not visible in the sitemap.
+
+h3. Exclude sticky articles?
+
+p. If set to Yes, "sticky":http://textpattern.net/wiki/index.php?title=Write#Sticky articles are not visible in the sitemap.
+
 h2. Changelog
 
 h3. Version 1.3 - upcoming
