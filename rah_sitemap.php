@@ -197,13 +197,12 @@ class rah_sitemap {
 	
 	/**
 	 * Gets an instance of the class
-	 * @param bool $new_instance
 	 * @return obj
 	 */
 	
-	static public function get($new_instance=false) {
+	static public function get() {
 		
-		if(self::$instance === NULL || $new_instance) {
+		if(self::$instance === NULL) {
 			self::$instance = new rah_sitemap();
 		}
 		
