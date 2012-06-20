@@ -279,23 +279,14 @@ class rah_sitemap {
 			$this->url(pagelinkurl(array('c' => $a['name'])));
 		}
 		
-		$fields = $prefs['rah_sitemap_exclude_fields'] ? 
-			do_list($prefs['rah_sitemap_exclude_fields']) : array();
-		
-		$ex = array();
-		
-		foreach($fields as $f) {
-			if($f !== '') {
-				$f = explode(':', $f);
-				$ex[trim($f[0])][] = trim(implode(':', array_slice($f, 1)));
+		foreach(do_list($prefs['rah_sitemap_exclude_fields']) as $field) {
+			if($field && strpos($field, ':')) {
+				$f = explode(':', $field);
+				$sql[] = trim($f[0]) . " NOT LIKE '".doSlash(trim(implode(':', array_slice($f, 1))))."'";
 			}
 		}
 		
 		$sql[] = 'Status >= 4';
-		
-		foreach($ex as $e => $v) {
-			$sql[] = $e . ' NOT IN('. implode(',', quote_list($v)). ')';
-		}
 		
 		if($prefs['rah_sitemap_exclude_sticky_articles']) {
 			$sql[] = 'Status != 5';
