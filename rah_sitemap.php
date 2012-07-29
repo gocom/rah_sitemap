@@ -68,33 +68,24 @@ class rah_sitemap {
 			return;
 		}
 		
-		$current = isset($prefs['rah_sitemap_version']) ?
-			(string) $prefs['rah_sitemap_version'] : 'base';
-		
-		if($current === self::$version) {
+		if((string) get_pref(__CLASS__.'_version') === self::$version) {
 			return;
 		}
 		
 		$opt = array(
-			'exclude_categories' => '',
-			'exclude_sections' => '',
-			'exclude_fields' => array(),
-			'urls' => '',
-			'future_articles' => 0,
-			'past_articles' => 1,
-			'expired_articles' => 1,
-			'exclude_sticky_articles' => 1,
+			'exclude_categories' => array('rah_sitemap_categories', array()),
+			'exclude_sections' => array('rah_sitemap_sections', array()),
+			'exclude_fields' => array('rah_sitemap_textarea', array()),
+			'urls' => array('rah_sitemap_textarea', ''),
+			'future_articles' => array('yesnoradio', 0),
+			'past_articles' => array('yesnoradio', 1),
+			'expired_articles' => array('yesnoradio', 1),
+			'exclude_sticky_articles' => array('yesnoradio', 1),
 		);
 		
-		@$rs = 
-			safe_rows(
-				'name, value',
-				'rah_sitemap_prefs',
-				'1=1'
-			);
+		@$rs = safe_rows('name, value', 'rah_sitemap_prefs', '1=1');
 		
 		if($rs) {
-			
 			foreach($rs as $a) {
 				
 				if(trim($a['value']) === '') {
@@ -103,96 +94,64 @@ class rah_sitemap {
 			
 				if($a['name'] == 'articlecategories') {
 					foreach(do_list($a['value']) as $v) {
-						$opt['exclude_fields'][] = 'Category1: ' . $v;
-						$opt['exclude_fields'][] = 'Category2: ' . $v;
+						$opt['exclude_fields'][1][] = 'Category1: ' . $v;
+						$opt['exclude_fields'][1][] = 'Category2: ' . $v;
 					}
 				}
 				
 				elseif($a['name'] == 'articlesections') {
 					foreach(do_list($a['value']) as $v) {
-						$opt['exclude_fields'][] = 'Section: ' . $v;
+						$opt['exclude_fields'][1][] = 'Section: ' . $v;
 					}
 				}
 				
 				elseif($a['name'] == 'sections') {
-					$opt['exclude_sections'] = do_list($a['value']);
+					$opt['exclude_sections'][1] = do_list($a['value']);
 				}
 				
 				elseif($a['name'] == 'categories' && strpos($a['value'], 'article_||_') !== false) {
-					foreach(do_list($a['value']) as $k => $v) {
+					foreach(do_list($a['value']) as $v) {
 						if(strpos($v, 'article_||_') === 0) {
-							$opt['exclude_categories'] = substr($v, 11);
+							$opt['exclude_categories'][1][] = substr($v, 11);
 						}
 					}
 				}
 				
 				elseif(isset($opt[$a['name']])) {
-					$opt[$a['name']] = $a['value'];
+					$opt[$a['name']][1] = $a['value'];
 				}
 			}
 			
-			@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap_prefs'));	
+			@$rs = safe_column('url', 'rah_sitemap', '1=1');
+			
+			if($rs) {
+				$opt['urls'][1] = implode(', ', $rs);
+				@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap'));
+			}
+			
+			@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap_prefs'));
 		}
 		
-		@$rs = 
-			safe_column(
-				'url',
-				'rah_sitemap',
-				'1=1'
-			);
+		$position = 260;
 		
-		if($rs) {
-			$opt['urls'] = implode(',', $rs);
-			@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap'));
-		}
-		
-		$position = 259;
-		
-		foreach($opt as $name => $value) {
-		
-			$n = 'rah_sitemap_' . $name;
+		foreach($opt as $name => $val) {
+			$n = __CLASS__.'_'.$name;
+			
+			if(!isset($prefs[$n])) {
+				
+				if(is_array($val[1])) {
+					$val[1] = implode(',', $val[1]);
+				}
+				
+				set_pref($n, $val[1], __CLASS__, PREF_ADVANCED, $val[0], $position);
+				$prefs[$n] = $val[1];
+			}
+			
 			$position++;
-			
-			if(isset($prefs[$n])) {
-				continue;
-			}
-			
-			if(is_array($value)) {
-				$value = implode(',', $value);
-			}
-			
-			if($name == 'exclude_categories') {
-				$html = 'rah_sitemap_categories';
-			}
-			
-			elseif($name == 'exclude_sections') {
-				$html = 'rah_sitemap_sections';
-			}
-			
-			elseif($name == 'exclude_fields' || $name == 'urls') {
-				$html = 'rah_sitemap_textarea';
-			}
-			
-			else {
-				$html = 'yesnoradio';
-			}
-			
-			safe_insert(
-				'txp_prefs',
-				"prefs_id=1,
-				name='{$n}',
-				val='".doSlash($value)."',
-				type=1,
-				event='rah_sitemap',
-				html='{$html}',
-				position=".$position
-			);
-
-			$prefs[$n] = $value;
 		}
 		
-		set_pref('rah_sitemap_version', self::$version, 'rah_sitemap', 2, '', 0);
-		$prefs['rah_sitemap_version'] = self::$version;
+		set_pref(__CLASS__.'_version', self::$version, __CLASS__, 2, '', 0);
+		$prefs[__CLASS__.'_version'] = self::$version;
 	}
 	
 	/**
