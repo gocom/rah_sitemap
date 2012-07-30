@@ -1,0 +1,7 @@
+h1. Modules for rah_sitemap
+
+p. This directory contains modules for rah_sitemap, a sitemap plugin for "Textpattern CMS":http://textpattern.com.
+
+h2. Links
+
+p. Links module adds set links from the Textpattern's Links panel to the XML sitemap.
