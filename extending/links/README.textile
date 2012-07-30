@@ -1,0 +1,7 @@
+h1. Links module for rah_sitemap
+
+p. This is a Links module for rah_sitemap plugin. It adds links from Textpattern's Links panel to the XML sitemap. A link that meets one of the following criteria will be added to the sitemap:
+
+* The link is published to a category named *rah_sitemap*.
+* The link's URL starts with the site's URL (i.e. @http://mysite.com/@).
+* The link's URL starts with a forward slash (@/@).
