@@ -1,8 +1,8 @@
 #@admin
 #Default language, en-us, en-gb
 rah_sitemap => Sitemap
-rah_sitemap_view_prefs => Go to preferences
-rah_sitemap_view_sitemap => View sitemap
+rah_sitemap_view_prefs => Go to the preferences
+rah_sitemap_view_sitemap => View the sitemap
 rah_sitemap_exclude_categories => Exclude categories
 rah_sitemap_exclude_sections => Exclude sections
 rah_sitemap_exclude_fields => Exclude articles based on fields (field: value, comma-separated)
