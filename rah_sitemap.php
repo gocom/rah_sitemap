@@ -327,6 +327,10 @@ class rah_sitemap {
 			$url = hu . ltrim(htmlspecialchars($url), '/');
 		}
 		
+		if(isset($this->urlset[$url])) {
+			return $this;
+		}
+		
 		if($lastmod !== NULL) {
 		
 			if(is_string($lastmod)) {
@@ -338,7 +342,7 @@ class rah_sitemap {
 			}
 		}
 		
-		$this->urlset[] = 
+		$this->urlset[$url] = 
 			'<url>'.
 				'<loc>'.$url.'</loc>'.
 				($lastmod ? '<lastmod>'.$lastmod.'</lastmod>' : '').
