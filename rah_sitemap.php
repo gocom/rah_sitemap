@@ -40,7 +40,7 @@ class rah_sitemap {
 	 * @var array Stores XML urlset
 	 */
 	
-	protected $urlset = array();
+	public $urlset = array();
 	
 	/**
 	 * @var array Stores allowed article fields
