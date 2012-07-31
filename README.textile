@@ -72,11 +72,7 @@ p. If set to Yes, "sticky":http://textpattern.net/wiki/index.php?title=Write#Sti
 
 h2. For developers
 
-p. Todo
-
-h3. Callback
-
-p. Rah_sitemap introduces a new callback event to the Textpattern's event library. The is public-facing @rah_sitemap.urlset@ which fired before a sitemap is printed out. The callback event can be used with the API to add new URLs to the sitemap.
+p. Rah_sitemap has small set of tools developers can use. These tools allow other Textpattern plugins to extend rah_sitemap's functionality by adding new URLs to the sitemap. The plugin has a public callback events anyone can use and a tiny PHP API.
 
 h3. API
 
@@ -93,6 +89,25 @@ h4. rah_sitemap::url()
 bc. object rah_sitemap::url(string $url [,int|string $lastmod = NULL])
 
 p. This method adds an URL to the sitemap. The @$url@ can be absolute or relative. The @$lastmod@ can take an integer or a data/time string. If NULL or undefined, no lastmod timestamp is given for URL in the sitemap.
+
+bc. rah_sitemap::get()
+	->url('/path/to/page', '2012-06-23 10:56:32');
+
+p. The above would add a single URL pointing to @http://mysite.com/path/to/page@ to the sitemap.
+
+h4. rah_sitemap::$urlset
+
+bc. array rah_sitemap::$urlset
+
+p. Is a public property containing all URLs added to the sitemap as an array map. Each of the values in the array contains single XML @<url>@ node. While the property is public please avoid accessing it directly unless you really must. The property is always subject to change and is merely used to store the sitemap's URLs. If you want to add an URL to the sitemap, please see @rah_sitemap::url()@ instead. Only potential reason why you would want to interact with @$urlset@ is to either to collect the URLs (e.g. log, ping) or overwrite values.
+
+h3. Callback
+
+p. Rah_sitemap introduces a new callback event to the Textpattern's event library. The is public-facing @rah_sitemap.urlset@ which fired before a sitemap is printed out. The callback event can be used with the API to add new URLs to the sitemap.
+
+p. As with other callback events in Textpattern, hooking to rah_sitemap's event happens using Textpattern's callback handling functions, mainly "register_callback":http://textpattern.net/wiki/index.php?title=Plugin_Development_Guidelines#Callbacks.
+
+bc. register_callback('abc_my_callback_function', 'rah_sitemap.urlset');
 
 h2. Changelog
 
