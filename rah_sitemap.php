@@ -126,9 +126,9 @@ class rah_sitemap {
 			
 			if($rs) {
 				$opt['urls'][1] = implode(', ', $rs);
-				@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap'));
 			}
 			
+			@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap'));
 			@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap_prefs'));
 		}
 		
