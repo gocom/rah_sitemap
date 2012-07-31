@@ -297,6 +297,8 @@ class rah_sitemap {
 			implode('', $this->urlset).
 			'</urlset>';
 		
+		ob_clean();
+		txp_status_header('200 OK');
 		header('Content-type: application/xml');
 		
 		if(
