@@ -1,0 +1,13 @@
+#@admin
+#@language fr-fr
+rah_sitemap => Sitemap
+rah_sitemap_view_prefs => Accès aux préférences
+rah_sitemap_view_sitemap => Visualiser le sitemap
+rah_sitemap_exclude_categories => Exclusion de catégories
+rah_sitemap_exclude_sections => Exclusion de sections
+rah_sitemap_exclude_fields => Exclusion d'articles par champs (liste de valeurs séparées par une virgule)
+rah_sitemap_urls => URL supplémentaires (liste séparée par une virgule)
+rah_sitemap_future_articles => Inclure les articles post-datés ?
+rah_sitemap_past_articles => Inclure les articles publiés ?
+rah_sitemap_expired_articles => Inclure les articles expirés ?
+rah_sitemap_exclude_sticky_articles => Exclure les articles permaments ?
