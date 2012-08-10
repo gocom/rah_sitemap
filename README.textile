@@ -70,6 +70,10 @@ h3. Exclude sticky articles?
 
 p. If set to Yes, "sticky":http://textpattern.net/wiki/index.php?title=Write#Sticky articles are not visible in the sitemap.
 
+h2. Extras and modules
+
+p. Todo.
+
 h2. For developers
 
 p. Rah_sitemap has small set of tools developers can use. These tools allow other Textpattern plugins to extend rah_sitemap's functionality by adding new URLs to the sitemap. The plugin has a public callback events anyone can use and a tiny PHP API.
