@@ -15,16 +15,7 @@
  * http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-	if(@txpinterface == 'admin') {
-		rah_sitemap::install();
-		add_privs('plugin_prefs.rah_sitemap', '1,2');
-		register_callback(array('rah_sitemap', 'prefs'), 'plugin_prefs.rah_sitemap');
-		register_callback(array('rah_sitemap', 'install'), 'plugin_lifecycle.rah_sitemap');
-		register_callback(array('rah_sitemap', 'prefs_save'), 'prefs', 'advanced_prefs_save', 1);
-	}
-	elseif(@txpinterface == 'public') {
-		register_callback(array('rah_sitemap', 'page_handler'), 'textpattern');
-	}
+	rah_sitemap::get();
 
 class rah_sitemap {
 
@@ -153,7 +144,19 @@ class rah_sitemap {
 		set_pref(__CLASS__.'_version', self::$version, __CLASS__, 2, '', 0);
 		$prefs[__CLASS__.'_version'] = self::$version;
 	}
-	
+
+	/**
+	 * Constructor
+	 */
+
+	public function __construct() {
+		add_privs('plugin_prefs.'.__CLASS__, '1,2');
+		register_callback(array(__CLASS__, 'install'), 'plugin_lifecycle.'.__CLASS__);
+		register_callback(array($this, 'prefs'), 'plugin_prefs.'.__CLASS__);
+		register_callback(array($this, 'prefs_save'), 'prefs', 'advanced_prefs_save', 1);
+		register_callback(array($this, 'page_handler'), 'textpattern');
+	}
+
 	/**
 	 * Gets an instance of the class
 	 * @return obj
@@ -172,7 +175,7 @@ class rah_sitemap {
 	 * Handles preference saving
 	 */
 	
-	static public function prefs_save() {
+	public function prefs_save() {
 	
 		if(empty($_POST) || !is_array($_POST)) {
 			return;
@@ -196,7 +199,7 @@ class rah_sitemap {
 	 * Handles returning the sitemap
 	 */
 	
-	static public function page_handler() {
+	public function page_handler() {
 		
 		global $pretext;
 		
@@ -204,7 +207,7 @@ class rah_sitemap {
 			return;
 		}
 		
-		return self::get()->populate_article_fields()->get_sitemap();
+		return $this->populate_article_fields()->get_sitemap();
 	}
 
 	/**
@@ -377,7 +380,7 @@ class rah_sitemap {
 	 * Options page
 	 */
 
-	static public function prefs() {
+	public function prefs() {
 		echo 
 			'<p>'.n.
 			'	<a href="?event=prefs&amp;step=advanced_prefs#prefs-rah_sitemap_exclude_categories">'.gTxt('rah_sitemap_view_prefs').'</a><br />'.n.
