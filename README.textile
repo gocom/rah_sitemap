@@ -4,6 +4,10 @@ p. "Project page":http://rahforum.biz/plugins/rah_sitemap | "Twitter":http://twi
 
 p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. Easily build valid "Sitemaps.org":http://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for search engines, including Google. Supports categories, sections, articles and even custom URLs. All settings can be managed from clean interface. No dive to code required.
 
+h2. Basics
+
+p. Todo.
+
 h2. List of features
 
 * Simple interface and options integrated to Textpattern's native preferences panel.
@@ -20,11 +24,16 @@ Rah_sitemap's minimum requirements:
 
 h2. Installing
 
-p. The general behavior stands: paste the plugin code to the plugin installer textarea and run the automatic setup. Then just activate the plugin and you are ready to use the sitemap.
+p. Rah_sitemap's installation follows the standard plugin installation steps.
 
-p. You can locate rah_sitemap's user-interface panel from Textpattern's Advanced Preferences panel, Textpattern / Admin / Preferences / Advanced.
+# Download the plugin installation code.
+# Copy and paste the installation code into the _Install plugin_ box of your Textpattern Plugin pane.
+# Run the automated setup.
+# After the setup is done, activate the plugin. Done.
 
 h2. Configuration
+
+p. You can locate rah_sitemap's user-interface panel from Textpattern's Advanced Preferences panel, Textpattern / Admin / Preferences / Advanced.
 
 p. Todo
 
