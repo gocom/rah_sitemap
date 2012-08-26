@@ -6,7 +6,19 @@ p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.
 
 h2. Basics
 
-p. Todo.
+p. Rah_sitemap generates a sitemap for your Textpattern website, listing all of its section-, article category- and article-pages. The generated sitemap follows the XML based "Sitemap protocol format":http://www.sitemaps.org/ and is targeted to search engines, opposed to your visitors.
+
+p. The sitemap can be configured directly from Textpattern's Preferences panel, making rah_sitemap very easy to setup and use. The plugin itself takes care of the rest.
+
+p. The generated sitemap is publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's "Permanent Link Mode":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Permanent_Link_Mode. If the site is configured to use "clean URLs":http://textpattern.net/wiki/index.php?title=Talk:Managing_Clean_URLs the sitemap can be accessed from:
+
+bc. http://example.com/sitemap.xml
+
+p. In both the messy and the clean URL mode the query version can be used:
+
+bc. http://example.com/?rah_sitemap=sitemap
+
+p. In the above URLs @example.com@ would be the "site's URL":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Site_URL as specified in Textpattern's "Basic Preferences":http://textpattern.net/wiki/index.php?title=Basic_Preferences.
 
 h2. List of features
 
@@ -33,9 +45,11 @@ p. Rah_sitemap's installation follows the standard plugin installation steps.
 
 h2. Configuration
 
-p. You can locate rah_sitemap's user-interface panel from Textpattern's Advanced Preferences panel, Textpattern / Admin / Preferences / Advanced.
+p. After the rah_sitemap is installed, you may want to do some configuration to it, like for instance exclude certain articles and sections from the sitemap. The plugin's all settings can be configured from Textpattern's "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under *Sitemap* section. See the *Preferences* section below for more information.
 
-p. Todo
+h3. Sending the sitemap to Search Engines
+
+p. Todo.
 
 h2. Preferences
 
@@ -121,6 +135,12 @@ p. Rah_sitemap introduces a new callback event to the Textpattern's event librar
 p. As with other callback events in Textpattern, hooking to rah_sitemap's event happens using Textpattern's callback handling functions, mainly "register_callback":http://textpattern.net/wiki/index.php?title=Plugin_Development_Guidelines#Callbacks.
 
 bc. register_callback('abc_my_callback_function', 'rah_sitemap.urlset');
+
+h3. Custom URL functions
+
+p. If you are supplying a custom URL function for Textpattern, please note that the URLs the function generates need to meet "RFC 3986":http://www.ietf.org/rfc/rfc3986.txt and "RFC 3987":http://www.ietf.org/rfc/rfc3987.txt. All URLs should also be entity escaped from special syntax characters. Please see "htmlspecialchars":http://php.net/manual/en/function.htmlspecialchars.php and Textpattern's core function "txpspecialchars":http://code.google.com/p/textpattern/source/detail?r=3818. All URLs Textpattern itself generates follows these specifications, and so should your custom URL plugin.
+
+p. As rah_sitemap integrates well with Textpattern's core, it uses the same URL functions as Textpattern. If an URL given to the sitemap doesn't meet those specification, the sitemap will become invalid.
 
 h2. Changelog
 
