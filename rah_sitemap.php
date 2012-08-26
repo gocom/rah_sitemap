@@ -300,7 +300,7 @@ class rah_sitemap {
 		
 		ob_clean();
 		txp_status_header('200 OK');
-		header('Content-type: application/xml');
+		header('Content-type: application/xml; charset=UTF-8');
 		
 		if(
 			strpos(serverSet('HTTP_ACCEPT_ENCODING'), 'gzip') !== false && 
