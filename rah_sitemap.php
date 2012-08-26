@@ -336,12 +336,12 @@ class rah_sitemap {
 		
 		if($lastmod !== NULL) {
 		
-			if(is_string($lastmod)) {
-				$lastmod = strtotime($lastmod);
+			if(!is_int($lastmod)) {
+				$lastmod = doArray($lastmod, 'strtotime');
 			}
 			
 			if($lastmod !== false) {
-				$lastmod = date('c', $lastmod);
+				$lastmod = safe_strftime('iso8601', $lastmod);
 			}
 		}
 		
