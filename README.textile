@@ -10,15 +10,29 @@ p. Rah_sitemap generates a sitemap for your Textpattern website, listing all of 
 
 p. The sitemap can be configured directly from Textpattern's Preferences panel, making rah_sitemap very easy to setup and use. The plugin itself takes care of the rest.
 
-p. The generated sitemap is publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's "Permanent Link Mode":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Permanent_Link_Mode. If the site is configured to use "clean URLs":http://textpattern.net/wiki/index.php?title=Talk:Managing_Clean_URLs the sitemap can be accessed from:
+h3. Accessing the sitemap
+
+p. The generated sitemap is publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's "Permanent Link Mode":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Permanent_Link_Mode. If the site is configured to use "clean URLs":http://textpattern.net/wiki/index.php?title=Talk:Managing_Clean_URLs the sitemap can be accessed using an optional clean path:
 
 bc. http://example.com/sitemap.xml
 
-p. In both the messy and the clean URL mode the query version can be used:
+p. In both the messy and the clean URL mode the query version can be used too:
 
 bc. http://example.com/?rah_sitemap=sitemap
 
 p. In the above URLs @example.com@ would be the "site's URL":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Site_URL as specified in Textpattern's "Basic Preferences":http://textpattern.net/wiki/index.php?title=Basic_Preferences.
+
+h3. Immediate boost to search engine visiblity?
+
+p. Not exactly. Providing Sitemap is to help crawling, finding your site's pages. Pages that are otherwise hard to discover. Sitemaps itself do not boost content's visibility.
+
+p. For a simple, almost static website with just few easily discoverable pages, a sitemap may not be necessary at all. If search engines already can know about your pages with no issues, you do not really need rah_sitemap or Sitemaps in general. Once a page is indexed, that's where the sitemap's work end in increasing discoverability.
+
+p. Rah_sitemap is particularly useful when your site has pages that are hard to discover due to being loaded using Ajax, there is way too much distinct content that don't link to each other, or pages are nested deep in a complex page structure. Rah_sitemap can also help your site to start up when it has very few links point to it's pages.
+
+p. It's common misconception to think that Sitemaps guarantee that pages will be indexed. This is not the case. Sitemap is a map. Whether a place is marked on a map doesn't mean someone will actually go there, or when. Like any map, the map is used to find and learn, to increase the future knowledge. Update interval also helps to estimate when your site is updated next and when it should be crawled again.
+
+p. Normally, you will benefit from submitting a sitemap, but its just one piece in the puzzle. In no case will you get penalized from Sitemap or including the wrong content in it.
 
 h2. List of features
 
@@ -47,9 +61,17 @@ h2. Configuration
 
 p. After the rah_sitemap is installed, you may want to do some configuration to it, like for instance exclude certain articles and sections from the sitemap. The plugin's all settings can be configured from Textpattern's "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under *Sitemap* section. See the *Preferences* section below for more information.
 
-h3. Sending the sitemap to Search Engines
+h3. Sending the sitemap to search engines
 
-p. Todo.
+p. Once you have a sitemap up and running, you now should inform search engines about it. There are few ways you can do it. There is "Webmaster Tools":http://www.google.com/webmasters/ for Google, you could use a "robots.txt":http://www.robotstxt.org/ directive and do pinging.
+
+p. To use a robots.txt file to inform about your sitemap's location, you will need access to create a file at the root of the domain named @robots.txt@. In that file you would add a @Sitemap@ directive containing an absolute URL to your sitemap:
+
+bc. Sitemap: http://www.example.com/?rah_sitemap=sitemap
+
+p. Where the @http://www.example.com/@ is your site's location as defined in Textpattern's Preferences panel.
+
+p. If this all about robots.txt seems complicated, or you don't have full access to the domain's root contents, then the easiest and the most user friendly method would be to use a search engine's own interface to do the informing about the location. For instance, Google offers "Webmaster Tools":http://www.google.com/webmasters/ which allow you to send in and validate sitemaps from a graphical user interface.
 
 h2. Preferences
 
@@ -95,7 +117,7 @@ p. If set to Yes, "sticky":http://textpattern.net/wiki/index.php?title=Write#Sti
 
 h2. Extras and modules
 
-p. Todo.
+p. Rah_sitemap supports modules. The plugin's own modules can be used to add new functionality. Please see "extending":https://github.com/gocom/rah_sitemap/tree/master/extending directory on GitHub for more about modules and to download some existing ones.
 
 h2. For developers
 
