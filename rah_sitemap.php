@@ -295,7 +295,7 @@ class rah_sitemap {
 		$xml = 
 			'<?xml version="1.0" encoding="utf-8"?>'.
 			'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
-			implode('', $this->urlset).
+			implode('', array_slice($this->urlset, 0, 50000)).
 			'</urlset>';
 		
 		ob_clean();
