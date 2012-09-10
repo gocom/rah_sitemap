@@ -153,6 +153,8 @@ class rah_sitemap {
 		register_callback(array($this, 'prefs'), 'plugin_prefs.'.__CLASS__);
 		register_callback(array($this, 'prefs_save'), 'prefs', 'advanced_prefs_save', 1);
 		register_callback(array($this, 'page_handler'), 'textpattern');
+		register_callback(array($this, 'section_ui'), 'section_ui', 'extend_detail_form');
+		register_callback(array($this, 'category_ui'), 'category_ui', 'extend_detail_form');
 	}
 
 	/**
@@ -410,6 +412,26 @@ class rah_sitemap {
 		}
 		
 		return implode('<br />', $out);
+	}
+	
+	/**
+	 * Shows settings at the section panel
+	 */
+	
+	public function section_ui($event, $step, $void, $r) {
+		$yes = (!$r || !in_array($r['name'], do_list(get_pref('rah_sitemap_exclude_sections'))));
+
+		return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', $yes, '', ''), '', 'rah_sitemap_include_in');
+	}
+	
+	/**
+	 * Shows settings at the category panel
+	 */
+	
+	public function category_ui($event, $step, $void, $r) {
+		$yes = (!$r || !in_array($r['name'], do_list(get_pref('rah_sitemap_exclude_categories'))));
+		
+		return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', $yes, '', ''), '', 'rah_sitemap_include_in');
 	}
 }
 
