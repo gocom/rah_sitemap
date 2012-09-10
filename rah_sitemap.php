@@ -62,8 +62,8 @@ class rah_sitemap {
 		}
 		
 		$opt = array(
-			'exclude_categories' => array('rah_sitemap_categories', array()),
-			'exclude_sections' => array('rah_sitemap_sections', array()),
+			'exclude_categories' => array('text_input', array()),
+			'exclude_sections' => array('text_input', array()),
 			'exclude_fields' => array('rah_sitemap_textarea', array()),
 			'urls' => array('rah_sitemap_textarea', ''),
 			'future_articles' => array('yesnoradio', 0),
@@ -151,7 +151,6 @@ class rah_sitemap {
 		add_privs('plugin_prefs.'.__CLASS__, '1,2');
 		register_callback(array(__CLASS__, 'install'), 'plugin_lifecycle.'.__CLASS__);
 		register_callback(array($this, 'prefs'), 'plugin_prefs.'.__CLASS__);
-		register_callback(array($this, 'prefs_save'), 'prefs', 'advanced_prefs_save', 1);
 		register_callback(array($this, 'page_handler'), 'textpattern');
 		register_callback(array($this, 'section_ui'), 'section_ui', 'extend_detail_form');
 		register_callback(array($this, 'category_ui'), 'category_ui', 'extend_detail_form');
@@ -169,30 +168,6 @@ class rah_sitemap {
 		}
 		
 		return self::$instance;
-	}
-	
-	/**
-	 * Handles preference saving
-	 */
-	
-	public function prefs_save() {
-	
-		if(empty($_POST) || !is_array($_POST)) {
-			return;
-		}
-		
-		foreach(array('exclude_sections', 'exclude_categories') as $name) {
-		
-			$name = 'rah_sitemap_' . $name;
-		
-			if(isset($_POST[$name]) && is_array($_POST[$name])) {
-				$_POST[$name] = implode(', ', $_POST[$name]);
-			}
-			
-			else {
-				$_POST[$name] = '';
-			}
-		}
 	}
 	
 	/**
@@ -383,35 +358,9 @@ class rah_sitemap {
 	public function prefs() {
 		echo 
 			'<p>'.n.
-			'	<a href="?event=prefs&amp;step=advanced_prefs#prefs-rah_sitemap_exclude_categories">'.gTxt('rah_sitemap_view_prefs').'</a><br />'.n.
+			'	<a href="?event=prefs&amp;step=advanced_prefs#prefs-rah_sitemap_exclude_fields">'.gTxt('rah_sitemap_view_prefs').'</a><br />'.n.
 			'	<a href="'.hu.'?rah_sitemap=sitemap">'.gTxt('rah_sitemap_view_sitemap').'</a>'.
 			'</p>';
-	}
-	
-	/**
-	 * Returns a multi-select option
-	 * @param string $name
-	 * @param array $values
-	 * @param string|array $selected
-	 * @return HTML markup
-	 */
-	
-	static public function multiselect($name, $values, $selected) {
-		
-		if(!is_array($selected)) {
-			$selected = do_list($selected);
-		}
-		
-		$name = htmlspecialchars($name);
-		$out = array();
-		$i = 0;
-		
-		foreach($values as $value => $label) {
-			$id = $name.($i++);
-			$out[] = '<input type="checkbox" id="'.$id.'" name="'.$name.'[]" value="'.htmlspecialchars($value).'"'.(in_array($value, $selected) ? ' checked="checked"' : '').' /> <label for="'.$id.'">'.htmlspecialchars($label).'</label>';
-		}
-		
-		return implode('<br />', $out);
 	}
 	
 	/**
@@ -434,56 +383,6 @@ class rah_sitemap {
 		return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', $yes, '', ''), '', 'rah_sitemap_include_in');
 	}
 }
-
-/**
- * Lists all available sections
- * @param string $name
- * @param string $value
- * @return string HTML
- */
-
-	function rah_sitemap_sections($name, $value) {
-		
-		$rs = 
-			safe_rows(
-				'name, title',
-				'txp_section',
-				"name != 'default' ORDER BY title asc"
-			);
-		
-		$out = array();
-		
-		foreach($rs as $a) {
-			$out[$a['name']] = $a['title'];
-		}
-		
-		return rah_sitemap::multiselect($name, $out, $value);
-	}
-
-/**
- * Lists all available categories
- * @param string $name
- * @param string $value
- * @return string HTML
- */
-
-	function rah_sitemap_categories($name, $value) {
-		
-		$rs = 
-			safe_rows(
-				'name, title',
-				'txp_category',
-				"type = 'article' AND name != 'root' ORDER BY title asc"
-			);
-		
-		$out = array();
-		
-		foreach($rs as $a) {
-			$out[$a['name']] = $a['title'];
-		}
-		
-		return rah_sitemap::multiselect($name, $out, $value);
-	}
 
 /**
  * Lists all excluded article fields
