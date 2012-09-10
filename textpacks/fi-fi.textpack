@@ -3,8 +3,6 @@
 rah_sitemap => Sivukartta
 rah_sitemap_view_prefs => Siirry asetuksiin
 rah_sitemap_view_sitemap => Näytä sivukartta
-rah_sitemap_exclude_categories => Poislue kategoriat
-rah_sitemap_exclude_sections => Poislue osiot
 rah_sitemap_exclude_fields => Poislue artikkeleita kenttien arvojen perusteella (kenttä: arvo, pilkuin eroteltuna)
 rah_sitemap_urls => Sivukarttaan sisältyvät lisä-osoiteet (pilkuin eroteltuna)
 rah_sitemap_future_articles => Sisällytä tuleivasuuteen ajastetut artikkelit?
