@@ -304,7 +304,11 @@ class rah_sitemap {
 	public function url($url, $lastmod=NULL) {
 	
 		if(strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0) {
-			$url = hu . ltrim(htmlspecialchars($url), '/');
+			$url = hu.ltrim($url, '/');
+		}
+		
+		if(preg_match('/[&\'"<>]/', $url)) {
+			$url = htmlspecialchars($url, ENT_QUOTES);
 		}
 		
 		if(isset($this->urlset[$url])) {
