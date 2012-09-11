@@ -54,6 +54,16 @@ class rah_sitemap {
 				"name like 'rah\_sitemap\_%'"
 			);
 			
+			safe_alter(
+				'txp_section',
+				'DROP COLUMN rah_sitemap_include_in'
+			);
+			
+			safe_alter(
+				'txp_category',
+				'DROP COLUMN rah_sitemap_include_in'
+			);
+			
 			return;
 		}
 		
@@ -62,8 +72,6 @@ class rah_sitemap {
 		}
 		
 		$opt = array(
-			'exclude_categories' => array('text_input', array()),
-			'exclude_sections' => array('text_input', array()),
 			'exclude_fields' => array('rah_sitemap_textarea', array()),
 			'urls' => array('rah_sitemap_textarea', ''),
 			'future_articles' => array('yesnoradio', 0),
@@ -72,7 +80,20 @@ class rah_sitemap {
 			'exclude_sticky_articles' => array('yesnoradio', 1),
 		);
 		
+		if(!in_array('rah_sitemap_include_in', getThings('describe '.safe_pfx('txp_section')))) {
+			safe_alter('txp_section', 'ADD rah_sitemap_include_in TINYINT(1) NOT NULL DEFAULT 1');
+		}
+		
+		if(!in_array('rah_sitemap_include_in', getThings('describe '.safe_pfx('txp_category')))) {
+			safe_alter('txp_category', 'ADD rah_sitemap_include_in TINYINT(1) NOT NULL DEFAULT 1');
+		}
+				
 		if(in_array(PFX.'rah_sitemap_prefs', getThings('SHOW TABLES'))) {
+			
+			$update = array(
+				'sections' => array(),
+				'categories' => array(),
+			);
 		
 			$rs = safe_rows('name, value', 'rah_sitemap_prefs', '1=1');
 		
@@ -96,13 +117,13 @@ class rah_sitemap {
 				}
 				
 				elseif($a['name'] == 'sections') {
-					$opt['exclude_sections'][1] = do_list($a['value']);
+					$update['sections'] = do_list($a['value']);
 				}
 				
 				elseif($a['name'] == 'categories' && strpos($a['value'], 'article_||_') !== false) {
 					foreach(do_list($a['value']) as $v) {
 						if(strpos($v, 'article_||_') === 0) {
-							$opt['exclude_categories'][1][] = substr($v, 11);
+							$update['categories'][] = substr($v, 11);
 						}
 					}
 				}
@@ -116,6 +137,14 @@ class rah_sitemap {
 			
 			if($rs) {
 				$opt['urls'][1] = implode(', ', $rs);
+			}
+			
+			if($update['categories']) {
+				safe_update('txp_category', 'rah_sitemap_include_in=0', 'name IN('.implode(',', quote_list($update['categories'])).')');
+			}
+			
+			if($update['sections']) {
+				safe_update('txp_section', 'rah_sitemap_include_in=0', 'name IN('.implode(',', quote_list($update['sections'])).')');
 			}
 			
 			@safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap'));
