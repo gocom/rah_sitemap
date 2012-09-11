@@ -120,11 +120,10 @@ class rah_sitemap {
 					$update['sections'] = do_list($a['value']);
 				}
 				
-				elseif($a['name'] == 'categories' && strpos($a['value'], 'article_||_') !== false) {
+				elseif($a['name'] == 'categories') {
 					foreach(do_list($a['value']) as $v) {
-						if(strpos($v, 'article_||_') === 0) {
-							$update['categories'][] = substr($v, 11);
-						}
+						$v = explode('_||_', $v);
+						$update['categories'][$v[0]][] = end($v);
 					}
 				}
 				
@@ -140,7 +139,9 @@ class rah_sitemap {
 			}
 			
 			if($update['categories']) {
-				safe_update('txp_category', 'rah_sitemap_include_in=0', 'name IN('.implode(',', quote_list($update['categories'])).')');
+				foreach($update['categories'] as $type => $categories) {
+					safe_update('txp_category', 'rah_sitemap_include_in=0', "type='".doSlash($type)."' and name IN(".implode(',', quote_list($categories)).")");
+				}
 			}
 			
 			if($update['sections']) {
