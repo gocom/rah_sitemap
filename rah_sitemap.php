@@ -226,13 +226,11 @@ class rah_sitemap {
 		
 		$this->url(hu);
 		
-		$s = array_merge(array("'default'"), quote_list(do_list($prefs['rah_sitemap_exclude_sections'])));
-		
 		$rs = 
 			safe_rows(
 				'name',
 				'txp_section',
-				'name NOT IN('.implode(',', $s).') ORDER BY name ASC'
+				"name != 'default' and rah_sitemap_include_in=1 ORDER BY name ASC"
 			);
 		
 		foreach($rs as $a) {
