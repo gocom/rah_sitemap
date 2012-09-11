@@ -72,9 +72,10 @@ class rah_sitemap {
 			'exclude_sticky_articles' => array('yesnoradio', 1),
 		);
 		
-		@$rs = safe_rows('name, value', 'rah_sitemap_prefs', '1=1');
+		if(in_array(PFX.'rah_sitemap_prefs', getThings('SHOW TABLES'))) {
 		
-		if($rs) {
+			$rs = safe_rows('name, value', 'rah_sitemap_prefs', '1=1');
+		
 			foreach($rs as $a) {
 				
 				if(trim($a['value']) === '') {
