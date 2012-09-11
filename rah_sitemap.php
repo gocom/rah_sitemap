@@ -185,6 +185,10 @@ class rah_sitemap {
 		register_callback(array($this, 'section_ui'), 'section_ui', 'extend_detail_form');
 		register_callback(array($this, 'category_ui'), 'category_ui', 'extend_detail_form');
 		register_callback(array($this, 'section_save'), 'section', 'section_save');
+		register_callback(array($this, 'category_save'), 'category', 'cat_article_save');
+		register_callback(array($this, 'category_save'), 'category', 'cat_image_save');
+		register_callback(array($this, 'category_save'), 'category', 'cat_file_save');
+		register_callback(array($this, 'category_save'), 'category', 'cat_link_save');
 	}
 
 	/**
@@ -405,7 +409,7 @@ class rah_sitemap {
 	}
 	
 	/**
-	 * Updates section options
+	 * Updates sections
 	 */
 	
 	public function section_save() {
@@ -421,10 +425,19 @@ class rah_sitemap {
 	 */
 	
 	public function category_ui($event, $step, $void, $r) {
-		
-		$yes = (!$r || !in_array($r['name'], do_list(get_pref('rah_sitemap_exclude_categories'))));
-		
-		return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', $yes, '', ''), '', 'rah_sitemap_include_in');
+		return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', !empty($r['rah_sitemap_include_in']), '', ''), '', 'rah_sitemap_include_in');
+	}
+	
+	/**
+	 * Updates categories
+	 */
+	
+	public function category_save() {
+		safe_update(
+			'txp_category', 
+			'rah_sitemap_include_in='.intval(ps('rah_sitemap_include_in')),
+			'id='.intval(ps('id'))
+		);
 	}
 }
 
