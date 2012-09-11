@@ -243,13 +243,13 @@ class rah_sitemap {
 		
 		$rs = 
 			safe_rows(
-				'name',
+				'name, type',
 				'txp_category',
-				"name != 'root' and rah_sitemap_include_in=1 and type='article' ORDER BY name asc"
+				"name != 'root' and rah_sitemap_include_in=1 ORDER BY name asc"
 			);
 		
 		foreach($rs as $a) {
-			$this->url(pagelinkurl(array('c' => $a['name'])));
+			$this->url(pagelinkurl(array('c' => $a['name'], 'context' => $a['type'])));
 		}
 		
 		$sql = array('Status >= 4');
