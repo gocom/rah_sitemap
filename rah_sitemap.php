@@ -338,7 +338,7 @@ class rah_sitemap {
 			$url = hu.ltrim($url, '/');
 		}
 		
-		if(preg_match('/[&\'"<>]/', $url)) {
+		if(preg_match('/[\'"<>]/', $url)) {
 			$url = htmlspecialchars($url, ENT_QUOTES);
 		}
 		
