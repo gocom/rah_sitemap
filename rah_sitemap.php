@@ -237,13 +237,11 @@ class rah_sitemap {
 			$this->url(pagelinkurl(array('s' => $a['name'])));
 		}
 		
-		$c = array_merge(array("'root'"), quote_list(do_list($prefs['rah_sitemap_exclude_categories'])));
-		
 		$rs = 
 			safe_rows(
 				'name',
 				'txp_category',
-				"name NOT IN(".implode(',', $c).") AND type='article' ORDER BY name asc"
+				"name != 'root' and rah_sitemap_include_in=1 and type='article' ORDER BY name asc"
 			);
 		
 		foreach($rs as $a) {
