@@ -214,9 +214,7 @@ class rah_sitemap {
 		
 		global $pretext;
 		
-		$name = basename($pretext['request_uri']);
-		
-		if(!gps('rah_sitemap') && $name !== 'sitemap.xml' && $name !== 'sitemap.xml.gz') {
+		if(!gps('rah_sitemap') && basename($pretext['request_uri'], '.gz') !== 'sitemap.xml') {
 			return;
 		}
 		
