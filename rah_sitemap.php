@@ -232,25 +232,29 @@ class rah_sitemap {
 		$this->url(hu);
 		
 		$rs = 
-			safe_rows(
+			safe_rows_start(
 				'name',
 				'txp_section',
 				"name != 'default' and rah_sitemap_include_in=1 ORDER BY name ASC"
 			);
 		
-		foreach($rs as $a) {
-			$this->url(pagelinkurl(array('s' => $a['name'])));
+		if($rs) {
+			while($a = nextRow($rs)) {
+				$this->url(pagelinkurl(array('s' => $a['name'])));
+			}
 		}
 		
 		$rs = 
-			safe_rows(
+			safe_rows_start(
 				'name, type',
 				'txp_category',
 				"name != 'root' and rah_sitemap_include_in=1 ORDER BY name asc"
 			);
 		
-		foreach($rs as $a) {
-			$this->url(pagelinkurl(array('c' => $a['name'], 'context' => $a['type'])));
+		if($rs) {
+			while($a = nextRow($rs)) {
+				$this->url(pagelinkurl(array('c' => $a['name'], 'context' => $a['type'])));
+			}
 		}
 		
 		$sql = array('Status >= 4');
@@ -283,14 +287,16 @@ class rah_sitemap {
 		}
 		
 		$rs = 
-			safe_rows(
+			safe_rows_start(
 				'*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod',
 				'textpattern',
 				implode(' and ', $sql) . ' ORDER BY Posted DESC'
 			);
 		
-		foreach($rs as $a) {
-			$this->url(permlinkurl($a), (int) max($a['uLastMod'], $a['uPosted']));
+		if($rs) {
+			while($a = nextRow($rs)) {
+				$this->url(permlinkurl($a), (int) max($a['uLastMod'], $a['uPosted']));
+			}
 		}
 		
 		foreach(do_list($prefs['rah_sitemap_urls']) as $url) {
