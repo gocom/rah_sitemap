@@ -45,8 +45,7 @@ h2. Requirements
 
 p. Rah_sitemap's minimum requirements:
 
-* Textpattern v4.4.1 or newer.
-* PHP 5.2 or newer.
+* Textpattern 4.5 or newer.
 
 h2. Installing
 
@@ -160,6 +159,8 @@ h3. Version 1.3 - upcoming
 * Added: French translation by "Patrick Lefevre":https://twitter.com/lowel.
 * Removed: Number of extra configuration options including zlib-fixes, compression and custom URL formats.
 * Improved: Zlib and gzip options are checked and dealt with automatically.
+* Improved: Compatibility with Textpattern 4.5.
+* Now requires Textpattern 4.5 or newer.
 
 h3. Version 1.2 - 2011/03/09
 
