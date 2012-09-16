@@ -72,8 +72,8 @@ class rah_sitemap {
 		}
 		
 		$opt = array(
-			'exclude_fields' => array('rah_sitemap_textarea', array()),
-			'urls' => array('rah_sitemap_textarea', ''),
+			'exclude_fields' => array('pref_longtext_input', array()),
+			'urls' => array('pref_longtext_input', ''),
 			'future_articles' => array('yesnoradio', 0),
 			'past_articles' => array('yesnoradio', 1),
 			'expired_articles' => array('yesnoradio', 1),
@@ -447,16 +447,5 @@ class rah_sitemap {
 		);
 	}
 }
-
-/**
- * Lists all excluded article fields
- * @param string $name
- * @param string $value
- * @return string HTML textarea
- */
-
-	function rah_sitemap_textarea($name, $value) {
-		return text_area($name, 60, 300, $value, $name);
-	}
 
 ?>
