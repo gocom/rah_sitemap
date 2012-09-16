@@ -160,7 +160,7 @@ h2. Changelog
 
 h3. Version 1.3 - upcoming
 
-* Changed: Integrated preferences to Textpattern's native preferences panel.
+* Changed: Integrated preferences to Textpattern's native preferences panel, and to Section and Category editors.
 * Added: Language strings, interface is now translatable using Textpacks.
 * Added: Finnish translation.
 * Added: French translation by "Patrick Lefevre":https://twitter.com/lowel.
