@@ -77,14 +77,6 @@ h2. Preferences
 
 p. Rah_sitemap comes with number of preferences which all can be found from the "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences, organized under a *Sitemap* section. Rah_sitemap's preferences allow excluding sections, categories and articles from the XML sitemap. Following options will be present.
 
-h3. Exclude categories
-
-p. Any selected category will be excluded from the sitemap.
-
-h3. Exclude sections
-
-p. Works similarly to categories. Any of the selected sections will be excluded from the sitemap. The option will only effect the actual section page, but not articles published to the section.
-
 h3. Exclude articles based on fields
 
 p. The field can be used to exclude articles from the sitemap based on any article field and its value. The option takes a comma-separated list of @articlefield: value@ pairs. Where the field is the of the database field and the value is the field's value that will be excluded. Available fields include: @Title@, @AuthorID@, @Body@, @Excerpt@, @Category1@, @Category2@, @Section@, @Keywords@, @url_title@, @custom_1@ to @custom_10@ and @Image@.
