@@ -164,14 +164,12 @@ class rah_sitemap {
 				}
 				
 				set_pref($n, $val[1], __CLASS__, PREF_ADVANCED, $val[0], $position);
-				$prefs[$n] = $val[1];
 			}
 			
 			$position++;
 		}
 		
-		set_pref(__CLASS__.'_version', self::$version, __CLASS__, 2, '', 0);
-		$prefs[__CLASS__.'_version'] = self::$version;
+		set_pref(__CLASS__.'_version', self::$version, __CLASS__, PREF_HIDDEN);
 	}
 
 	/**
