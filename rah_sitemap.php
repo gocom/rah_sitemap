@@ -470,6 +470,12 @@ class rah_sitemap
 
 	/**
 	 * Shows settings at the Sections panel.
+	 *
+	 * @param  string $event The event
+	 * @param  string $step  The step
+	 * @param  bool   $void  Not used
+	 * @param  array  $r     The section data as an array
+	 * @return string HTML
 	 */
 
 	public function section_ui($event, $step, $void, $r)
@@ -495,6 +501,12 @@ class rah_sitemap
 
 	/**
 	 * Shows settings at the Category panel.
+	 *
+	 * @param  string $event The event
+	 * @param  string $step  The step
+	 * @param  bool   $void  Not used
+	 * @param  array  $r     The section data as an array
+	 * @return string HTML
 	 */
 
 	public function category_ui($event, $step, $void, $r)
