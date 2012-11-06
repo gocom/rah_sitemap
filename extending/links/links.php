@@ -9,9 +9,7 @@
  * @license GLPv2
  */
 
-	if(defined('txpinterface')) {
-		new rah_sitemap__links();
-	}
+	new rah_sitemap__links();
 
 class rah_sitemap__links {
 
