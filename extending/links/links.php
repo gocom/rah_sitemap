@@ -15,13 +15,14 @@
  * The module class.
  */
 
-class rah_sitemap__links {
-
+class rah_sitemap__links
+{
 	/**
 	 * Constructor.
 	 */
 
-	public function __construct() {
+	public function __construct()
+	{
 		register_callback(array($this, 'urlset'), 'rah_sitemap.urlset');
 	}
 
@@ -29,7 +30,8 @@ class rah_sitemap__links {
 	 * Adds links to the sitemap.
 	 */
 
-	public function urlset() {
+	public function urlset()
+	{
 		$local = str_replace(array('%', '_'), array('\\%', '\\_'), doSlash(hu));
 
 		$rs = 
@@ -39,7 +41,8 @@ class rah_sitemap__links {
 				"category='rah_sitemap' or url LIKE '".$local."_%' or url LIKE '/_%'"
 			);
 
-		foreach($rs as $a) {
+		foreach ($rs as $a)
+		{
 			rah_sitemap::get()->url($a['url'], $a['date']);
 		}
 	}
