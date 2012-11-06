@@ -1,46 +1,63 @@
 <?php
 
 /**
- * Rah_sitemap plugin for Textpattern CMS
+ * Rah_sitemap plugin for Textpattern CMS.
  *
- * @author Jukka Svahn
- * @date 2008-
+ * @author  Jukka Svahn
+ * @date    2008-
  * @license GNU GPLv2
- * @link http://rahforum.biz/plugins/rah_sitemap
+ * @link    http://rahforum.biz/plugins/rah_sitemap
  *
- * Copyright (C) 2012 Jukka Svahn <http://rahforum.biz>
+ * Copyright (C) 2012 Jukka Svahn http://rahforum.biz
  * Licensed under GNU Genral Public License version 2
  * http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 	rah_sitemap::get();
 
+/**
+ * The plugin class.
+ */
+
 class rah_sitemap {
 
+	/**
+	 * Version number.
+	 *
+	 * @var string
+	 */
+
 	static public $version = '1.2';
-	
+
 	/**
-	 * @var obj Stores instances
+	 * Stores instances.
+	 *
+	 * @var obj
 	 */
-	
+
 	static public $instance = NULL;
-	
+
 	/**
-	 * @var array Stores XML urlset
+	 * Stores an XML urlset.
+	 *
+	 * @var array
 	 */
-	
+
 	public $urlset = array();
-	
+
 	/**
-	 * @var array Stores allowed article fields
+	 * Stores an array of mapped article fields.
+	 *
+	 * @var array
 	 */
-	
+
 	protected $article_fields = array();
 
 	/**
-	 * Installer
-	 * @param string $event Admin-side callback event.
-	 * @param string $step Admin-side plugin-lifecycle step.
+	 * Installer.
+	 *
+	 * @param string $event Admin-side plugin-lifecycle event
+	 * @param string $step  Admin-side plugin-lifecycle step
 	 */
 
 	static public function install($event='', $step='') {
@@ -173,7 +190,7 @@ class rah_sitemap {
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 
 	public function __construct() {
@@ -192,10 +209,11 @@ class rah_sitemap {
 	}
 
 	/**
-	 * Gets an instance of the class
-	 * @return obj
+	 * Gets an instance of the class.
+	 *
+	 * @return rah_sitemap
 	 */
-	
+
 	static public function get() {
 		
 		if(self::$instance === NULL) {
@@ -204,11 +222,11 @@ class rah_sitemap {
 		
 		return self::$instance;
 	}
-	
+
 	/**
-	 * Handles returning the sitemap
+	 * Handles returning the sitemap.
 	 */
-	
+
 	public function page_handler() {
 		
 		global $pretext;
@@ -221,7 +239,7 @@ class rah_sitemap {
 	}
 
 	/**
-	 * Generates and outputs the sitemap
+	 * Generates and outputs the sitemap.
 	 */
 
 	protected function get_sitemap() {
@@ -330,14 +348,15 @@ class rah_sitemap {
 		echo $xml;
 		exit;
 	}
-	
+
 	/**
-	 * Generates XML sitemap url item
-	 * @param string $url
-	 * @param int|string $lastmod
-	 * @return obj
+	 * Renders a &lt;url&gt; element to the XML document.
+	 *
+	 * @param  string     $url     The URL
+	 * @param  int|string $lastmod The modification date
+	 * @return rah_sitemap
 	 */
-	
+
 	public function url($url, $lastmod=NULL) {
 	
 		if(strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0) {
@@ -373,8 +392,9 @@ class rah_sitemap {
 	}
 
 	/**
-	 * Populates allowed article fields
-	 * @return obj
+	 * Picks up names of article fields.
+	 *
+	 * @return rah_sitemap
 	 */
 
 	protected function populate_article_fields() {
@@ -393,7 +413,7 @@ class rah_sitemap {
 	}
 
 	/**
-	 * Options page
+	 * Options panel.
 	 */
 
 	public function prefs() {
@@ -403,21 +423,21 @@ class rah_sitemap {
 			'	<a href="'.hu.'?rah_sitemap=sitemap">'.gTxt('rah_sitemap_view_sitemap').'</a>'.
 			'</p>';
 	}
-	
+
 	/**
-	 * Shows settings at the section panel
+	 * Shows settings at the Sections panel.
 	 */
-	
+
 	public function section_ui($event, $step, $void, $r) {
 		if($r['name'] !== 'default') {
 			return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', !empty($r['rah_sitemap_include_in']), '', ''), '', 'rah_sitemap_include_in');
 		}
 	}
-	
+
 	/**
-	 * Updates sections
+	 * Updates a section.
 	 */
-	
+
 	public function section_save() {
 		safe_update(
 			'txp_section', 
@@ -425,19 +445,19 @@ class rah_sitemap {
 			"name='".doSlash(ps('name'))."'"
 		);
 	}
-	
+
 	/**
-	 * Shows settings at the category panel
+	 * Shows settings at the Category panel.
 	 */
-	
+
 	public function category_ui($event, $step, $void, $r) {
 		return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', !empty($r['rah_sitemap_include_in']), '', ''), '', 'rah_sitemap_include_in');
 	}
-	
+
 	/**
-	 * Updates categories
+	 * Updates a category.
 	 */
-	
+
 	public function category_save() {
 		safe_update(
 			'txp_category', 
