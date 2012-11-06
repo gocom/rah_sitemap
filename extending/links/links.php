@@ -3,18 +3,22 @@
 /**
  * Links module for rah_sitemap.
  * 
- * @package rah_sitemap
- * @author Jukka Svahn <http://rahforum.biz/>
+ * @package   rah_sitemap
+ * @author    Jukka Svahn <http://rahforum.biz/>
  * @copyright (c) 2012 Jukka Svahn
- * @license GLPv2
+ * @license   GLPv2
  */
 
 	new rah_sitemap__links();
 
+/**
+ * The module class.
+ */
+
 class rah_sitemap__links {
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 
 	public function __construct() {
@@ -22,7 +26,7 @@ class rah_sitemap__links {
 	}
 
 	/**
-	 * Adds links to the sitemap
+	 * Adds links to the sitemap.
 	 */
 
 	public function urlset() {
