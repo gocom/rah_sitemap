@@ -233,8 +233,8 @@ class rah_sitemap
 	 * @return rah_sitemap
 	 */
 
-	static public function get() {
-
+	static public function get()
+	{
 		if (self::$instance === NULL)
 		{
 			self::$instance = new rah_sitemap();
@@ -352,7 +352,8 @@ class rah_sitemap
 
 		foreach (do_list($prefs['rah_sitemap_urls']) as $url)
 		{
-			if ($url) {
+			if ($url)
+			{
 				$this->url($url);
 			}
 		}
