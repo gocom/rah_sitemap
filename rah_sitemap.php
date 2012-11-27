@@ -35,7 +35,7 @@ class rah_sitemap
 	 * @var obj
 	 */
 
-	static public $instance = NULL;
+	static public $instance = null;
 
 	/**
 	 * Stores an XML urlset.
@@ -235,7 +235,7 @@ class rah_sitemap
 
 	static public function get()
 	{
-		if (self::$instance === NULL)
+		if (self::$instance === null)
 		{
 			self::$instance = new rah_sitemap();
 		}
@@ -394,7 +394,7 @@ class rah_sitemap
 	 * @return rah_sitemap
 	 */
 
-	public function url($url, $lastmod = NULL)
+	public function url($url, $lastmod = null)
 	{
 		if (strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0)
 		{
@@ -411,7 +411,7 @@ class rah_sitemap
 			return $this;
 		}
 
-		if ($lastmod !== NULL)
+		if ($lastmod !== null)
 		{
 			if (!is_int($lastmod))
 			{
