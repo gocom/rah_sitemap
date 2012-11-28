@@ -141,7 +141,7 @@ class rah_sitemap
 					}
 				}
 
-				elseif ($a['name'] == 'sections')
+				else if ($a['name'] == 'sections')
 				{
 					$update['sections'] = do_list($a['value']);
 				}
