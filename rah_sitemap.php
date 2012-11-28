@@ -415,7 +415,7 @@ class rah_sitemap
 		{
 			if (!is_int($lastmod))
 			{
-				$lastmod = doArray($lastmod, 'strtotime');
+				$lastmod = strtotime($lastmod);
 			}
 
 			if ($lastmod !== false)
