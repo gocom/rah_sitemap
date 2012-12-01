@@ -10,3 +10,4 @@ rah_sitemap_past_articles => Inclure les articles publiés ?
 rah_sitemap_expired_articles => Inclure les articles expirés ?
 rah_sitemap_exclude_sticky_articles => Exclure les articles permaments ?
 rah_sitemap_include_in => Include in sitemap
+rah_sitemap_compress => Compress the sitemap?
