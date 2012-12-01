@@ -96,6 +96,7 @@ class rah_sitemap
 			'past_articles' => array('yesnoradio', 1),
 			'expired_articles' => array('yesnoradio', 1),
 			'exclude_sticky_articles' => array('yesnoradio', 1),
+			'compress' => array('yesnoradio', 0),
 		);
 
 		if (!in_array('rah_sitemap_include_in', getThings('describe '.safe_pfx('txp_section'))))
@@ -370,7 +371,8 @@ class rah_sitemap
 		txp_status_header('200 OK');
 		header('Content-type: text/xml; charset=utf-8');
 
-		if(
+		if (
+			$prefs['rah_sitemap_compress'] && 
 			strpos(serverSet('HTTP_ACCEPT_ENCODING'), 'gzip') !== false && 
 			@extension_loaded('zlib') && 
 			@ini_get('zlib.output_compression') == 0 && 
