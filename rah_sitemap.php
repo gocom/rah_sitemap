@@ -60,7 +60,7 @@ class rah_sitemap
 	 * @param string $step  Admin-side plugin-lifecycle step
 	 */
 
-	static public function install($event = '', $step = '')
+	public function install($event = '', $step = '')
 	{
 		global $prefs;
 
@@ -216,7 +216,7 @@ class rah_sitemap
 	{
 		add_privs('plugin_prefs.rah_sitemap', '1,2');
 		add_privs('prefs.rah_sitemap', '1,2');
-		register_callback(array(__CLASS__, 'install'), 'plugin_lifecycle.rah_sitemap');
+		register_callback(array($this, 'install'), 'plugin_lifecycle.rah_sitemap');
 		register_callback(array($this, 'prefs'), 'plugin_prefs.rah_sitemap');
 		register_callback(array($this, 'page_handler'), 'textpattern');
 		register_callback(array($this, 'section_ui'), 'section_ui', 'extend_detail_form');
