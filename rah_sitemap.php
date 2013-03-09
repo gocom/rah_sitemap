@@ -90,13 +90,13 @@ class rah_sitemap
 		}
 
 		$opt = array(
-			'exclude_fields' => array('pref_longtext_input', array()),
-			'urls' => array('pref_longtext_input', ''),
-			'future_articles' => array('yesnoradio', 0),
-			'past_articles' => array('yesnoradio', 1),
-			'expired_articles' => array('yesnoradio', 1),
+			'exclude_fields'          => array('pref_longtext_input', array()),
+			'urls'                    => array('pref_longtext_input', ''),
+			'future_articles'         => array('yesnoradio', 0),
+			'past_articles'           => array('yesnoradio', 1),
+			'expired_articles'        => array('yesnoradio', 1),
 			'exclude_sticky_articles' => array('yesnoradio', 1),
-			'compress' => array('yesnoradio', 0),
+			'compress'                => array('yesnoradio', 0),
 		);
 
 		if (!in_array('rah_sitemap_include_in', getThings('describe '.safe_pfx('txp_section'))))
@@ -112,7 +112,7 @@ class rah_sitemap
 		if (in_array(PFX.'rah_sitemap_prefs', getThings('SHOW TABLES')))
 		{
 			$update = array(
-				'sections' => array(),
+				'sections'   => array(),
 				'categories' => array(),
 			);
 
