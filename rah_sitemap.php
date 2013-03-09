@@ -118,7 +118,7 @@ class rah_sitemap
 
 			$rs = safe_rows('name, value', 'rah_sitemap_prefs', '1=1');
 
-			foreach($rs as $a)
+			foreach ($rs as $a)
 			{
 				if (trim($a['value']) === '')
 				{
