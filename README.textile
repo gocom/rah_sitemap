@@ -45,7 +45,7 @@ h2. Requirements
 
 p. Rah_sitemap's minimum requirements:
 
-* Textpattern 4.5 or newer.
+* Textpattern 4.5.0 or newer.
 
 h2. Installing
 
