@@ -84,7 +84,7 @@ class rah_sitemap
 			return;
 		}
 
-		if ((string) get_pref(__CLASS__.'_version') === self::$version)
+		if ((string) get_pref('rah_sitemap_version') === self::$version)
 		{
 			return;
 		}
@@ -190,7 +190,7 @@ class rah_sitemap
 
 		foreach ($opt as $name => $val)
 		{
-			$n = __CLASS__.'_'.$name;
+			$n = 'rah_sitemap_'.$name;
 			
 			if (!isset($prefs[$n]))
 			{
@@ -199,13 +199,13 @@ class rah_sitemap
 					$val[1] = implode(',', $val[1]);
 				}
 
-				set_pref($n, $val[1], __CLASS__, PREF_ADVANCED, $val[0], $position);
+				set_pref($n, $val[1], 'rah_sitemap', PREF_ADVANCED, $val[0], $position);
 			}
 
 			$position++;
 		}
 
-		set_pref(__CLASS__.'_version', self::$version, __CLASS__, PREF_HIDDEN);
+		set_pref('rah_sitemap_version', self::$version, 'rah_sitemap', PREF_HIDDEN);
 	}
 
 	/**
@@ -214,10 +214,10 @@ class rah_sitemap
 
 	public function __construct()
 	{
-		add_privs('plugin_prefs.'.__CLASS__, '1,2');
-		add_privs('prefs.'.__CLASS__, '1,2');
-		register_callback(array(__CLASS__, 'install'), 'plugin_lifecycle.'.__CLASS__);
-		register_callback(array($this, 'prefs'), 'plugin_prefs.'.__CLASS__);
+		add_privs('plugin_prefs.rah_sitemap', '1,2');
+		add_privs('prefs.rah_sitemap', '1,2');
+		register_callback(array(__CLASS__, 'install'), 'plugin_lifecycle.rah_sitemap');
+		register_callback(array($this, 'prefs'), 'plugin_prefs.rah_sitemap');
 		register_callback(array($this, 'page_handler'), 'textpattern');
 		register_callback(array($this, 'section_ui'), 'section_ui', 'extend_detail_form');
 		register_callback(array($this, 'category_ui'), 'category_ui', 'extend_detail_form');
