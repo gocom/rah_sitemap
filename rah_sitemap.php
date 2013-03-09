@@ -530,5 +530,3 @@ class rah_sitemap
 		);
 	}
 }
-
-?>
