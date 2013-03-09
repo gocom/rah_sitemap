@@ -496,9 +496,9 @@ class rah_sitemap
 	public function section_save()
 	{
 		safe_update(
-			'txp_section', 
-			'rah_sitemap_include_in='.intval(ps('rah_sitemap_include_in')),
-			"name='".doSlash(ps('name'))."'"
+			'txp_section',
+			'rah_sitemap_include_in = '.intval(ps('rah_sitemap_include_in')),
+			"name = '".doSlash(ps('name'))."'"
 		);
 	}
 
@@ -524,9 +524,9 @@ class rah_sitemap
 	public function category_save()
 	{
 		safe_update(
-			'txp_category', 
-			'rah_sitemap_include_in='.intval(ps('rah_sitemap_include_in')),
-			'id='.intval(ps('id'))
+			'txp_category',
+			'rah_sitemap_include_in = '.intval(ps('rah_sitemap_include_in')),
+			'id = '.intval(ps('id'))
 		);
 	}
 }
