@@ -62,8 +62,6 @@ class rah_sitemap
 
 	public function install($event = '', $step = '')
 	{
-		global $prefs;
-
 		if ($step == 'deleted')
 		{
 			safe_delete(
@@ -191,8 +189,8 @@ class rah_sitemap
 		foreach ($opt as $name => $val)
 		{
 			$n = 'rah_sitemap_'.$name;
-			
-			if (!isset($prefs[$n]))
+
+			if (get_pref($n, false) === false)
 			{
 				if (is_array($val[1]))
 				{
@@ -266,8 +264,6 @@ class rah_sitemap
 
 	protected function get_sitemap()
 	{
-		global $prefs;
-
 		$this->url(hu);
 
 		$rs = safe_rows_start(
@@ -300,7 +296,7 @@ class rah_sitemap
 
 		$sql = array('Status >= 4');
 
-		foreach (do_list($prefs['rah_sitemap_exclude_fields']) as $field)
+		foreach (do_list(get_pref('rah_sitemap_exclude_fields')) as $field)
 		{
 			if ($field)
 			{
@@ -314,22 +310,22 @@ class rah_sitemap
 			}
 		}
 
-		if ($prefs['rah_sitemap_exclude_sticky_articles'])
+		if (get_pref('rah_sitemap_exclude_sticky_articles'))
 		{
 			$sql[] = 'Status != 5';
 		}
 
-		if (!$prefs['rah_sitemap_future_articles'])
+		if (!get_pref('rah_sitemap_future_articles'))
 		{
 			$sql[] = 'Posted <= now()';
 		}
 
-		if (!$prefs['rah_sitemap_past_articles'])
+		if (!get_pref('rah_sitemap_past_articles'))
 		{
 			$sql[] = 'Posted >= now()';
 		}
-		
-		if (!$prefs['rah_sitemap_expired_articles'])
+
+		if (!get_pref('rah_sitemap_expired_articles'))
 		{
 			$sql[] = "(Expires = ".NULLDATETIME." or Expires >= now())";
 		}
@@ -348,7 +344,7 @@ class rah_sitemap
 			}
 		}
 
-		foreach (do_list($prefs['rah_sitemap_urls']) as $url)
+		foreach (do_list(get_pref('rah_sitemap_urls')) as $url)
 		{
 			if ($url)
 			{
@@ -369,7 +365,7 @@ class rah_sitemap
 		header('Content-type: text/xml; charset=utf-8');
 
 		if (
-			$prefs['rah_sitemap_compress'] && 
+			get_pref('rah_sitemap_compress') && 
 			strpos(serverSet('HTTP_ACCEPT_ENCODING'), 'gzip') !== false && 
 			@extension_loaded('zlib') && 
 			@ini_get('zlib.output_compression') == 0 && 
