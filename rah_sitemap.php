@@ -270,12 +270,11 @@ class rah_sitemap
 
 		$this->url(hu);
 
-		$rs = 
-			safe_rows_start(
-				'name',
-				'txp_section',
-				"name != 'default' and rah_sitemap_include_in=1 ORDER BY name ASC"
-			);
+		$rs = safe_rows_start(
+			'name',
+			'txp_section',
+			"name != 'default' and rah_sitemap_include_in = 1 order by name asc"
+		);
 
 		if ($rs)
 		{
@@ -285,12 +284,11 @@ class rah_sitemap
 			}
 		}
 
-		$rs = 
-			safe_rows_start(
-				'name, type',
-				'txp_category',
-				"name != 'root' and rah_sitemap_include_in=1 ORDER BY name asc"
-			);
+		$rs = safe_rows_start(
+			'name, type',
+			'txp_category',
+			"name != 'root' and rah_sitemap_include_in = 1 order by name asc"
+		);
 
 		if ($rs)
 		{
@@ -336,12 +334,11 @@ class rah_sitemap
 			$sql[] = "(Expires = ".NULLDATETIME." or Expires >= now())";
 		}
 
-		$rs = 
-			safe_rows_start(
-				'*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod',
-				'textpattern',
-				implode(' and ', $sql) . ' ORDER BY Posted DESC'
-			);
+		$rs = safe_rows_start(
+			'*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod',
+			'textpattern',
+			implode(' and ', $sql) . ' order by Posted desc'
+		);
 
 		if ($rs)
 		{
