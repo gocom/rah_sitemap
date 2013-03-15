@@ -457,6 +457,8 @@ class rah_sitemap
 
 	public function prefs()
 	{
+		pagetop(gTxt('rah_sitemap'));
+
 		echo 
 			'<p>'.n.
 			'	<a href="?event=prefs&amp;step=advanced_prefs#prefs-rah_sitemap_exclude_fields">'.gTxt('rah_sitemap_view_prefs').'</a><br />'.n.
