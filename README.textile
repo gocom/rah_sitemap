@@ -108,7 +108,9 @@ p. If set to Yes, "sticky":http://textpattern.net/wiki/index.php?title=Write#Sti
 
 h2. Extras and modules
 
-p. Rah_sitemap supports modules. The plugin's own modules can be used to add new functionality. Please see "extending":https://github.com/gocom/rah_sitemap/tree/master/extending directory on GitHub for more about modules and to download some existing ones.
+p. Rah_sitemap supports modules. The plugin's own modules can be used to add new functionality.
+
+* "Links":https://github.com/gocom/rah_sitemap__links - displays Textpattern's links in the sitemap.
 
 h2. For developers
 
