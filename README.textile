@@ -2,44 +2,44 @@ h1. rah_sitemap
 
 p. "Project page":http://rahforum.biz/plugins/rah_sitemap | "Twitter":http://twitter.com/gocom | "GitHub":https://github.com/gocom/rah_sitemap | "Support forum":http://forum.textpattern.com/viewtopic.php?id=28279 | "Donate":http://rahforum.biz/donate/rah_sitemap
 
-p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. Easily build valid "Sitemaps.org":http://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for search engines, including Google. Supports categories, sections, articles and even custom URLs. All settings can be managed from clean interface. No dive to code required.
+p. Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. The plugin lets you easily generate valid "Sitemaps.org":http://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your valuable content. Rah_sitemap maps your categories, sections, articles and even custom URLs of your choosing, and what is best, none of it requires diving into code. All configuration is done from a clean graphical user-interface.
 
 h2. Basics
 
-p. Rah_sitemap generates a sitemap for your Textpattern website, listing all of its section-, article category- and article-pages. The generated sitemap follows the XML based "Sitemap protocol format":http://www.sitemaps.org/ and is targeted to search engines, opposed to your visitors.
+p. Rah_sitemap generates a sitemap for your Textpattern website, listing all of its section-, article category- and article-pages. The generated sitemap follows the XML based "Sitemap protocol format":http://www.sitemaps.org/ and is targeted to search engines, opposed to your visitors. The sitemap is meant to help search engines to index your site as it grows and gets more and more various nested pages.
 
-p. The sitemap can be configured directly from Textpattern's Preferences panel, making rah_sitemap very easy to setup and use. The plugin itself takes care of the rest.
+p. The Sitemap can be configured directly from Textpattern's Preferences panel, making rah_sitemap very easy to setup and use. The plugin itself takes care of the rest.
 
 h3. Accessing the sitemap
 
-p. The generated sitemap is publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's "Permanent Link Mode":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Permanent_Link_Mode. If the site is configured to use "clean URLs":http://textpattern.net/wiki/index.php?title=Talk:Managing_Clean_URLs the sitemap can be accessed using an optional clean path:
+p. The generated sitemap is publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's "Permanent Link Mode":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Permanent_Link_Mode. If the site is configured to use "clean URLs":http://textpattern.net/wiki/index.php?title=Talk:Managing_Clean_URLs the sitemap can be accessed using a clean path:
 
 bc. http://example.com/sitemap.xml
 
-p. In both the messy and the clean URL mode the query version can be used too:
+p. The query version is available in both the messy and the clean URL modes:
 
 bc. http://example.com/?rah_sitemap=sitemap
 
-p. In the above URLs @example.com@ would be the "site's URL":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Site_URL as specified in Textpattern's "Basic Preferences":http://textpattern.net/wiki/index.php?title=Basic_Preferences.
+p. In the above URLs @example.com@ would be the "site's URL":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Site_URL as specified in Textpattern's "Preferences":http://textpattern.net/wiki/index.php?title=Basic_Preferences.
 
 h3. Immediate boost to search engine visiblity?
 
 p. Not exactly. Providing Sitemap is to help crawling, finding your site's pages. Pages that are otherwise hard to discover. Sitemaps itself do not boost content's visibility.
 
-p. For a simple, almost static website with just few easily discoverable pages, a sitemap may not be necessary at all. If search engines already can know about your pages with no issues, you do not really need rah_sitemap or Sitemaps in general. Once a page is indexed, that's where the sitemap's work end in increasing discoverability.
+p. For a simple, almost static website with just few easily discoverable pages, a sitemap may not be necessary at all. If search engines already can get to know about your pages, you do not really need rah_sitemap or Sitemaps in general. Once a page is indexed, that's where the sitemap's work ends in increasing discoverability.
 
-p. Rah_sitemap is particularly useful when your site has pages that are hard to discover due to being loaded using Ajax, there is way too much distinct content that don't link to each other, or pages are nested deep in a complex page structure. Rah_sitemap can also help your site to start up when it has very few links point to it's pages.
+p. Rah_sitemap is particularly useful when your site has pages that are hard to discover due to being loaded using Ajax, there is way too much distinct content that don't link to each other, or pages are nested deep in a complex page structure. Rah_sitemap can also help your site to start up when it has very few links point to its pages.
 
 p. It's common misconception to think that Sitemaps guarantee that pages will be indexed. This is not the case. Sitemap is a map. Whether a place is marked on a map doesn't mean someone will actually go there, or when. Like any map, the map is used to find and learn, to increase the future knowledge. Update interval also helps to estimate when your site is updated next and when it should be crawled again.
 
-p. Normally, you will benefit from submitting a sitemap, but its just one piece in the puzzle. In no case will you get penalized from Sitemap or including the wrong content in it.
+p. Normally, you will benefit from submitting a sitemap, but its just one piece of the puzzle. In no case will you get penalized from Sitemap or including the wrong content in it.
 
 h2. List of features
 
+* Build valid XML sitemaps for search engines.
 * Simple interface and options integrated to Textpattern's native preferences panel.
 * Filter, include and exclude section, category and article URLs from the sitemap.
 * No need to create files nor set permissions, instead of just use the plugin and eventually submit the sitemap URL to Google (via Webmaster tools) and other search engines.
-* Sitemap is automatically compressed.
 
 h2. Requirements
 
@@ -58,11 +58,11 @@ p. Rah_sitemap's installation follows the standard plugin installation steps.
 
 h2. Configuration
 
-p. After the rah_sitemap is installed, you may want to do some configuration to it, like for instance exclude certain articles and sections from the sitemap. The plugin's settings can be configured from Textpattern's "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under *Sitemap* section. "Sections":http://textpattern.net/wiki/index.php?title=Sections and "Categories":http://textpattern.net/wiki/index.php?title=Categories can be configured and removed from the sitemap from the respectful editors.
+p. After the rah_sitemap is installed, you may want configure to fit your site. For instance, you may want to exclude certain inrelevant articles or sections from the sitemap. The plugin's settings can be configured from Textpattern's "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under *Sitemap* section. "Sections":http://textpattern.net/wiki/index.php?title=Sections and "Categories":http://textpattern.net/wiki/index.php?title=Categories can be excluded from the sitemap from their respectful editors.
 
 h3. Sending the sitemap to search engines
 
-p. Once you have a sitemap up and running, you now should inform search engines about it. There are few ways you can do it. There is "Webmaster Tools":http://www.google.com/webmasters/ for Google, you could use a "robots.txt":http://www.robotstxt.org/ directive and do pinging.
+p. Once you have a sitemap up and running, you now should inform search engines about it. There are few ways you can do it. There is "Webmaster Tools":http://www.google.com/webmasters/ for Google, you could use a "robots.txt":http://www.robotstxt.org/ directive or do search vendor specific pinging.
 
 p. To use a robots.txt file to inform about your sitemap's location, you will need access to create a file at the root of the domain named @robots.txt@. In that file you would add a @Sitemap@ directive containing an absolute URL to your sitemap:
 
@@ -70,33 +70,33 @@ bc. Sitemap: http://www.example.com/?rah_sitemap=sitemap
 
 p. Where the @http://www.example.com/@ is your site's location as defined in Textpattern's Preferences panel.
 
-p. If this all about robots.txt seems complicated, or you don't have full access to the domain's root contents, then the easiest and the most user friendly method would be to use a search engine's own interface to do the informing about the location. For instance, Google offers "Webmaster Tools":http://www.google.com/webmasters/ which allow you to send in and validate sitemaps from a graphical user interface.
+p. If this all about robots.txt seems complicated, or you don't have full access to the domain's root contents, then the easiest and the most user friendly method would be to use each search engine's own interface and tools. For instance, Google offers "Webmaster Tools":http://www.google.com/webmasters/ where you can send in and validate sitemaps. Webmaster Tools has a easy to use web based, graphical user-interface.
 
 h2. Preferences
 
-p. Rah_sitemap comes with number of preferences which all can be found from the "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences, organized under a *Sitemap* section. Rah_sitemap allows excluding sections, categories and articles from the XML sitemap. Following options will be present.
+p. Rah_sitemap comes with number of preferences which all can be found from your "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under a *Sitemap* section. Rah_sitemap allows excluding sections, categories and articles from the XML sitemap. Following options will be present.
 
 h3. Exclude articles based on fields
 
-p. The field can be used to exclude articles from the sitemap based on any article field and its value. The option takes a comma-separated list of @articlefield: value@ pairs. Where the field is the of the database field and the value is the field's value that will be excluded. Available fields include: @Title@, @AuthorID@, @Body@, @Excerpt@, @Category1@, @Category2@, @Section@, @Keywords@, @url_title@, @custom_1@ to @custom_10@ and @Image@.
+p. The field can be used to exclude articles from the sitemap based on any article field and its value. The option takes a comma-separated list of @articlefield: value@ pairs, where the field is the database field and the value is the field's value that will be excluded. Available fields include @Title@, @AuthorID@, @Body@, @Excerpt@, @Category1@, @Category2@, @Section@, @Keywords@, @url_title@, @custom_1@ to @custom_10@ and @Image@.
 
 p. Values used in the option support two wildcard characters. An underscore (@_@) matches exactly one character, and a percent sign (@%@) matches zero or more characters.
 
-p. If you wanted to exclude articles posted to "sections":http://textpattern.net/wiki/index.php?title=sections _notes_ and _private_ or by a user _mailer_, you could use the following as the setting:
+p. If you wanted to exclude articles posted to "sections":http://textpattern.net/wiki/index.php?title=sections named as _notes_ and _private_ or by a user _mailer_, you could use the following in the field:
 
 bc. Section: notes, Section: private, AuthorID: mailer
 
 h3. Additional URLs
 
-p. Comma-separated list of additional local site URLs added to the sitemap. Note that sitemaps only allow local URLs, meaning that any URL used, needs to link to the same domain as the website. If an URL is relative and doesn't start with a HTTP or HTTPS protocol, the site's URL is prepended to the URL.
+p. Comma-separated list of additional local site URLs added to the sitemap. Note that a Sitemap only allows local URLs, meaning that any URL used, needs to link to the same domain as where the website itself is located. If a URL is relative and doesn't start with a HTTP or HTTPS protocol, the site's URL is prepended to the URL.
 
 h3. Include future articles?
 
-p. If set to Yes, articles with publishing date set to a future date, are visible in the sitemap. Please note that by default "article":http://textpattern.net/wiki/index.php?title=article tag doesn't display future articles, unless its @time@ attribute is explicitly set to include @future@.
+p. If set to Yes, articles with future publishing date are visible in the sitemap. Please note that by default the "article":http://textpattern.net/wiki/index.php?title=article tag doesn't display future articles, unless its @time@ attribute is explicitly set to @future@ or @any@.
 
 h3. Include published articles?
 
-p. If set to Yes, published, Live, articles are visible in the sitemap. If both this option and _Include future articles?_ are set to No, no articles will be visible in the sitemap.
+p. If set to Yes, published articles are visible in the sitemap. If both this option and _Include future articles?_ are set to No, no articles will be visible in the sitemap.
 
 h3. Include expired articles?
 
@@ -114,7 +114,7 @@ p. Rah_sitemap supports modules. The plugin's own modules can be used to add new
 
 h2. For developers
 
-p. Rah_sitemap has small set of tools developers can use. These tools allow other Textpattern plugins to extend rah_sitemap's functionality by adding new URLs to the sitemap. The plugin has a public callback events anyone can use and a tiny PHP API.
+p. Rah_sitemap offers small set of tools for developers. These tools allow other Textpattern plugins to extend rah_sitemap's functionality by adding new URLs to the sitemap. The plugin has a public callback events anyone can use and a tiny PHP API.
 
 h3. API
 
