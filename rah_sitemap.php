@@ -21,7 +21,7 @@ class rah_sitemap
 	 * @var array
 	 */
 
-	public $urlset = array();
+	protected $urlset = array();
 
 	/**
 	 * Stores an array of mapped article fields.
