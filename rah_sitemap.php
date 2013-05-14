@@ -33,33 +33,10 @@ class rah_sitemap
 
 	/**
 	 * Installer.
-	 *
-	 * @param string $event Admin-side plugin-lifecycle event
-	 * @param string $step  Admin-side plugin-lifecycle step
 	 */
 
-	public function install($event = '', $step = '')
+	public function install()
 	{
-		if ($step == 'deleted')
-		{
-			safe_delete(
-				'txp_prefs',
-				"name like 'rah\_sitemap\_%'"
-			);
-
-			safe_alter(
-				'txp_section',
-				'DROP COLUMN rah_sitemap_include_in'
-			);
-
-			safe_alter(
-				'txp_category',
-				'DROP COLUMN rah_sitemap_include_in'
-			);
-
-			return;
-		}
-
 		$opt = array(
 			'exclude_fields'          => array('pref_longtext_input', array()),
 			'urls'                    => array('pref_longtext_input', ''),
@@ -178,6 +155,17 @@ class rah_sitemap
 	}
 
 	/**
+	 * Uninstaller.
+	 */
+
+	public function uninstall()
+	{
+		safe_delete('txp_prefs', "name like 'rah\_sitemap\_%'");
+		safe_alter('txp_section', 'DROP COLUMN rah_sitemap_include_in');
+		safe_alter('txp_category', 'DROP COLUMN rah_sitemap_include_in');
+	}
+
+	/**
 	 * Constructor.
 	 */
 
@@ -185,7 +173,8 @@ class rah_sitemap
 	{
 		add_privs('plugin_prefs.rah_sitemap', '1,2');
 		add_privs('prefs.rah_sitemap', '1,2');
-		register_callback(array($this, 'install'), 'plugin_lifecycle.rah_sitemap');
+		register_callback(array($this, 'install'), 'plugin_lifecycle.rah_sitemap', 'installed');
+		register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_sitemap', 'deleted');
 		register_callback(array($this, 'prefs'), 'plugin_prefs.rah_sitemap');
 		register_callback(array($this, 'page_handler'), 'textpattern');
 		register_callback(array($this, 'section_ui'), 'section_ui', 'extend_detail_form');
