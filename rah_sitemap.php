@@ -16,14 +16,6 @@
 class rah_sitemap
 {
 	/**
-	 * Version number.
-	 *
-	 * @var string
-	 */
-
-	static public $version = '1.2';
-
-	/**
 	 * Stores an XML urlset.
 	 *
 	 * @var array
@@ -65,11 +57,6 @@ class rah_sitemap
 				'DROP COLUMN rah_sitemap_include_in'
 			);
 
-			return;
-		}
-
-		if ((string) get_pref('rah_sitemap_version') === self::$version)
-		{
 			return;
 		}
 
@@ -188,8 +175,6 @@ class rah_sitemap
 
 			$position++;
 		}
-
-		set_pref('rah_sitemap_version', self::$version, 'rah_sitemap', PREF_HIDDEN);
 	}
 
 	/**
