@@ -1,0 +1,23 @@
+{
+	"name": "rah/rah_sitemap",
+	"description": "Sitemap plugin for Textpattern CMS",
+	"keywords": ["textpattern", "plugin"],
+	"homepage": "https://github.com/gocom/rah_sitemap",
+	"license": "GPL-2.0",
+	"type": "textpattern-plugin",
+	"authors": [
+		{
+			"name": "Jukka Svahn",
+			"homepage": "http://rahforum.biz",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/gocom/rah_sitemap/issues",
+		"source": "https://github.com/gocom/rah_sitemap"
+	},
+	"require": {
+		"textpattern/lock": "4.5.*",
+		"textpattern/installer": "*"
+	}
+}
