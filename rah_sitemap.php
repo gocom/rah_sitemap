@@ -13,12 +13,6 @@
  * http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-	rah_sitemap::get();
-
-/**
- * The plugin class.
- */
-
 class rah_sitemap
 {
 	/**
@@ -28,14 +22,6 @@ class rah_sitemap
 	 */
 
 	static public $version = '1.2';
-
-	/**
-	 * Stores instances.
-	 *
-	 * @var obj
-	 */
-
-	static public $instance = null;
 
 	/**
 	 * Stores an XML urlset.
@@ -227,22 +213,6 @@ class rah_sitemap
 	}
 
 	/**
-	 * Gets an instance of the class.
-	 *
-	 * @return rah_sitemap
-	 */
-
-	static public function get()
-	{
-		if (self::$instance === null)
-		{
-			self::$instance = new rah_sitemap();
-		}
-
-		return self::$instance;
-	}
-
-	/**
 	 * Handles returning the sitemap.
 	 */
 
@@ -352,7 +322,16 @@ class rah_sitemap
 			}
 		}
 
-		callback_event('rah_sitemap.urlset');
+		$urlset = array();
+		callback_event_ref('rah_sitemap.urlset', '', 0, $urlset);
+
+		if ($urlset && is_array($urlset))
+		{
+			foreach ($urlset as $url => $lastmod)
+			{
+				$this->url($url, $lastmod);
+			}
+		}
 
 		$xml = 
 			'<?xml version="1.0" encoding="utf-8"?>'.
@@ -525,3 +504,5 @@ class rah_sitemap
 		);
 	}
 }
+
+new rah_sitemap();

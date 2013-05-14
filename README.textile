@@ -114,28 +114,7 @@ p. Rah_sitemap supports modules. The plugin's own modules can be used to add new
 
 h2. For developers
 
-p. Rah_sitemap offers small set of tools for developers. These tools allow other Textpattern plugins to extend rah_sitemap's functionality by adding new URLs to the sitemap. The plugin has a public callback events anyone can use and a tiny PHP API.
-
-h3. API
-
-p. Rah_sitemap has a small public application interface that allows adding URLs to the XML sitemap. The following methods are available.
-
-h4. rah_sitemap::get()
-
-bc. object rah_sitemap::get()
-
-p. Gets an instance of the class. The @get()@ method should be used when accessing rah_sitemap class instead of new. The method has no parameters.
-
-h4. rah_sitemap::url()
-
-bc. object rah_sitemap::url(string $url [,int|string $lastmod = NULL])
-
-p. This method adds an URL to the sitemap. The @$url@ can be absolute or relative. The @$lastmod@ can take an integer or a data/time string. If NULL or undefined, no lastmod timestamp is given for URL in the sitemap.
-
-bc. rah_sitemap::get()
-	->url('/path/to/page', '2012-06-23 10:56:32');
-
-p. The above would add a single URL pointing to @http://mysite.com/path/to/page@ to the sitemap.
+p. Rah_sitemap offers small set of tools for developers. These tools allow other Textpattern plugins to extend rah_sitemap's functionality by adding new URLs to the sitemap. The plugin is packaged in a class structure that can be extended if needed, and introduces new Textpattern callback events.
 
 h3. Callback
 
@@ -143,7 +122,12 @@ p. Rah_sitemap introduces a new public-facing callback event to the Textpattern'
 
 p. As with other callback events in Textpattern, hooking to rah_sitemap's event happens using Textpattern's callback handling functions, mainly "register_callback":http://textpattern.net/wiki/index.php?title=Plugin_Development_Guidelines#Callbacks.
 
-bc. register_callback(callable $callback, 'rah_sitemap.urlset');
+bc.. register_callback('abc_function', 'rah_sitemap.urlset', 0, $urls);
+
+fuction abc_function($event, $step, $void, $urls)
+{
+	$urls['http://example.com/foo/bar'] = '2013-03-04 10:06:30';
+}
 
 h3. Custom URL functions
 
