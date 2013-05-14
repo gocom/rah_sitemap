@@ -368,7 +368,7 @@ class rah_sitemap
 	 * @return rah_sitemap
 	 */
 
-	public function url($url, $lastmod = null)
+	protected function url($url, $lastmod = null)
 	{
 		if (strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0)
 		{
