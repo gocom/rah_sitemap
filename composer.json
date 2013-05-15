@@ -17,7 +17,7 @@
 		"source": "https://github.com/gocom/rah_sitemap"
 	},
 	"require": {
-		"textpattern/lock": "4.5.*",
+		"textpattern/lock": "4.5.*,4.6.*",
 		"textpattern/installer": "*"
 	}
 }
