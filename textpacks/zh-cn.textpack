@@ -2,8 +2,8 @@
 #@language zh-cn
 rah_sitemap => 网站地图
 rah_sitemap_view_prefs => 前往设置页面
-rah_sitemap_view_sitemap => 查看Sitemap
-rah_sitemap_exclude_fields => 基于栏位(field)排除文章 (栏位: 值, 逗号分隔)
+rah_sitemap_view_sitemap => 查看网站地图
+rah_sitemap_exclude_fields => 基于栏位排除文章 (栏位: 值, 逗号分隔)
 rah_sitemap_urls => 附加URL地址 (逗号分隔)
 rah_sitemap_future_articles => 包括将来的文章?
 rah_sitemap_past_articles => 包括已发表的文章?
