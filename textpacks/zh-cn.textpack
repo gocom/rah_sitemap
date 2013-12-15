@@ -1,0 +1,13 @@
+#@admin
+#@language, zh-cn
+rah_sitemap => Sitemap
+rah_sitemap_view_prefs => 前往设置页面
+rah_sitemap_view_sitemap => 查看Sitemap
+rah_sitemap_exclude_fields => 基于field排除文章 (field: value, 逗号分隔)
+rah_sitemap_urls => 附加网址URL (逗号分隔)
+rah_sitemap_future_articles => 包括将来的文章?
+rah_sitemap_past_articles => 包括已发表的文章?
+rah_sitemap_expired_articles => 包括已过期的文章?
+rah_sitemap_exclude_sticky_articles => 排除置顶文章?
+rah_sitemap_include_in => 出现在Sitemap中
+rah_sitemap_compress => 压缩Sitemap?
