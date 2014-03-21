@@ -1,7 +1,7 @@
 <?php
 
 /*
- * rah_sitemap - Flat templates for Textpattern CMS
+ * rah_sitemap - XML sitemap plugin for Textpattern CMS
  * https://github.com/gocom/rah_sitemap
  *
  * Copyright (C) 2014 Jukka Svahn
