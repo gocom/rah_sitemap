@@ -1,6 +1,6 @@
 h1. rah_sitemap
 
-"Project page":http://rahforum.biz/plugins/rah_sitemap | "Packagist":https://packagist.org/packages/rah/rah_sitemap | "Twitter":http://twitter.com/gocom | "GitHub":https://github.com/gocom/rah_sitemap | "Support forum":http://forum.textpattern.com/viewtopic.php?id=28279 | "Donate":http://rahforum.biz/donate/rah_sitemap
+"Download":https://github.com/gocom/rah_sitemap/releases | "Packagist":https://packagist.org/packages/rah/rah_sitemap | "Twitter":http://twitter.com/gocom | "Issues":https://github.com/gocom/rah_sitemap/issues | "Support forum":http://forum.textpattern.com/viewtopic.php?id=28279 | "Donate":http://rahforum.biz/donate/rah_sitemap
 
 Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. The plugin lets you easily generate valid "Sitemaps.org":http://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your valuable content. Rah_sitemap maps your categories, sections, articles and even custom URLs of your choosing, and what is best, none of it requires diving into code. All configuration is done from a clean graphical user-interface.
 
