@@ -1,5 +1,4 @@
 #@admin
-#Default language, en-us, en-gb
 rah_sitemap => Sitemap
 rah_sitemap_view_prefs => Go to the preferences
 rah_sitemap_view_sitemap => View the sitemap
