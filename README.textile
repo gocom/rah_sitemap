@@ -47,14 +47,13 @@ Rah_sitemap's minimum requirements:
 
 * Textpattern 4.5.0 or newer.
 
-h2. Installing
+h2. Install
 
-Rah_sitemap's installation follows the standard plugin installation steps.
+Using "Composer":http://getcomposer.org:
 
-# Download the plugin installation code.
-# Copy and paste the installation code into the _Install plugin_ box of your Textpattern Plugin pane.
-# Run the automated setup.
-# After the setup is done, activate the plugin. Done.
+bc. $ composer require rah/rah_sitemap:*
+
+Or "download":https://github.com/gocom/rah_sitemap/releases a plugin package.
 
 h2. Configuration
 
