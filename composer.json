@@ -19,5 +19,8 @@
     "require": {
         "textpattern/lock": ">=4.5.0",
         "textpattern/installer": "*"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "1.5.*"
     }
 }
