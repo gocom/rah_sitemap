@@ -4,6 +4,14 @@ h1. rah_sitemap
 
 Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. The plugin lets you easily generate valid "Sitemaps.org":http://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your valuable content. Rah_sitemap maps your categories, sections, articles and even custom URLs of your choosing, and what is best, none of it requires diving into code. All configuration is done from a clean graphical user-interface.
 
+h2. Install
+
+Using "Composer":http://getcomposer.org:
+
+bc. $ composer require rah/rah_sitemap:*
+
+Or "download":https://github.com/gocom/rah_sitemap/releases a plugin package.
+
 h2. Basics
 
 Rah_sitemap generates a sitemap for your Textpattern website, listing all of its section-, article category- and article-pages. The generated sitemap follows the XML based "Sitemap protocol format":http://www.sitemaps.org/ and is targeted to search engines, opposed to your visitors. The sitemap is meant to help search engines to index your site as it grows and gets more and more various nested pages.
@@ -34,42 +42,29 @@ It's common misconception to think that Sitemaps guarantee that pages will be in
 
 Normally, you will benefit from submitting a sitemap, but its just one piece of the puzzle. In no case will you get penalized from Sitemap or including the wrong content in it.
 
-h2. List of features
-
-* Build valid XML sitemaps for search engines.
-* Simple interface and options integrated to Textpattern's native preferences panel.
-* Filter, include and exclude section, category and article URLs from the sitemap.
-* No need to create files nor set permissions, instead of just use the plugin and eventually submit the sitemap URL to Google (via Webmaster tools) and other search engines.
-
 h2. Requirements
 
 Rah_sitemap's minimum requirements:
 
 * Textpattern 4.5.0 or newer.
 
-h2. Install
-
-Using "Composer":http://getcomposer.org:
-
-bc. $ composer require rah/rah_sitemap:*
-
-Or "download":https://github.com/gocom/rah_sitemap/releases a plugin package.
-
 h2. Configuration
 
-After the rah_sitemap is installed, you may want configure to fit your site. For instance, you may want to exclude certain inrelevant articles or sections from the sitemap. The plugin's settings can be configured from Textpattern's "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under *Sitemap* section. "Sections":http://textpattern.net/wiki/index.php?title=Sections and "Categories":http://textpattern.net/wiki/index.php?title=Categories can be excluded from the sitemap from their respectful editors.
+After the rah_sitemap is installed, you may want configure to fit your site. For instance, you may want to exclude certain irrelevant articles or sections from the sitemap. The plugin's settings can be configured from Textpattern's "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under its own *Sitemap* section. "Sections":http://textpattern.net/wiki/index.php?title=Sections and "Categories":http://textpattern.net/wiki/index.php?title=Categories can be excluded from the sitemap from their respectful editors.
 
 h3. Sending the sitemap to search engines
 
-Once you have a sitemap up and running, you now should inform search engines about it. There are few ways you can do it. There is "Webmaster Tools":http://www.google.com/webmasters/ for Google, you could use a "robots.txt":http://www.robotstxt.org/ directive or do search vendor specific pinging.
+Once you have a sitemap up and running, you may want to inform search engines about its existence. There are few ways you can do it: "Webmaster Tools":http://www.google.com/webmasters/ for Google, you could use a "robots.txt":http://www.robotstxt.org/ directive or search vendor specific pinging.
 
-To use a robots.txt file to inform about your sitemap's location, you will need access to create a file at the root of the domain named @robots.txt@. In that file you would add a @Sitemap@ directive containing an absolute URL to your sitemap:
+The recommended way is by using a robots.txt file. To get robots.txt up and running, you will have to add @robots.txt@ file at root of your site's domain, so that its accessible from @http://example.com/robots.txt@. If your site has fully functional clean URLs, is installed at the root and you already do not have robots.txt file, rah_sitemap will automatically create the file for you -- or well server it dynamically when requested.
+
+If not, you will need access to create a file at the root of the domain named @robots.txt@, or if you already have it, edit the existing one. In that file you would add a @Sitemap@ directive containing an absolute URL to your sitemap:
 
 bc. Sitemap: http://www.example.com/?rah_sitemap=sitemap
 
-Where the @http://www.example.com/@ is your site's location as defined in Textpattern's Preferences panel.
+Where the @http://www.example.com/@ is your site's location as defined in Textpattern's Preferences panel. The directive should be placed on its own line.
 
-If this all about robots.txt seems complicated, or you don't have full access to the domain's root contents, then the easiest and the most user friendly method would be to use each search engine's own interface and tools. For instance, Google offers "Webmaster Tools":http://www.google.com/webmasters/ where you can send in and validate sitemaps. Webmaster Tools has a easy to use web based, graphical user-interface.
+If this all about robots.txt seems complicated, or you don't have full access to the domain's root contents, then the easiest and the most user friendly method would be to use each search engine's own interface and tools. For instance, Google offers "Webmaster Tools":http://www.google.com/webmasters/, a control panel where you can send in and validate sitemaps.
 
 h2. Preferences
 
@@ -109,7 +104,7 @@ h2. Extras and modules
 
 Rah_sitemap supports modules. The plugin's own modules can be used to add new functionality.
 
-* "Links":https://github.com/gocom/rah_sitemap__links - displays Textpattern's links in the sitemap.
+* "Links":https://github.com/gocom/rah_sitemap_links - displays Textpattern's links in the sitemap.
 
 h2. For developers
 
