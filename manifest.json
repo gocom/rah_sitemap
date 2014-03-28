@@ -7,5 +7,8 @@
     "author_uri": "http://rahforum.biz",
     "order": 5,
     "flags": 3,
-    "help": {"file" : "./README.textile"}
+    "help": {"file" : "./README.textile"},
+    "code": {"file" : [
+        "./src/Rah/Sitemap.php"
+    ]}
 }
