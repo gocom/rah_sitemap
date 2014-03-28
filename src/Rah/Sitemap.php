@@ -313,7 +313,7 @@ class Rah_Sitemap
             }
         }
 
-        $xml = 
+        $xml =
             '<?xml version="1.0" encoding="utf-8"?>'.
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
             implode('', array_slice($this->addUrlset, 0, 50000)).
@@ -323,13 +323,8 @@ class Rah_Sitemap
         txp_status_header('200 OK');
         header('Content-type: text/xml; charset=utf-8');
 
-        if (
-            get_pref('rah_sitemap_compress') &&
-            strpos(serverSet('HTTP_ACCEPT_ENCODING'), 'gzip') !== false &&
-            @extension_loaded('zlib') &&
-            @ini_get('zlib.output_compression') == 0 &&
-            @ini_get('output_handler') != 'ob_gzhandler' &&
-            !@headers_sent()
+        if (get_pref('rah_sitemap_compress') &&
+            strpos(serverSet('HTTP_ACCEPT_ENCODING'), 'gzip') !== false
         ) {
             header('Content-Encoding: gzip');
             $xml = gzencode($xml);
@@ -371,7 +366,7 @@ class Rah_Sitemap
             }
         }
 
-        $this->addUrlset[$url] = 
+        $this->addUrlset[$url] =
             '<url>'.
                 '<loc>'.$url.'</loc>'.
                 ($lastmod ? '<lastmod>'.$lastmod.'</lastmod>' : '').
@@ -430,7 +425,12 @@ class Rah_Sitemap
     public function renderSectionOptions($event, $step, $void, $r)
     {
         if ($r['name'] !== 'default') {
-            return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', !empty($r['rah_sitemap_include_in']), '', ''), '', 'rah_sitemap_include_in');
+            return inputLabel(
+                'rah_sitemap_include_in',
+                yesnoradio('rah_sitemap_include_in', !empty($r['rah_sitemap_include_in']), '', ''),
+                '',
+                'rah_sitemap_include_in'
+            );
         }
     }
 
@@ -459,7 +459,12 @@ class Rah_Sitemap
 
     public function renderCategoryOptions($event, $step, $void, $r)
     {
-        return inputLabel('rah_sitemap_include_in', yesnoradio('rah_sitemap_include_in', !empty($r['rah_sitemap_include_in']), '', ''), '', 'rah_sitemap_include_in');
+        return inputLabel(
+            'rah_sitemap_include_in',
+            yesnoradio('rah_sitemap_include_in', !empty($r['rah_sitemap_include_in']), '', ''),
+            '',
+            'rah_sitemap_include_in'
+        );
     }
 
     /**
