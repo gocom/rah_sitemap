@@ -315,7 +315,8 @@ class Rah_Sitemap
      * @return rah_sitemap
      */
 
-    protected function addUrl($url, $lastmod = null) {
+    protected function addUrl($url, $lastmod = null)
+    {
         if (strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0) {
             $url = hu.ltrim($url, '/');
         }
