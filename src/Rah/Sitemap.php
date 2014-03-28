@@ -171,6 +171,7 @@ class Rah_Sitemap
         register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_sitemap', 'deleted');
         register_callback(array($this, 'prefs'), 'plugin_prefs.rah_sitemap');
         register_callback(array($this, 'pageHandler'), 'textpattern');
+        register_callback(array($this, 'cleanUrlHandler'), 'txp_die', '404');
         register_callback(array($this, 'renderSectionOptions'), 'section_ui', 'extend_detail_form');
         register_callback(array($this, 'renderCategoryOptions'), 'category_ui', 'extend_detail_form');
         register_callback(array($this, 'saveSection'), 'section', 'section_save');
@@ -181,18 +182,47 @@ class Rah_Sitemap
     }
 
     /**
-     * Handles routing requests to the sitemap.
+     * Handles routing GET requests to the sitemap.
      */
 
     public function pageHandler()
     {
+        if (gps('rah_sitemap')) {
+            $this->populateArticleFields()->sendSitemap();
+        }
+    }
+
+    /**
+     * Handles routing clean URLs.
+     */
+
+    public function cleanUrlHandler()
+    {
         global $pretext;
 
-        if (!gps('rah_sitemap') && basename($pretext['request_uri'], '.gz') !== 'sitemap.xml') {
-            return;
+        $basename = explode('?', (string) $pretext['request_uri']);
+        $basename = basename(array_shift($basename));
+
+        if ($basename === 'robots.txt') {
+            $this->sendRobots();
         }
 
-        return $this->populateArticleFields()->sendSitemap();
+        if ($basename === 'sitemap.xml' || $basename === 'sitemap.xml.gz') {
+            $this->populateArticleFields()->sendSitemap();
+        }
+    }
+
+    /**
+     * Generates and outputs robots file.
+     */
+
+    protected function sendRobots()
+    {
+        ob_clean();
+        txp_status_header('200 OK');
+        header('Content-type: text/plain; charset=utf-8');
+        echo 'Sitemap: '.hu.'sitemap.xml';
+        exit;
     }
 
     /**
