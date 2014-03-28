@@ -1,6 +1,6 @@
 {
     "name": "rah/rah_sitemap",
-    "description": "Sitemap plugin for Textpattern CMS",
+    "description": "XML sitemap plugin for Textpattern CMS",
     "keywords": ["textpattern", "plugin"],
     "homepage": "https://github.com/gocom/rah_sitemap",
     "license": "GPL-2.0",
