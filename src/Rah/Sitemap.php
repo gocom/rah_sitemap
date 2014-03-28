@@ -23,6 +23,8 @@
 
 /**
  * Main plugin class.
+ *
+ * @internal
  */
 
 class Rah_Sitemap
