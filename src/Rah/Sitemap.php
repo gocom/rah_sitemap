@@ -287,14 +287,14 @@ class Rah_Sitemap
         }
 
         $rs = safe_rows_start(
-            '*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod',
+            '*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod',
             'textpattern',
             implode(' and ', $sql) . ' order by Posted desc'
         );
 
         if ($rs) {
             while ($a = nextRow($rs)) {
-                $this->addUrl(permlinkurl($a), (int) max($a['uLastMod'], $a['uPosted']));
+                $this->addUrl(permlinkurl($a), (int) max($a['uLastMod'], $a['posted']));
             }
         }
 
