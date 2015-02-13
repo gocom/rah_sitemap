@@ -339,7 +339,7 @@ class Rah_Sitemap
      *
      * @param  string     $url     The URL
      * @param  int|string $lastmod The modification date
-     * @return rah_sitemap
+     * @return Rah_Sitemap
      */
 
     protected function addUrl($url, $lastmod = null)
