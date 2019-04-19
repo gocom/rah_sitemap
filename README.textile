@@ -34,7 +34,7 @@ Normally, you will benefit from submitting a sitemap, but its just one piece in 
 
 h2. Configuration
 
-After rah_sitemap is installed, you may want to configure it to fit your site. For instance, you may want to exclude certain irrelevant articles or sections. The plugin's settings can be configured from Textpattern's "Preferences":https://docs.textpattern.com/administration/preferences-panel panel, organized under its own *Sitemap* section. "Sections":https://docs.textpattern.com/administration/sections-panel and "Categories":https://docs.textpattern.com/administration/categories-panel can be excluded from the sitemap from their respectful editors.
+After rah_sitemap is installed, you may want to configure it to fit your site. For instance, you may want to exclude certain irrelevant articles or sections. The plugin's settings can be configured from Textpattern's "Preferences":https://docs.textpattern.com/administration/preferences-panel panel, organized under its own *Sitemap* section. "Sections":https://docs.textpattern.com/administration/sections-panel and "Categories":https://docs.textpattern.com/administration/categories-panel can be excluded from the sitemap from their respective editors.
 
 h3. Sending the sitemap to search engines
 
