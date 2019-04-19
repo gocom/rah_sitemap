@@ -87,7 +87,7 @@ final class Rah_Sitemap
         $position = 260;
 
         foreach ($options as $name => $value) {
-            create_pref('rah_sitemap_' . $name, $value[0], 'rah_sitemap', PREF_PLUGIN, $value[0], $position++);
+            create_pref('rah_sitemap_' . $name, $value[1], 'rah_sitemap', PREF_PLUGIN, $value[0], $position++);
         }
     }
 
