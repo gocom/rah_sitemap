@@ -2,7 +2,7 @@ h1. rah_sitemap
 
 "Packagist":https://packagist.org/packages/rah/rah_sitemap | "Issues":https://github.com/gocom/rah_sitemap/issues | "Donate":https://rahforum.biz/donate/rah_sitemap
 
-Rah_sitemap is a sitemap plugin for "Textpattern CMS":https://www.textpattern.com. The plugin lets you easily generate valid "Sitemaps.org":https://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your valuable content. Rah_sitemap maps your categories, sections, articles and even custom URLs of your choosing, and what is best, none of it requires diving into code. All configuration is done from a clean graphical user-interface.
+Sitemap plugin for "Textpattern CMS":https://textpattern.com. Generates "Sitemaps.org":https://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your valuable content. Rah_sitemap maps your categories, sections, articles and even custom URLs of your choosing, and what is best, none of it requires diving into code. All configuration is done from a clean graphical user-interface.
 
 h2. Install
 
@@ -50,7 +50,7 @@ Where the @https://example.com/@ is your site's location as defined in Textpatt
 
 h2. Preferences
 
-Rah_sitemap comes with number of preferences which all can be found from your "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under a *Sitemap* section. Rah_sitemap allows excluding sections, categories and articles from the XML sitemap. Following options will be present.
+Rah_sitemap comes with number of preferences which all can be found from your Preferences panel, organized under a *Sitemap* section. Rah_sitemap allows excluding sections, categories and articles from the XML sitemap. Following options will be present.
 
 h3. Exclude articles based on fields
 
@@ -58,7 +58,7 @@ The field can be used to exclude articles from the sitemap based on any article 
 
 Values used in the option support two wildcard characters. An underscore (@_@) matches exactly one character, and a percent sign (@%@) matches zero or more characters.
 
-If you wanted to exclude articles posted to "sections":http://textpattern.net/wiki/index.php?title=sections named as _notes_ and _private_ or by a user _mailer_, you could use the following in the field:
+If you wanted to exclude articles posted to sections named as _notes_ and _private_ or by a user _mailer_, you could use the following in the field:
 
 bc. Section: notes, Section: private, AuthorID: mailer
 
@@ -68,7 +68,7 @@ Comma-separated list of additional local site URLs added to the sitemap. Note th
 
 h3. Include future articles?
 
-If set to Yes, articles with future publishing date are visible in the sitemap. Please note that by default the "article":http://textpattern.net/wiki/index.php?title=article tag doesn't display future articles, unless its @time@ attribute is explicitly set to @future@ or @any@.
+If set to Yes, articles with future publishing date are visible in the sitemap. Please note that by default the article tag doesn't display future articles, unless its @time@ attribute is explicitly set to @future@ or @any@.
 
 h3. Include published articles?
 
@@ -80,13 +80,7 @@ If set to No, expired articles are not visible in the sitemap.
 
 h3. Exclude sticky articles?
 
-If set to Yes, "sticky":http://textpattern.net/wiki/index.php?title=Write#Sticky articles are not visible in the sitemap.
-
-h2. Extras and modules
-
-Rah_sitemap supports modules. The plugin's own modules can be used to add new functionality.
-
-* "Links":https://github.com/gocom/rah_sitemap_links - displays Textpattern's links in the sitemap.
+If set to Yes, sticky articles are not visible in the sitemap.
 
 h2. For developers
 
@@ -96,7 +90,7 @@ h3. Callback
 
 Rah_sitemap introduces a new public-facing callback event to the Textpattern's event library named  @rah_sitemap.urlset@. The event is fired before a sitemap is printed out. The callback event can be used with the API to add new URLs to the sitemap.
 
-As with other callback events in Textpattern, hooking to rah_sitemap's event happens using Textpattern's callback handling functions, mainly "register_callback":http://textpattern.net/wiki/index.php?title=Plugin_Development_Guidelines#Callbacks.
+As with other callback events in Textpattern, hooking to rah_sitemap's event happens using Textpattern's callback handling functions, mainly "register_callback":https://docs.textpattern.com/development/index#callbacks.
 
 bc.. register_callback('abc_function', 'rah_sitemap.urlset', 0, $urls);
 
@@ -112,9 +106,11 @@ As rah_sitemap integrates well with Textpattern's core, it uses the same URL fun
 
 h2. Changelog
 
-h3. Version 1.3.1 - upcoming
+h3. Version 2.0.0 - upcoming
 
 * Fixed: Generates valid @/year/month/day/title@ permlinks. Thank you, "Wladimir Palant":https://github.com/palant.
+* Now requires Textpattern 4.7.0 or newer.
+* Now requires PHP 7.2.0 or newer.
 
 h3. Version 1.3.0 - 2014/03/28
 
