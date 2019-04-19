@@ -106,9 +106,11 @@ As rah_sitemap integrates well with Textpattern's core, it uses the same URL fun
 
 h2. Changelog
 
-h3. Version 2.0.0 - upcoming
+h3. Version 2.0.0 - 2019/04/20
 
 * Fixed: Generates valid @/year/month/day/title@ permlinks. Thank you, "Wladimir Palant":https://github.com/palant.
+* Drop old legacy preference migration code.
+* Use preference API to create preference options.
 * Now requires Textpattern 4.7.0 or newer.
 * Now requires PHP 7.2.0 or newer.
 
