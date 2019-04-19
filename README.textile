@@ -1,26 +1,24 @@
 h1. rah_sitemap
 
-"Download":https://github.com/gocom/rah_sitemap/releases | "Packagist":https://packagist.org/packages/rah/rah_sitemap | "Twitter":http://twitter.com/gocom | "Issues":https://github.com/gocom/rah_sitemap/issues | "Support forum":http://forum.textpattern.com/viewtopic.php?id=28279 | "Donate":http://rahforum.biz/donate/rah_sitemap
+"Download":https://github.com/gocom/rah_sitemap/releases | "Packagist":https://packagist.org/packages/rah/rah_sitemap | "Issues":https://github.com/gocom/rah_sitemap/issues | "Donate":https://rahforum.biz/donate/rah_sitemap
 
-Rah_sitemap is a sitemap plugin for "Textpattern CMS":http://www.textpattern.com. The plugin lets you easily generate valid "Sitemaps.org":http://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your valuable content. Rah_sitemap maps your categories, sections, articles and even custom URLs of your choosing, and what is best, none of it requires diving into code. All configuration is done from a clean graphical user-interface.
+Rah_sitemap is a sitemap plugin for "Textpattern CMS":https://www.textpattern.com. The plugin lets you easily generate valid "Sitemaps.org":https://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your valuable content. Rah_sitemap maps your categories, sections, articles and even custom URLs of your choosing, and what is best, none of it requires diving into code. All configuration is done from a clean graphical user-interface.
 
 h2. Install
 
-Using "Composer":http://getcomposer.org:
+Using "Composer":https://getcomposer.org:
 
-bc. $ composer require rah/rah_sitemap:*
-
-Or "download":https://github.com/gocom/rah_sitemap/releases a plugin package.
+bc. $ composer require rah/rah_sitemap
 
 h2. Basics
 
-Rah_sitemap generates a sitemap for your Textpattern website, listing all of its section-, article category- and article-pages. The generated sitemap follows the XML based "Sitemap protocol format":http://www.sitemaps.org/ and is targeted to search engines, opposed to your visitors. The sitemap is meant to help search engines to index your site as it grows and gets more and more various nested pages.
+Rah_sitemap generates a sitemap for your Textpattern website, listing all of its section-, article category- and article-pages. The generated sitemap follows the XML based "Sitemap protocol format":https://www.sitemaps.org/ and is targeted to search engines, opposed to your visitors. The sitemap is meant to help search engines to index your site as it grows and gets more and more various nested pages.
 
 The Sitemap can be configured directly from Textpattern's Preferences panel, making rah_sitemap very easy to setup and use. The plugin itself takes care of the rest.
 
 h3. Accessing the sitemap
 
-The generated sitemap becomes publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's "Permanent link mode":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Permanent_Link_Mode. If the site is configured to use "clean URLs":http://textpattern.net/wiki/index.php?title=Talk:Managing_Clean_URLs, the sitemap can be accessed using a clean path like @http://example.com/sitemap.xml@, where the @example.com@ would be the "site's URL":http://textpattern.net/wiki/index.php?title=Basic_Preferences#Site_URL. Additionally a query version, @http://example.com/?rah_sitemap=sitemap@, is available in both the messy and the clean URL modes, and can be used if the other one isn't available.
+The generated sitemap becomes publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's permanent link mode. If the site is configured to use clean URLs, the sitemap can be accessed using a clean path like @http://example.com/sitemap.xml@, where the @example.com@ would be the site's URL. Additionally a query version, @http://example.com/?rah_sitemap=sitemap@, is available in both the messy and the clean URL modes, and can be used if the other one isn't available.
 
 h3. Immediate boost to search engine visiblity?
 
@@ -34,27 +32,21 @@ It's common misconception to think that Sitemaps guarantee that pages will be in
 
 Normally, you will benefit from submitting a sitemap, but its just one piece in the puzzle. In no case will you get penalized from Sitemap or including wrong content in it.
 
-h2. Requirements
-
-Rah_sitemap's minimum requirements:
-
-* Textpattern 4.5.0 or newer.
-
 h2. Configuration
 
-After rah_sitemap is installed, you may want to configure it to fit your site. For instance, you may want to exclude certain irrelevant articles or sections. The plugin's settings can be configured from Textpattern's "Advanced Preferences":http://textpattern.net/wiki/index.php?title=Advanced_Preferences panel, organized under its own *Sitemap* section. "Sections":http://textpattern.net/wiki/index.php?title=Sections and "Categories":http://textpattern.net/wiki/index.php?title=Categories can be excluded from the sitemap from their respectful editors.
+After rah_sitemap is installed, you may want to configure it to fit your site. For instance, you may want to exclude certain irrelevant articles or sections. The plugin's settings can be configured from Textpattern's "Preferences":https://docs.textpattern.com/administration/preferences-panel panel, organized under its own *Sitemap* section. "Sections":https://docs.textpattern.com/administration/sections-panel and "Categories":https://docs.textpattern.com/administration/categories-panel can be excluded from the sitemap from their respectful editors.
 
 h3. Sending the sitemap to search engines
 
-Once you have a sitemap up and running, you may want to inform search engines about its existence. There are few ways you can do it: "Webmaster Tools":http://www.google.com/webmasters/ for Google, you could use a "robots.txt":http://www.robotstxt.org/ directive or search vendor specific pinging.
+Once you have a sitemap up and running, you may want to inform search engines about its existence. There are few ways you can do it: "Webmaster Tools":https://www.google.com/webmasters/ for Google, you could use a "robots.txt":https://www.robotstxt.org/ directive or search vendor specific pinging.
 
-The recommended way is by using a robots.txt file. To get robots.txt up and running, you will have to add @robots.txt@ file at root of your site's domain, so that its accessible from @http://example.com/robots.txt@. If your Textpattern site has fully functional clean URLs, is installed at the root and you already do not have robots.txt file, rah_sitemap will automatically create the file for you -- or well, serve it dynamically.
+The recommended way is by using a robots.txt file. To get robots.txt up and running, you will have to add @robots.txt@ file at root of your site's domain, so that its accessible from @https://example.com/robots.txt@. If your Textpattern site has fully functional clean URLs, is installed at the root and you already do not have robots.txt file, rah_sitemap will automatically create the file for you -- or well, serve it dynamically.
 
 If not, you will need to create or edit a file named @robots.txt@ at the root of the domain. In that file you would add a @Sitemap@ directive containing an absolute URL to your sitemap:
 
-bc. Sitemap: http://www.example.com/?rah_sitemap=sitemap
+bc. Sitemap: https://example.com/?rah_sitemap=sitemap
 
-Where the @http://www.example.com/@ is your site's location as defined in Textpattern's Preferences panel. The directive should be placed on its own line.
+Where the @https://example.com/@ is your site's location as defined in Textpattern's Preferences panel. The directive should be placed on its own line.
 
 h2. Preferences
 
@@ -114,7 +106,7 @@ fuction abc_function($event, $step, $void, $urls) {
 
 h3. Custom URL functions
 
-If you are supplying a custom URL function for Textpattern, please note that the URLs the function generates need to meet "RFC 3986":http://www.ietf.org/rfc/rfc3986.txt and "RFC 3987":http://www.ietf.org/rfc/rfc3987.txt. All URLs should also be entity escaped from special syntax characters using Textpattern's "txpspecialchars":http://code.google.com/p/textpattern/source/detail?r=3818 function. All URLs Textpattern itself generates follow these specifications, and so should your custom URL plugin.
+If you are supplying a custom URL function for Textpattern, please note that the URLs the function generates need to meet "RFC 3986":http://www.ietf.org/rfc/rfc3986.txt and "RFC 3987":http://www.ietf.org/rfc/rfc3987.txt. All URLs should also be entity escaped from special syntax characters using Textpattern's @txpspecialchars@ function. All URLs Textpattern itself generates follow these specifications, and so should your custom URL plugin.
 
 As rah_sitemap integrates well with Textpattern's core, it uses the same URL functions as Textpattern. If an URL given to the sitemap doesn't meet those specification, the sitemap will become invalid.
 

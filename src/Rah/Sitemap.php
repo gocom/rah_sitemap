@@ -4,7 +4,7 @@
  * rah_sitemap - XML sitemap plugin for Textpattern CMS
  * https://github.com/gocom/rah_sitemap
  *
- * Copyright (C) 2015 Jukka Svahn
+ * Copyright (C) 2019 Jukka Svahn
  *
  * This file is part of rah_sitemap.
  *
@@ -22,44 +22,59 @@
  */
 
 /**
- * Main plugin class.
- *
- * @internal
+ * Plugin class.
  */
-
-class Rah_Sitemap
+final class Rah_Sitemap
 {
     /**
      * Stores an XML urlset.
      *
      * @var array
      */
-
-    protected $urlset = array();
+    private $urlset = [];
 
     /**
      * Stores an array of mapped article fields.
      *
      * @var array
      */
+    private $articleFields = [];
 
-    protected $articleFields = array();
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        add_privs('plugin_prefs.rah_sitemap', '1,2');
+        add_privs('prefs.rah_sitemap', '1,2');
+        register_callback([$this, 'install'], 'plugin_lifecycle.rah_sitemap', 'installed');
+        register_callback([$this, 'uninstall'], 'plugin_lifecycle.rah_sitemap', 'deleted');
+        register_callback([$this, 'prefs'], 'plugin_prefs.rah_sitemap');
+        register_callback([$this, 'pageHandler'], 'textpattern');
+        register_callback([$this, 'cleanUrlHandler'], 'txp_die', '404');
+        register_callback([$this, 'renderSectionOptions'], 'section_ui', 'extend_detail_form');
+        register_callback([$this, 'renderCategoryOptions'], 'category_ui', 'extend_detail_form');
+        register_callback([$this, 'saveSection'], 'section', 'section_save');
+        register_callback([$this, 'saveCategory'], 'category', 'cat_article_save');
+        register_callback([$this, 'saveCategory'], 'category', 'cat_image_save');
+        register_callback([$this, 'saveCategory'], 'category', 'cat_file_save');
+        register_callback([$this, 'saveCategory'], 'category', 'cat_link_save');
+    }
 
     /**
      * Installer.
      */
-
-    public function install()
+    public function install(): void
     {
-        $opt = array(
-            'exclude_fields'          => array('pref_longtext_input', array()),
-            'urls'                    => array('pref_longtext_input', ''),
-            'future_articles'         => array('yesnoradio', 0),
-            'past_articles'           => array('yesnoradio', 1),
-            'expired_articles'        => array('yesnoradio', 1),
-            'exclude_sticky_articles' => array('yesnoradio', 1),
-            'compress'                => array('yesnoradio', 0),
-        );
+        $options = [
+            'exclude_fields' => ['pref_longtext_input', []],
+            'urls' => ['pref_longtext_input', ''],
+            'future_articles' => ['yesnoradio', 0],
+            'past_articles' => ['yesnoradio', 1],
+            'expired_articles' => ['yesnoradio', 1],
+            'exclude_sticky_articles' => ['yesnoradio', 1],
+            'compress' => ['yesnoradio', 0],
+        ];
 
         if (!in_array('rah_sitemap_include_in', getThings('describe '.safe_pfx('txp_section')))) {
             safe_alter('txp_section', 'ADD rah_sitemap_include_in TINYINT(1) NOT NULL DEFAULT 1');
@@ -69,123 +84,27 @@ class Rah_Sitemap
             safe_alter('txp_category', 'ADD rah_sitemap_include_in TINYINT(1) NOT NULL DEFAULT 1');
         }
 
-        if (in_array(PFX.'rah_sitemap_prefs', getThings('SHOW TABLES'))) {
-            $update = array(
-                'sections'   => array(),
-                'categories' => array(),
-            );
-
-            $rs = safe_rows('name, value', 'rah_sitemap_prefs', '1=1');
-
-            foreach ($rs as $a) {
-                if (trim($a['value']) === '') {
-                    continue;
-                }
-
-                if ($a['name'] == 'articlecategories') {
-                    foreach (do_list($a['value']) as $v) {
-                        $opt['exclude_fields'][1][] = 'Category1: ' . $v;
-                        $opt['exclude_fields'][1][] = 'Category2: ' . $v;
-                    }
-                } elseif ($a['name'] == 'articlesections') {
-                    foreach (do_list($a['value']) as $v) {
-                        $opt['exclude_fields'][1][] = 'Section: ' . $v;
-                    }
-                } elseif ($a['name'] == 'sections') {
-                    $update['sections'] = do_list($a['value']);
-                } elseif ($a['name'] == 'categories') {
-                    foreach (do_list($a['value']) as $v) {
-                        $v = explode('_||_', $v);
-                        $update['categories'][$v[0]][] = end($v);
-                    }
-                } elseif (isset($opt[$a['name']])) {
-                    $opt[$a['name']][1] = $a['value'];
-                }
-            }
-
-            @$rs = safe_column('url', 'rah_sitemap', '1 = 1');
-
-            if ($rs) {
-                $opt['urls'][1] = implode(', ', $rs);
-            }
-
-            if ($update['categories']) {
-                foreach ($update['categories'] as $type => $categories) {
-                    safe_update(
-                        'txp_category',
-                        'rah_sitemap_include_in = 0',
-                        "type = '".doSlash($type)."' and name IN(".implode(',', quote_list($categories)).")"
-                    );
-                }
-            }
-
-            if ($update['sections']) {
-                safe_update(
-                    'txp_section',
-                    'rah_sitemap_include_in = 0',
-                    'name IN('.implode(',', quote_list($update['sections'])).')'
-                );
-            }
-
-            @safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap'));
-            @safe_query('DROP TABLE IF EXISTS '.safe_pfx('rah_sitemap_prefs'));
-        }
-
         $position = 260;
 
-        foreach ($opt as $name => $val) {
-            $n = 'rah_sitemap_'.$name;
-
-            if (get_pref($n, false) === false) {
-                if (is_array($val[1])) {
-                    $val[1] = implode(',', $val[1]);
-                }
-
-                set_pref($n, $val[1], 'rah_sitemap', PREF_ADVANCED, $val[0], $position);
-            }
-
-            $position++;
+        foreach ($options as $name => $value) {
+            create_pref('rah_sitemap_' . $name, $value[0], 'rah_sitemap', PREF_PLUGIN, $value[0], $position++);
         }
     }
 
     /**
      * Uninstaller.
      */
-
-    public function uninstall()
+    public function uninstall(): void
     {
-        safe_delete('txp_prefs', "name like 'rah\_sitemap\_%'");
+        remove_pref(null, 'rah_sitemap');
         safe_alter('txp_section', 'DROP COLUMN rah_sitemap_include_in');
         safe_alter('txp_category', 'DROP COLUMN rah_sitemap_include_in');
     }
 
     /**
-     * Constructor.
-     */
-
-    public function __construct()
-    {
-        add_privs('plugin_prefs.rah_sitemap', '1,2');
-        add_privs('prefs.rah_sitemap', '1,2');
-        register_callback(array($this, 'install'), 'plugin_lifecycle.rah_sitemap', 'installed');
-        register_callback(array($this, 'uninstall'), 'plugin_lifecycle.rah_sitemap', 'deleted');
-        register_callback(array($this, 'prefs'), 'plugin_prefs.rah_sitemap');
-        register_callback(array($this, 'pageHandler'), 'textpattern');
-        register_callback(array($this, 'cleanUrlHandler'), 'txp_die', '404');
-        register_callback(array($this, 'renderSectionOptions'), 'section_ui', 'extend_detail_form');
-        register_callback(array($this, 'renderCategoryOptions'), 'category_ui', 'extend_detail_form');
-        register_callback(array($this, 'saveSection'), 'section', 'section_save');
-        register_callback(array($this, 'saveCategory'), 'category', 'cat_article_save');
-        register_callback(array($this, 'saveCategory'), 'category', 'cat_image_save');
-        register_callback(array($this, 'saveCategory'), 'category', 'cat_file_save');
-        register_callback(array($this, 'saveCategory'), 'category', 'cat_link_save');
-    }
-
-    /**
      * Handles routing GET requests to the sitemap.
      */
-
-    public function pageHandler()
+    public function pageHandler(): void
     {
         if (gps('rah_sitemap')) {
             $this->populateArticleFields()->sendSitemap();
@@ -195,8 +114,7 @@ class Rah_Sitemap
     /**
      * Handles routing clean URLs.
      */
-
-    public function cleanUrlHandler()
+    public function cleanUrlHandler(): void
     {
         global $pretext;
 
@@ -215,8 +133,7 @@ class Rah_Sitemap
     /**
      * Generates and outputs robots file.
      */
-
-    protected function sendRobots()
+    private function sendRobots(): void
     {
         ob_clean();
         txp_status_header('200 OK');
@@ -228,8 +145,7 @@ class Rah_Sitemap
     /**
      * Generates and outputs the sitemap.
      */
-
-    protected function sendSitemap()
+    private function sendSitemap(): void
     {
         $this->addUrl(hu);
 
@@ -241,7 +157,7 @@ class Rah_Sitemap
 
         if ($rs) {
             while ($a = nextRow($rs)) {
-                $this->addUrl(pagelinkurl(array('s' => $a['name'])));
+                $this->addUrl(pagelinkurl(['s' => $a['name']]));
             }
         }
 
@@ -253,11 +169,14 @@ class Rah_Sitemap
 
         if ($rs) {
             while ($a = nextRow($rs)) {
-                $this->addUrl(pagelinkurl(array('c' => $a['name'], 'context' => $a['type'])));
+                $this->addUrl(pagelinkurl([
+                    'c' => $a['name'],
+                    'context' => $a['type'],
+                ]));
             }
         }
 
-        $sql = array('Status >= 4');
+        $sql = ['Status >= 4'];
 
         foreach (do_list(get_pref('rah_sitemap_exclude_fields')) as $field) {
             if ($field) {
@@ -304,7 +223,7 @@ class Rah_Sitemap
             }
         }
 
-        $urlset = array();
+        $urlset = [];
         callback_event_ref('rah_sitemap.urlset', '', 0, $urlset);
 
         if ($urlset && is_array($urlset)) {
@@ -341,8 +260,7 @@ class Rah_Sitemap
      * @param  int|string $lastmod The modification date
      * @return Rah_Sitemap
      */
-
-    protected function addUrl($url, $lastmod = null)
+    private function addUrl($url, $lastmod = null)
     {
         if (strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0) {
             $url = hu.ltrim($url, '/');
@@ -380,8 +298,7 @@ class Rah_Sitemap
      *
      * @return Rah_Sitemap
      */
-
-    protected function populateArticleFields()
+    private function populateArticleFields(): self
     {
         $columns = (array) @getThings('describe '.safe_pfx('textpattern'));
 
@@ -399,17 +316,14 @@ class Rah_Sitemap
     /**
      * Options panel.
      */
-
-    public function prefs()
+    public function prefs(): void
     {
         pagetop(gTxt('rah_sitemap'));
 
-        echo '<p>'.n.
-            '<a href="?event=prefs&amp;step=advanced_prefs#prefs-rah_sitemap_exclude_fields">'.
-                gTxt('rah_sitemap_view_prefs').
-            '</a><br />'.n.
-            '<a href="'.hu.'?rah_sitemap=sitemap">'.gTxt('rah_sitemap_view_sitemap').'</a>'.
-            '</p>';
+        echo graf(
+            href(gTxt('rah_sitemap_view_prefs'), ['event' => 'prefs']) . br .
+            href(gTxt('rah_sitemap_view_sitemap'), hu . '?rah_sitemap=sitemap')
+        );
     }
 
     /**
@@ -421,7 +335,6 @@ class Rah_Sitemap
      * @param  array  $r     The section data as an array
      * @return string HTML
      */
-
     public function renderSectionOptions($event, $step, $void, $r)
     {
         if ($r['name'] !== 'default') {
@@ -437,7 +350,6 @@ class Rah_Sitemap
     /**
      * Updates a section.
      */
-
     public function saveSection()
     {
         safe_update(
@@ -456,7 +368,6 @@ class Rah_Sitemap
      * @param  array  $r     The section data as an array
      * @return string HTML
      */
-
     public function renderCategoryOptions($event, $step, $void, $r)
     {
         return inputLabel(
@@ -470,7 +381,6 @@ class Rah_Sitemap
     /**
      * Updates a category.
      */
-
     public function saveCategory()
     {
         safe_update(
@@ -480,5 +390,3 @@ class Rah_Sitemap
         );
     }
 }
-
-new Rah_Sitemap();
