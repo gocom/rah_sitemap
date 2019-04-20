@@ -72,7 +72,7 @@ final class Rah_Sitemap
     public function install(): void
     {
         $options = [
-            'exclude_fields' => ['pref_longtext_input', []],
+            'exclude_fields' => ['pref_longtext_input', ''],
             'urls' => ['pref_longtext_input', ''],
             'future_articles' => ['yesnoradio', 0],
             'past_articles' => ['yesnoradio', 1],
