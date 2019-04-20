@@ -27,6 +27,11 @@
 final class Rah_Sitemap
 {
     /**
+     * URL limit.
+     */
+    private const URL_LIMIT = 50000;
+
+    /**
      * Stores an XML urlset.
      *
      * @var array
@@ -235,7 +240,7 @@ final class Rah_Sitemap
         $xml =
             '<?xml version="1.0" encoding="utf-8"?>'.
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
-            implode('', array_slice($this->addUrlset, 0, 50000)).
+            implode('', array_slice($this->addUrlset, 0, self::URL_LIMIT)).
             '</urlset>';
 
         ob_clean();
@@ -258,9 +263,9 @@ final class Rah_Sitemap
      *
      * @param  string     $url     The URL
      * @param  int|string $lastmod The modification date
-     * @return Rah_Sitemap
+     * @return $this
      */
-    private function addUrl($url, $lastmod = null)
+    private function addUrl($url, $lastmod = null): self
     {
         if (strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0) {
             $url = hu.ltrim($url, '/');
@@ -296,7 +301,7 @@ final class Rah_Sitemap
     /**
      * Picks up names of article fields.
      *
-     * @return Rah_Sitemap
+     * @return $this
      */
     private function populateArticleFields(): self
     {
@@ -335,7 +340,7 @@ final class Rah_Sitemap
      * @param  array  $r     The section data as an array
      * @return string HTML
      */
-    public function renderSectionOptions($event, $step, $void, $r)
+    public function renderSectionOptions($event, $step, $void, $r): string
     {
         if ($r['name'] !== 'default') {
             return inputLabel(
@@ -350,7 +355,7 @@ final class Rah_Sitemap
     /**
      * Updates a section.
      */
-    public function saveSection()
+    public function saveSection(): void
     {
         safe_update(
             'txp_section',
@@ -368,7 +373,7 @@ final class Rah_Sitemap
      * @param  array  $r     The section data as an array
      * @return string HTML
      */
-    public function renderCategoryOptions($event, $step, $void, $r)
+    public function renderCategoryOptions($event, $step, $void, $r): string
     {
         return inputLabel(
             'rah_sitemap_include_in',
@@ -381,7 +386,7 @@ final class Rah_Sitemap
     /**
      * Updates a category.
      */
-    public function saveCategory()
+    public function saveCategory(): void
     {
         safe_update(
             'txp_category',
