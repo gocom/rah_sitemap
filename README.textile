@@ -106,6 +106,10 @@ As rah_sitemap integrates well with Textpattern's core, it uses the same URL fun
 
 h2. Changelog
 
+h3. Version 2.0.1 - upcoming
+
+* Fixed: option in exclude expired articles.
+
 h3. Version 2.0.0 - 2019/04/20
 
 * Fixed: Generates valid @/year/month/day/title@ permlinks. Thank you, "Wladimir Palant":https://github.com/palant.
