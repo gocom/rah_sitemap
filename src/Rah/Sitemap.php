@@ -34,7 +34,7 @@ final class Rah_Sitemap
     /**
      * Stores an XML urlset.
      *
-     * @var array
+     * @var string[]
      */
     private $urlset = [];
 
@@ -240,7 +240,7 @@ final class Rah_Sitemap
         $xml =
             '<?xml version="1.0" encoding="utf-8"?>'.
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
-            implode('', array_slice($this->addUrlset, 0, self::URL_LIMIT)).
+            implode('', array_slice($this->urlset, 0, self::URL_LIMIT)).
             '</urlset>';
 
         ob_clean();
@@ -275,7 +275,7 @@ final class Rah_Sitemap
             $url = htmlspecialchars($url, ENT_QUOTES);
         }
 
-        if (isset($this->addUrlset[$url])) {
+        if (isset($this->urlset[$url])) {
             return $this;
         }
 
@@ -289,7 +289,7 @@ final class Rah_Sitemap
             }
         }
 
-        $this->addUrlset[$url] =
+        $this->urlset[$url] =
             '<url>'.
                 '<loc>'.$url.'</loc>'.
                 ($lastmod ? '<lastmod>'.$lastmod.'</lastmod>' : '').
