@@ -207,7 +207,7 @@ final class Rah_Sitemap
         }
 
         if (!get_pref('rah_sitemap_expired_articles')) {
-            $sql[] = "(Expires = ".NULLDATETIME." or Expires >= now())";
+            $sql[] = "(Expires = NULL or Expires >= now())";
         }
 
         $rs = safe_rows_start(
