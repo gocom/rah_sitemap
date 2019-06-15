@@ -108,7 +108,7 @@ h2. Changelog
 
 h3. Version 2.0.1 - upcoming
 
-* Fixed: option in exclude expired articles.
+* Fixed: option to exclude expired articles.
 
 h3. Version 2.0.0 - 2019/04/20
 
