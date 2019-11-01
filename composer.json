@@ -22,9 +22,11 @@
         "textpattern/installer": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "3.*"
+        "squizlabs/php_codesniffer": "3.*",
+        "rah/mtxpc": "*"
     },
     "scripts": {
-        "cs": "./vendor/bin/phpcs"
+        "cs": "./vendor/bin/phpcs",
+        "compile": "mtxpc --outdir=dist/ -c . && mtxpc --outdir=dist/ ."
     }
 }
