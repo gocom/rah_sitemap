@@ -10,7 +10,7 @@ Using "Composer":https://getcomposer.org:
 
 bc. $ composer require rah/rah_sitemap
 
-Or download "an installer package":https://github.com/gocom/rah_sitemap/releases.
+Or "download":https://github.com/gocom/rah_sitemap/releases an installer package.
 
 h2. Basics
 
