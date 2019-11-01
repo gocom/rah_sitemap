@@ -27,7 +27,7 @@
 final class Rah_Sitemap
 {
     /**
-     * URL limit.
+     * @var int URL limit.
      */
     private const URL_LIMIT = 50000;
 
@@ -229,6 +229,7 @@ final class Rah_Sitemap
         }
 
         $urlset = [];
+
         callback_event_ref('rah_sitemap.urlset', '', 0, $urlset);
 
         if ($urlset && is_array($urlset)) {
@@ -263,6 +264,7 @@ final class Rah_Sitemap
      *
      * @param  string     $url     The URL
      * @param  int|string $lastmod The modification date
+     *
      * @return $this
      */
     private function addUrl($url, $lastmod = null): self
@@ -338,6 +340,7 @@ final class Rah_Sitemap
      * @param  string $step  The step
      * @param  bool   $void  Not used
      * @param  array  $r     The section data as an array
+     *
      * @return string HTML
      */
     public function renderSectionOptions($event, $step, $void, $r): string
@@ -371,6 +374,7 @@ final class Rah_Sitemap
      * @param  string $step  The step
      * @param  bool   $void  Not used
      * @param  array  $r     The section data as an array
+     *
      * @return string HTML
      */
     public function renderCategoryOptions($event, $step, $void, $r): string
