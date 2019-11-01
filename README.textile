@@ -108,7 +108,7 @@ As rah_sitemap integrates well with Textpattern's core, it uses the same URL fun
 
 h2. Changelog
 
-h3. Version 2.0.1 - upcoming
+h3. Version 2.0.1 - 2019/11/01
 
 * Fixed: option to exclude expired articles.
 
