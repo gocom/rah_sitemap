@@ -10,6 +10,8 @@ Using "Composer":https://getcomposer.org:
 
 bc. $ composer require rah/rah_sitemap
 
+Or download "an installer package":https://github.com/gocom/rah_sitemap/releases.
+
 h2. Basics
 
 Rah_sitemap generates a sitemap for your Textpattern website, listing all of its section-, article category- and article-pages. The generated sitemap follows the XML based "Sitemap protocol format":https://www.sitemaps.org/ and is targeted to search engines, opposed to your visitors. The sitemap is meant to help search engines to index your site as it grows and gets more and more various nested pages.
