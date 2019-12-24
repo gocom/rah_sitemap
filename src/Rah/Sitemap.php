@@ -346,9 +346,10 @@ final class Rah_Sitemap
     public function renderSectionOptions($event, $step, $void, $r): string
     {
         if ($r['name'] !== 'default') {
+            $value = empty($r['rah_sitemap_include_in'])? 0 : $r['rah_sitemap_include_in'];
             return inputLabel(
                 'rah_sitemap_include_in',
-                yesnoradio('rah_sitemap_include_in', !empty($r['rah_sitemap_include_in']), '', ''),
+                yesnoradio('rah_sitemap_include_in', $value, '', ''),
                 '',
                 'rah_sitemap_include_in'
             );
