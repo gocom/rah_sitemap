@@ -1,0 +1,16 @@
+#@admin
+rah_sitemap => Sitemap
+rah_sitemap_view_prefs => Go to the preferences
+rah_sitemap_view_sitemap => View the sitemap
+rah_sitemap_exclude_fields => Exclude articles based on fields (field: value, comma-separated)
+rah_sitemap_urls => Additional URLs (comma-separated)
+rah_sitemap_future_articles => Include future articles?
+rah_sitemap_past_articles => Include published articles?
+rah_sitemap_expired_articles => Include expired articles?
+rah_sitemap_exclude_sticky_articles => Exclude sticky articles?
+rah_sitemap_include_in => Include in sitemap
+rah_sitemap_compress => Compress the sitemap?
+rah_sitemap_include_article_categories => Include article categories?
+rah_sitemap_include_image_categories => Include image categories?
+rah_sitemap_include_file_categories => Include file categories?
+rah_sitemap_include_link_categories => Include link categories?
