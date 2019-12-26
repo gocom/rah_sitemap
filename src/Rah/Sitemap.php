@@ -173,16 +173,16 @@ final class Rah_Sitemap
         /* Generates the entries for categories */
         $categorySql = ["name != 'root' and rah_sitemap_include_in = 1"];
         
-        if (get_pref('rah_sitemap_include_article_categories')) {
+        if (!get_pref('rah_sitemap_include_article_categories')) {
             $sql[] = "type <> 'article'";
         }
-        if (get_pref('rah_sitemap_include_image_categories')) {
+        if (!get_pref('rah_sitemap_include_image_categories')) {
             $sql[] = "type <> 'image'";
         }
-        if (get_pref('rah_sitemap_include_file_categories')) {
+        if (!get_pref('rah_sitemap_include_file_categories')) {
             $sql[] = "type <> 'file'";
         }
-        if (get_pref('rah_sitemap_include_link_categories')) {
+        if (!get_pref('rah_sitemap_include_link_categories')) {
             $sql[] = "type <> 'link'";
         }
         
