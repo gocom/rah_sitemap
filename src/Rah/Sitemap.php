@@ -174,22 +174,22 @@ final class Rah_Sitemap
         $categorySql = ["name != 'root' and rah_sitemap_include_in = 1"];
         
         if (!get_pref('rah_sitemap_include_article_categories')) {
-            $sql[] = "type <> 'article'";
+            $categorySql[] = "type <> 'article'";
         }
         if (!get_pref('rah_sitemap_include_image_categories')) {
-            $sql[] = "type <> 'image'";
+            $categorySql[] = "type <> 'image'";
         }
         if (!get_pref('rah_sitemap_include_file_categories')) {
-            $sql[] = "type <> 'file'";
+            $categorySql[] = "type <> 'file'";
         }
         if (!get_pref('rah_sitemap_include_link_categories')) {
-            $sql[] = "type <> 'link'";
+            $categorySql[] = "type <> 'link'";
         }
         
         $rs = safe_rows_start(
             'name, type',
             'txp_category',
-            implode(' and ', $sql) . ' order by name asc'
+            implode(' and ', $categorySql) . ' order by name asc'
         );
 
         if ($rs) {
