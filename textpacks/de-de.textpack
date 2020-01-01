@@ -1,0 +1,17 @@
+#@admin
+#@language de-de
+rah_sitemap => Sitemap
+rah_sitemap_view_prefs => Einstellungen öffnen
+rah_sitemap_view_sitemap => Sitemap anzeigen
+rah_sitemap_exclude_fields => Artikel basierend auf Feldern ausschließen (Feldname: Wert, Komma getrennte Tupel)
+rah_sitemap_urls => Zusätzliche URLs (mit Komma getrennt)
+rah_sitemap_future_articles => Zukünftige Artikel einschließen?
+rah_sitemap_past_articles => Veröffentlichte Artikel einschließen?
+rah_sitemap_expired_articles => Abgelaufene Artikel einschließen?
+rah_sitemap_exclude_sticky_articles => Fixierte Aritkel ausschließen?
+rah_sitemap_include_in => In Sitemap aufnehmen
+rah_sitemap_compress => Sitemap komprimiere?
+rah_sitemap_include_article_categories => Artikelkategorien einschließen?
+rah_sitemap_include_image_categories => Bildkategorien einschließen?
+rah_sitemap_include_file_categories => Dateikategorien einschließen?
+rah_sitemap_include_link_categories => Linkkategorien einschließen?
