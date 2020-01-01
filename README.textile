@@ -108,7 +108,7 @@ As rah_sitemap integrates well with Textpattern's core, it uses the same URL fun
 
 h2. Changelog
 
-h3. Version 2.1.0 - upcoming
+h3. Version 2.1.0 - 2020/01/01
 
 * Added: Global options to exclude categories from the sitemap by type. Thank you, "Sebastian Spautz":https://github.com/sebastiansIT.
 * Added: German translation. Thank you, "Sebastian Spautz":https://github.com/sebastiansIT.
