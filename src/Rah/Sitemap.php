@@ -170,26 +170,28 @@ final class Rah_Sitemap
             }
         }
 
-        /* Generates the entries for categories */
-        $categorySql = ["name != 'root' and rah_sitemap_include_in = 1"];
-        
+        $sql = ["name != 'root' and rah_sitemap_include_in = 1"];
+
         if (!get_pref('rah_sitemap_include_article_categories')) {
-            $categorySql[] = "type <> 'article'";
+            $sql[] = "type != 'article'";
         }
+
         if (!get_pref('rah_sitemap_include_image_categories')) {
-            $categorySql[] = "type <> 'image'";
+            $sql[] = "type != 'image'";
         }
+
         if (!get_pref('rah_sitemap_include_file_categories')) {
-            $categorySql[] = "type <> 'file'";
+            $sql[] = "type != 'file'";
         }
+
         if (!get_pref('rah_sitemap_include_link_categories')) {
-            $categorySql[] = "type <> 'link'";
+            $sql[] = "type != 'link'";
         }
-        
+
         $rs = safe_rows_start(
             'name, type',
             'txp_category',
-            implode(' and ', $categorySql) . ' order by name asc'
+            implode(' and ', $sql) . ' order by name asc'
         );
 
         if ($rs) {
@@ -201,7 +203,6 @@ final class Rah_Sitemap
             }
         }
 
-        /* Generates the entries for articles */
         $sql = ['Status >= 4'];
 
         foreach (do_list(get_pref('rah_sitemap_exclude_fields')) as $field) {
