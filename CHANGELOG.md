@@ -35,7 +35,7 @@
 ## Version 1.2 - 2011/03/09
 
 * Added: adds site URL to relative article permlinks. Basically a fix for gbp_permanent_links.
-* Changed: from `permlinkurl_id()` to `permlinkurl(). Greatly reduced the amount of queries generating article permlinks makes.
+* Changed: from `permlinkurl_id()` to `permlinkurl()`. Greatly reduced the amount of queries generating article permlinks makes.
 
 ## Version 1.1 - 2010/10/30
 
