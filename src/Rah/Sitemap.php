@@ -130,7 +130,7 @@ final class Rah_Sitemap
         pagetop(gTxt('rah_sitemap'));
 
         echo graf(
-            href(gTxt('rah_sitemap_view_prefs'), ['event' => 'prefs']) . br .
+            href(gTxt('rah_sitemap_view_prefs'), '?event=prefs#prefs_group_rah_sitemap') . br .
             href(gTxt('rah_sitemap_view_sitemap'), hu . '?rah_sitemap=sitemap')
         );
     }

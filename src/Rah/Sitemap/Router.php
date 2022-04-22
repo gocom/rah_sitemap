@@ -56,6 +56,10 @@ final class Rah_Sitemap_Router
             return;
         }
 
+        if (!$this->isClean) {
+            $path .= '.xml';
+        }
+
         $recordPool = new Rah_Sitemap_RecordPool();
 
         if (!$path

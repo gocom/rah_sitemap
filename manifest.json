@@ -18,6 +18,7 @@
         "./src/Rah/Sitemap/RecordPool.php",
         "./src/Rah/Sitemap/Url.php",
         "./src/Rah/Sitemap/Controller/IndexController.php",
+        "./src/Rah/Sitemap/Controller/RobotsController.php",
         "./src/Rah/Sitemap/Controller/SitemapController.php",
         "./src/Rah/Sitemap/Router.php",
         "./src/Rah/Sitemap.php",
