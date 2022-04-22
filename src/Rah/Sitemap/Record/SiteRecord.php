@@ -53,7 +53,13 @@ class Rah_Sitemap_Record_SiteRecord implements Rah_Sitemap_RecordInterface
             ),
         ];
 
-        callback_event_ref('rah_sitemap.urlset', '', 0, $urls);
+        callback_event_ref('rah_sitemap.urlset', '', 0, $urlset);
+
+        foreach ($urlset as $url) {
+            if ($url) {
+                $urls[] = new Rah_Sitemap_Url($url);
+            }
+        }
 
         foreach (do_list(get_pref('rah_sitemap_urls')) as $url) {
             if ($url) {
