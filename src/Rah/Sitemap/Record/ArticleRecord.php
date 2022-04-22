@@ -39,7 +39,12 @@ class Rah_Sitemap_Record_ArticleRecord implements Rah_Sitemap_RecordInterface
      */
     public function getPages(): int
     {
-        return 0;
+        $items = (int) safe_count(
+            'textpattern',
+            $this->getWhereStatement()
+        );
+
+        return ceil($items / self::LIMIT);
     }
 
     /**
@@ -74,7 +79,7 @@ class Rah_Sitemap_Record_ArticleRecord implements Rah_Sitemap_RecordInterface
     }
 
     /**
-     * Generates SQL where statement.
+     * Gets SQL where statement.
      *
      * @return string
      */

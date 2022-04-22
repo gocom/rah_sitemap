@@ -39,10 +39,12 @@ class Rah_Sitemap_Record_CategoryRecord implements Rah_Sitemap_RecordInterface
      */
     public function getPages(): int
     {
-        return (int) safe_count(
+        $items = (int) safe_count(
             'txp_category',
             $this->getWhereStatement()
         );
+
+        return \ceil($items / self::LIMIT);
     }
 
     /**
@@ -51,16 +53,22 @@ class Rah_Sitemap_Record_CategoryRecord implements Rah_Sitemap_RecordInterface
     public function getUrls(int $page): array
     {
         $urls = [];
+        $offset = max(0, ($page * self::LIMIT) - self::LIMIT);
 
         $rs = safe_rows_start(
             'name, type',
             'txp_category',
-            $this->getWhereStatement() . ' order by name asc'
+            sprintf(
+                '%s order by name asc limit %s, %s',
+                $this->getWhereStatement(),
+                $offset,
+                self::LIMIT
+            )
         );
 
         if ($rs) {
             while ($a = nextRow($rs)) {
-                $urls = new Rah_Sitemap_Url(
+                $urls[] = new Rah_Sitemap_Url(
                     pagelinkurl([
                         'c' => $a['name'],
                         'context' => $a['type'],
@@ -73,7 +81,7 @@ class Rah_Sitemap_Record_CategoryRecord implements Rah_Sitemap_RecordInterface
     }
 
     /**
-     * Generates SQL where statement.
+     * Gets SQL where statement.
      *
      * @return string
      */

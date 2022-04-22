@@ -59,12 +59,18 @@ final class Rah_Sitemap_Router
         $recordPool = new Rah_Sitemap_RecordPool();
 
         if (!$path
-            || !preg_match('/^sitemap.([a-z0-9_-]+)(?:\.([0-9]+))?\.xml/$', $path, $m)
+            || !preg_match(
+                '/^sitemap(?:\.(?P<name>[a-z0-9_-]+))?(?:\.(?P<page>[0-9]+))?\.xml$/',
+                $path,
+                $m
+            )
         ) {
             return;
         }
 
-        if ($m[1] === 'index') {
+        $name = $m['name'] ?? null;
+
+        if (!$name) {
             $controller = new Rah_Sitemap_Controller_IndexController(
                 $recordPool,
                 $this->isClean
@@ -74,10 +80,12 @@ final class Rah_Sitemap_Router
         }
 
         foreach ($recordPool->getSitemaps() as $sitemap) {
-            if ($sitemap->getName() === $m[1]) {
+            if ($sitemap->getName() === $name) {
+                $page = (int) ($m['page'] ?? 1);
+
                 $controller = new Rah_Sitemap_Controller_SitemapController(
                     $sitemap,
-                    (int) $m[2]
+                    $page
                 );
 
                 $controller->execute();

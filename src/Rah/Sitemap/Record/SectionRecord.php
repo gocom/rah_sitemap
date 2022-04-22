@@ -31,7 +31,7 @@ class Rah_Sitemap_Record_SectionRecord implements Rah_Sitemap_RecordInterface
      */
     public function getName(): string
     {
-        return 'category';
+        return 'section';
     }
 
     /**
@@ -39,10 +39,12 @@ class Rah_Sitemap_Record_SectionRecord implements Rah_Sitemap_RecordInterface
      */
     public function getPages(): int
     {
-        return (int) safe_count(
+        $items = (int) safe_count(
             'txp_section',
             "name != 'default' and rah_sitemap_include_in = 1"
         );
+
+        return ceil($items / self::LIMIT);
     }
 
     /**
@@ -51,11 +53,17 @@ class Rah_Sitemap_Record_SectionRecord implements Rah_Sitemap_RecordInterface
     public function getUrls(int $page): array
     {
         $urls = [];
+        $offset = max(0, ($page * self::LIMIT) - self::LIMIT);
 
         $rs = safe_rows_start(
             'name',
             'txp_section',
-            "name != 'default' and rah_sitemap_include_in = 1 order by name asc"
+            sprintf(
+                '%s order by name asc limit %s, %s',
+                $this->getWhereStatement(),
+                $offset,
+                self::LIMIT
+            )
         );
 
         if ($rs) {
@@ -69,5 +77,15 @@ class Rah_Sitemap_Record_SectionRecord implements Rah_Sitemap_RecordInterface
         }
 
         return $urls;
+    }
+
+    /**
+     * Gets SQL where statement.
+     *
+     * @return string
+     */
+    private function getWhereStatement(): string
+    {
+        return "name != 'default' and rah_sitemap_include_in = 1";
     }
 }

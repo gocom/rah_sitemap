@@ -48,14 +48,16 @@ class Rah_Sitemap_Record_SiteRecord implements Rah_Sitemap_RecordInterface
     public function getUrls(int $page): array
     {
         $urls = [
-            hu,
+            new Rah_Sitemap_Url(
+                hu
+            ),
         ];
 
         callback_event_ref('rah_sitemap.urlset', '', 0, $urls);
 
         foreach (do_list(get_pref('rah_sitemap_urls')) as $url) {
             if ($url) {
-                $urls[] = $url;
+                $urls[] = new Rah_Sitemap_Url($url);
             }
         }
 
