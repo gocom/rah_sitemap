@@ -21,4 +21,27 @@
  * along with rah_sitemap. If not, see <http://www.gnu.org/licenses/>.
  */
 
-new Rah_Sitemap();
+/**
+ * Record pool.
+ */
+final class Rah_Sitemap_RecordPool
+{
+    /**
+     * Gets sitemaps.
+     *
+     * @return Rah_Sitemap_RecordInterface[]
+     */
+    public function getSitemaps(): array
+    {
+        $sitemaps = [
+            new Rah_Sitemap_Record_ArticleRecord(),
+            new Rah_Sitemap_Record_CategoryRecord(),
+            new Rah_Sitemap_Record_SectionRecord(),
+            new Rah_Sitemap_Record_SiteRecord(),
+        ];
+
+        callback_event_ref('rah_sitemap.sitemaps', '', 0, $sitemaps);
+
+        return $sitemaps;
+    }
+}

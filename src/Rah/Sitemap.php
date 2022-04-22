@@ -4,7 +4,7 @@
  * rah_sitemap - XML sitemap plugin for Textpattern CMS
  * https://github.com/gocom/rah_sitemap
  *
- * Copyright (C) 2019 Jukka Svahn
+ * Copyright (C) 2022 Jukka Svahn
  *
  * This file is part of rah_sitemap.
  *
@@ -27,25 +27,6 @@
 final class Rah_Sitemap
 {
     /**
-     * @var int URL limit.
-     */
-    private const URL_LIMIT = 50000;
-
-    /**
-     * Stores an XML urlset.
-     *
-     * @var string[]
-     */
-    private $urlset = [];
-
-    /**
-     * Stores an array of mapped article fields.
-     *
-     * @var array
-     */
-    private $articleFields = [];
-
-    /**
      * Constructor.
      */
     public function __construct()
@@ -55,8 +36,8 @@ final class Rah_Sitemap
         register_callback([$this, 'install'], 'plugin_lifecycle.rah_sitemap', 'installed');
         register_callback([$this, 'uninstall'], 'plugin_lifecycle.rah_sitemap', 'deleted');
         register_callback([$this, 'prefs'], 'plugin_prefs.rah_sitemap');
-        register_callback([$this, 'pageHandler'], 'textpattern');
-        register_callback([$this, 'cleanUrlHandler'], 'txp_die', '404');
+        register_callback([$this, 'handleRawUrl'], 'textpattern');
+        register_callback([$this, 'handleCleanUrl'], 'txp_die', '404');
         register_callback([$this, 'renderSectionOptions'], 'section_ui', 'extend_detail_form');
         register_callback([$this, 'renderCategoryOptions'], 'category_ui', 'extend_detail_form');
         register_callback([$this, 'saveSection'], 'section', 'section_save');
@@ -111,235 +92,34 @@ final class Rah_Sitemap
     }
 
     /**
-     * Handles routing GET requests to the sitemap.
+     * Handles raw URLs.
      */
-    public function pageHandler(): void
+    public function handleRawUrl(): void
     {
-        if (gps('rah_sitemap')) {
-            $this->populateArticleFields()->sendSitemap();
+        $path = gps('rah_sitemap');
+
+        if ($path) {
+            $router = new Rah_Sitemap_Router(false);
+
+            $router->route((string) $path);
         }
     }
 
     /**
      * Handles routing clean URLs.
      */
-    public function cleanUrlHandler(): void
+    public function handleCleanUrl(): void
     {
         global $pretext;
 
-        $basename = explode('?', (string) $pretext['request_uri']);
-        $basename = basename(array_shift($basename));
+        $path = explode('?', (string) ($pretext['request_uri'] ?? ''));
+        $path = basename(array_shift($path));
 
-        if ($basename === 'robots.txt') {
-            $this->sendRobots();
+        if ($path) {
+            $router = new Rah_Sitemap_Router(true);
+
+            $router->route($path);
         }
-
-        if ($basename === 'sitemap.xml' || $basename === 'sitemap.xml.gz') {
-            $this->populateArticleFields()->sendSitemap();
-        }
-    }
-
-    /**
-     * Generates and outputs robots file.
-     */
-    private function sendRobots(): void
-    {
-        ob_clean();
-        txp_status_header('200 OK');
-        header('Content-type: text/plain; charset=utf-8');
-        echo 'Sitemap: '.hu.'sitemap.xml';
-        exit;
-    }
-
-    /**
-     * Generates and outputs the sitemap.
-     */
-    private function sendSitemap(): void
-    {
-        $this->addUrl(hu);
-
-        $rs = safe_rows_start(
-            'name',
-            'txp_section',
-            "name != 'default' and rah_sitemap_include_in = 1 order by name asc"
-        );
-
-        if ($rs) {
-            while ($a = nextRow($rs)) {
-                $this->addUrl(pagelinkurl(['s' => $a['name']]));
-            }
-        }
-
-        $sql = ["name != 'root' and rah_sitemap_include_in = 1"];
-
-        if (!get_pref('rah_sitemap_include_article_categories')) {
-            $sql[] = "type != 'article'";
-        }
-
-        if (!get_pref('rah_sitemap_include_image_categories')) {
-            $sql[] = "type != 'image'";
-        }
-
-        if (!get_pref('rah_sitemap_include_file_categories')) {
-            $sql[] = "type != 'file'";
-        }
-
-        if (!get_pref('rah_sitemap_include_link_categories')) {
-            $sql[] = "type != 'link'";
-        }
-
-        $rs = safe_rows_start(
-            'name, type',
-            'txp_category',
-            implode(' and ', $sql) . ' order by name asc'
-        );
-
-        if ($rs) {
-            while ($a = nextRow($rs)) {
-                $this->addUrl(pagelinkurl([
-                    'c' => $a['name'],
-                    'context' => $a['type'],
-                ]));
-            }
-        }
-
-        $sql = ['Status >= 4'];
-
-        foreach (do_list(get_pref('rah_sitemap_exclude_fields')) as $field) {
-            if ($field) {
-                $f = explode(':', $field);
-                $n = strtolower(trim($f[0]));
-
-                if (isset($this->articleFields[$n])) {
-                    $sql[] = $this->articleFields[$n]." NOT LIKE '".doSlash(trim(implode(':', array_slice($f, 1))))."'";
-                }
-            }
-        }
-
-        if (get_pref('rah_sitemap_exclude_sticky_articles')) {
-            $sql[] = 'Status != 5';
-        }
-
-        if (!get_pref('rah_sitemap_future_articles')) {
-            $sql[] = 'Posted <= now()';
-        }
-
-        if (!get_pref('rah_sitemap_past_articles')) {
-            $sql[] = 'Posted >= now()';
-        }
-
-        if (!get_pref('rah_sitemap_expired_articles')) {
-            $sql[] = "(Expires IS NULL or Expires >= now())";
-        }
-
-        $rs = safe_rows_start(
-            '*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod',
-            'textpattern',
-            implode(' and ', $sql) . ' order by Posted desc'
-        );
-
-        if ($rs) {
-            while ($a = nextRow($rs)) {
-                $this->addUrl(permlinkurl($a), (int) max($a['uLastMod'], $a['posted']));
-            }
-        }
-
-        foreach (do_list(get_pref('rah_sitemap_urls')) as $url) {
-            if ($url) {
-                $this->addUrl($url);
-            }
-        }
-
-        $urlset = [];
-
-        callback_event_ref('rah_sitemap.urlset', '', 0, $urlset);
-
-        if ($urlset && is_array($urlset)) {
-            foreach ($urlset as $url => $lastmod) {
-                $this->addUrl($url, $lastmod);
-            }
-        }
-
-        $xml =
-            '<?xml version="1.0" encoding="utf-8"?>'.
-            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
-            implode('', array_slice($this->urlset, 0, self::URL_LIMIT)).
-            '</urlset>';
-
-        ob_clean();
-        txp_status_header('200 OK');
-        header('Content-type: text/xml; charset=utf-8');
-
-        if (get_pref('rah_sitemap_compress') &&
-            strpos(serverSet('HTTP_ACCEPT_ENCODING'), 'gzip') !== false
-        ) {
-            header('Content-Encoding: gzip');
-            $xml = gzencode($xml);
-        }
-
-        echo $xml;
-        exit;
-    }
-
-    /**
-     * Renders a &lt;url&gt; element to the XML document.
-     *
-     * @param  string     $url     The URL
-     * @param  int|string $lastmod The modification date
-     *
-     * @return $this
-     */
-    private function addUrl($url, $lastmod = null): self
-    {
-        if (strpos($url, 'http://') !== 0 && strpos($url, 'https://') !== 0) {
-            $url = hu.ltrim($url, '/');
-        }
-
-        if (preg_match('/[\'"<>]/', $url)) {
-            $url = htmlspecialchars($url, ENT_QUOTES);
-        }
-
-        if (isset($this->urlset[$url])) {
-            return $this;
-        }
-
-        if ($lastmod !== null) {
-            if (!is_int($lastmod)) {
-                $lastmod = strtotime($lastmod);
-            }
-
-            if ($lastmod !== false) {
-                $lastmod = safe_strftime('iso8601', $lastmod);
-            }
-        }
-
-        $this->urlset[$url] =
-            '<url>'.
-                '<loc>'.$url.'</loc>'.
-                ($lastmod ? '<lastmod>'.$lastmod.'</lastmod>' : '').
-            '</url>';
-
-        return $this;
-    }
-
-    /**
-     * Picks up names of article fields.
-     *
-     * @return $this
-     */
-    private function populateArticleFields(): self
-    {
-        $columns = (array) @getThings('describe '.safe_pfx('textpattern'));
-
-        foreach ($columns as $name) {
-            $this->articleFields[strtolower($name)] = $name;
-        }
-
-        foreach (getCustomFields() as $id => $name) {
-            $this->articleFields[$name] = 'custom_'.intval($id);
-        }
-
-        return $this;
     }
 
     /**
@@ -358,10 +138,10 @@ final class Rah_Sitemap
     /**
      * Shows settings at the Sections panel.
      *
-     * @param  string $event The event
-     * @param  string $step  The step
-     * @param  bool   $void  Not used
-     * @param  array  $r     The section data as an array
+     * @param string $event The event
+     * @param string $step The step
+     * @param bool $void Not used
+     * @param array $r The section data as an array
      *
      * @return string HTML
      */
@@ -394,10 +174,10 @@ final class Rah_Sitemap
     /**
      * Shows settings at the Category panel.
      *
-     * @param  string $event The event
-     * @param  string $step  The step
-     * @param  bool   $void  Not used
-     * @param  array  $r     The section data as an array
+     * @param string $event The event
+     * @param string $step The step
+     * @param bool $void Not used
+     * @param array $r The section data as an array
      *
      * @return string HTML
      */

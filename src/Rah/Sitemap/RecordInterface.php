@@ -21,4 +21,33 @@
  * along with rah_sitemap. If not, see <http://www.gnu.org/licenses/>.
  */
 
-new Rah_Sitemap();
+/**
+ * Record.
+ */
+interface Rah_Sitemap_RecordInterface
+{
+    public const LIMIT = 50000;
+
+    /**
+     * Gets name of the sitemap.
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
+     * Gets number of pages.
+     *
+     * @return int
+     */
+    public function getPages(): int;
+
+    /**
+     * Gets URLs for the given page offset.
+     *
+     * @param int $page
+     *
+     * @return Rah_Sitemap_Url[]
+     */
+    public function getUrls(int $page): array;
+}

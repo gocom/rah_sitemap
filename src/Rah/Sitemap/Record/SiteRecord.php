@@ -21,4 +21,46 @@
  * along with rah_sitemap. If not, see <http://www.gnu.org/licenses/>.
  */
 
-new Rah_Sitemap();
+/**
+ * Site.
+ */
+class Rah_Sitemap_Record_SiteRecord implements Rah_Sitemap_RecordInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return 'site';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPages(): int
+    {
+        return 1;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUrls(int $page): array
+    {
+        $urls = [
+            new Rah_Sitemap_Url(
+                hu
+            ),
+        ];
+
+        callback_event_ref('rah_sitemap.urlset', '', 0, $urls);
+
+        foreach (do_list(get_pref('rah_sitemap_urls')) as $url) {
+            if ($url) {
+                $urls[] = new Rah_Sitemap_Url($url);
+            }
+        }
+
+        return $urls;
+    }
+}

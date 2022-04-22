@@ -1,7 +1,7 @@
 {
     "name": "rah_sitemap",
     "description": "XML sitemap",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "type": 5,
     "author": "Jukka Svahn",
     "author_uri": "https://github.com/gocom/rah_sitemap",
@@ -9,6 +9,17 @@
     "flags": 3,
     "help": {"file" : "./README.textile"},
     "code": {"file" : [
+        "./src/Rah/Sitemap/ControllerInterface.php",
+        "./src/Rah/Sitemap/RecordInterface.php",
+        "./src/Rah/Sitemap/Record/ArticleRecord.php",
+        "./src/Rah/Sitemap/Record/CategoryRecord.php",
+        "./src/Rah/Sitemap/Record/SectionRecord.php",
+        "./src/Rah/Sitemap/Record/SiteRecord.php",
+        "./src/Rah/Sitemap/RecordPool.php",
+        "./src/Rah/Sitemap/Url.php",
+        "./src/Rah/Sitemap/Controller/IndexController.php",
+        "./src/Rah/Sitemap/Controller/SitemapController.php",
+        "./src/Rah/Sitemap/Router.php",
         "./src/Rah/Sitemap.php",
         "./src/Index.php"
     ]}

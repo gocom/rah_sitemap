@@ -21,4 +21,13 @@
  * along with rah_sitemap. If not, see <http://www.gnu.org/licenses/>.
  */
 
-new Rah_Sitemap();
+/**
+ * Controller.
+ */
+interface Rah_Sitemap_ControllerInterface
+{
+    /**
+     * Sends response.
+     */
+    public function execute(): void;
+}
