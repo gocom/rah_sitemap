@@ -55,9 +55,16 @@ class Rah_Sitemap_Record_SiteRecord implements Rah_Sitemap_RecordInterface
 
         callback_event_ref('rah_sitemap.urlset', '', 0, $urlset);
 
-        foreach ($urlset as $url) {
+        foreach ($urlset as $url => $modifiedAt) {
             if ($url) {
-                $urls[] = new Rah_Sitemap_Url($url);
+                $modifiedAt = $modifiedAt
+                    ? (int) strtotime($modifiedAt)
+                    : null;
+
+                $urls[] = new Rah_Sitemap_Url(
+                    $url,
+                    $modifiedAt
+                );
             }
         }
 
