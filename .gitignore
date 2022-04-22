@@ -2,6 +2,6 @@
 !.editorconfig
 !.github
 !.gitignore
-/composer.lock
-/dist
-/vendor
+/dist/
+/vendor/
+composer.lock

@@ -21,4 +21,39 @@
  * along with rah_sitemap. If not, see <http://www.gnu.org/licenses/>.
  */
 
-new Rah_Sitemap();
+/**
+ * Robots controller.
+ */
+final class Rah_Sitemap_Controller_RobotsController implements Rah_Sitemap_ControllerInterface
+{
+    private bool $isClean;
+
+    /**
+     * Constructor.
+     *
+     * @param bool $isClean
+     */
+    public function __construct(
+        bool $isClean
+    ) {
+        $this->isClean = $isClean;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(): void
+    {
+        ob_clean();
+        txp_status_header('200 OK');
+        header('Content-type: text/plain; charset=utf-8');
+
+        if ($this->isClean) {
+            echo 'Sitemap: '.hu.'sitemap.xml';
+        } else {
+            echo 'Sitemap: '.hu.'?rah_sitemap=sitemap.xml';
+        }
+
+        exit;
+    }
+}

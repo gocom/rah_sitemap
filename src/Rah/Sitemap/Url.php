@@ -21,4 +21,45 @@
  * along with rah_sitemap. If not, see <http://www.gnu.org/licenses/>.
  */
 
-new Rah_Sitemap();
+/**
+ * Url.
+ */
+final class Rah_Sitemap_Url
+{
+    private string $url;
+    private ?int $modifiedAt;
+
+    /**
+     * Constructor.
+     *
+     * @param string $url
+     * @param int|null $modifiedAt
+     */
+    public function __construct(
+        string $url,
+        ?int $modifiedAt = null
+    ) {
+        $this->url = $url;
+        $this->modifiedAt = $modifiedAt;
+    }
+
+    /**
+     * Gets URL.
+     *
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * Gets modified at timestamp.
+     *
+     * @return int|null
+     */
+    public function getModifiedAt(): ?int
+    {
+        return $this->modifiedAt;
+    }
+}
