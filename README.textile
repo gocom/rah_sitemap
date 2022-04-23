@@ -101,7 +101,7 @@ fuction abc_function($event, $step, &$urls) {
     $urls['https://example.com/second'] = null;
 }
 
-The above would add `https://example.com/foo/bar` to the sitemap with UNIX modification timestamp of `123456789`, and `https://example.com/second` with no modification time.
+p. The above would add @https://example.com/foo/bar@ to the sitemap with UNIX modification timestamp of @123456789@, and @https://example.com/second@ with no modification time.
 
 h3. Custom URL functions
 
