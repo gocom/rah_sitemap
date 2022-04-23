@@ -41,9 +41,11 @@ abstract class Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordIn
     /**
      * Gets offset.
      *
+     * @param int $page
+     *
      * @return int
      */
-    protected function getOffset(): int
+    protected function getOffset(int $page): int
     {
         $limit = $this->getLimit();
 

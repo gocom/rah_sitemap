@@ -54,6 +54,10 @@ final class Rah_Sitemap_Controller_IndexController implements Rah_Sitemap_Contro
             $this->addSitemapNode($sitemap, $out);
         }
 
+        if (!$out) {
+            return;
+        }
+
         $xml =
             '<?xml version="1.0" encoding="utf-8"?>'.
             '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.

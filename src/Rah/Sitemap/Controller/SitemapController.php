@@ -50,6 +50,10 @@ final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_Cont
     {
         $urls = $this->record->getUrls($this->page);
 
+        if (!$urls) {
+            return;
+        }
+
         $out = [];
 
         foreach ($urls as $url) {

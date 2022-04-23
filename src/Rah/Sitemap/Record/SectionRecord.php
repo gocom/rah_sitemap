@@ -60,7 +60,7 @@ class Rah_Sitemap_Record_SectionRecord extends Rah_Sitemap_Record_AbstractRecord
             sprintf(
                 '%s order by name asc limit %s, %s',
                 $this->getWhereStatement(),
-                $this->getOffset(),
+                $this->getOffset($page),
                 $this->getLimit()
             )
         );

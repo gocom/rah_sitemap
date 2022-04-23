@@ -60,7 +60,7 @@ class Rah_Sitemap_Record_ArticleRecord extends Rah_Sitemap_Record_AbstractRecord
             sprintf(
                 '%s order by Posted asc limit %s, %s',
                 $this->getWhereStatement(),
-                $this->getOffset(),
+                $this->getOffset($page),
                 $this->getLimit()
             )
         );

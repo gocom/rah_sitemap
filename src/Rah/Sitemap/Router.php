@@ -26,6 +26,11 @@
  */
 final class Rah_Sitemap_Router
 {
+    /**
+     * Whether clean URLs are used.
+     *
+     * @var bool
+     */
     private bool $isClean;
 
     /**
@@ -95,5 +100,7 @@ final class Rah_Sitemap_Router
                 $controller->execute();
             }
         }
+
+        txp_die(gTxt('404_not_found'), '404');
     }
 }

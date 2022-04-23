@@ -26,6 +26,9 @@
  */
 final class Rah_Sitemap
 {
+    private bool $handledCleanUrls = false;
+    private bool $handledRawUrls = false;
+
     /**
      * Constructor.
      */
@@ -99,7 +102,9 @@ final class Rah_Sitemap
     {
         $path = gps('rah_sitemap');
 
-        if ($path) {
+        if ($path && !$this->handledRawUrls) {
+            $this->handledRawUrls = true;
+
             $router = new Rah_Sitemap_Router(false);
 
             $router->route((string) $path);
@@ -112,6 +117,12 @@ final class Rah_Sitemap
     public function handleCleanUrl(): void
     {
         global $pretext;
+
+        if ($this->handledCleanUrls) {
+            return;
+        }
+
+        $this->handledCleanUrls = true;
 
         $path = explode('?', (string) ($pretext['request_uri'] ?? ''));
         $path = basename(array_shift($path));
