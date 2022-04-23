@@ -4,7 +4,7 @@ Please take a quick look at this document before to make contribution process ea
 
 h2. License
 
-"GNU General Public License, version 2":https://github.com/gocom/rah_flat/blob/master/LICENSE.
+"GNU General Public License, version 2":https://github.com/gocom/rah_sitemap/blob/master/LICENSE.
 
 h2. Configure git
 
