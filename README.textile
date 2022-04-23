@@ -96,9 +96,12 @@ As with other callback events in Textpattern, hooking to rah_sitemap's event hap
 
 bc.. register_callback('abc_function', 'rah_sitemap.urlset', 0, $urls);
 
-fuction abc_function($event, $step, $void, $urls) {
-    $urls['http://example.com/foo/bar'] = '2013-03-04 10:06:30';
+fuction abc_function($event, $step, &$urls) {
+    $urls['https://example.com/foo/bar'] = 123456789;
+    $urls['https://example.com/second'] = null;
 }
+
+The above would add `https://example.com/foo/bar` to the sitemap with UNIX modification timestamp of `123456789`, and `https://example.com/second` with no modification time.
 
 h3. Custom URL functions
 
