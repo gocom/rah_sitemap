@@ -64,7 +64,7 @@ final class Rah_Sitemap
             'rah_sitemap_include_file_categories' => ['yesnoradio', 1],
             'rah_sitemap_include_link_categories' => ['yesnoradio', 1],
             'rah_sitemap_compress' => ['yesnoradio', 0],
-            'rah_sitemap_limit' => ['yesnoradio', 50000],
+            'rah_sitemap_limit' => ['text_input', 50000],
         ];
 
         if (!in_array('rah_sitemap_include_in', getThings('describe '.safe_pfx('txp_section')))) {
