@@ -2,7 +2,7 @@ h1. rah_sitemap
 
 "Download":https://github.com/gocom/rah_sitemap/releases | "Packagist":https://packagist.org/packages/rah/rah_sitemap | "Issues":https://github.com/gocom/rah_sitemap/issues
 
-Sitemap plugin for "Textpattern CMS":https://textpattern.com. Generates "Sitemaps.org":https://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your valuable content. Rah_sitemap maps your categories, sections, articles and even custom URLs of your choosing. No diving into code required, all configuration is done from a graphical user-interface.
+Sitemap plugin for "Textpattern CMS":https://textpattern.com. Generates "Sitemaps.org":https://www.sitemaps.org XML(eXtensible Markup Language) sitemaps for your site, which help Google and other search engines to index your content. Maps your categories, sections, articles and even custom URLs of your choosing. No diving into code required, all configuration is done from a graphical user interface.
 
 h2. Install
 
@@ -16,11 +16,11 @@ h2. Basics
 
 Rah_sitemap generates a sitemap for your Textpattern website, listing all of its section-, article category- and article-pages. The generated sitemap follows the XML based "Sitemap protocol format":https://www.sitemaps.org/ and is targeted to search engines, opposed to your visitors. The sitemap is meant to help search engines to index your site as it grows and gets more and more various nested pages.
 
-The Sitemap can be configured directly from Textpattern's Preferences panel, making rah_sitemap very easy to setup and use. The plugin itself takes care of the rest.
+The Sitemap can be configured directly from Textpattern's Preferences panel, making rah_sitemap easy to setup and use.
 
 h3. Accessing the sitemap
 
-The generated sitemap becomes publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's permanent link mode. If the site is configured to use clean URLs, the sitemap can be accessed using a clean path like @http://example.com/sitemap.xml@, where the @example.com@ would be the site's URL. Additionally a query version, @http://example.com/?rah_sitemap=sitemap@, is available in both the messy and the clean URL modes, and can be used if the other one isn't available.
+The generated sitemap becomes publicly accessible from the site's root. The sitemap can be accessed from two URLs, depending on the site's permanent link mode. If the site is configured to use clean URLs, the sitemap can be accessed using a clean path like @http://example.com/sitemap.xml@, where the @example.com@ would be the site's URL. Additionally a query string version, @http://example.com/?rah_sitemap=sitemap@, is available in both the messy and the clean URL modes, and can be used if the other one isn't available.
 
 h3. Immediate boost to search engine visiblity?
 
@@ -28,7 +28,7 @@ Not exactly. Providing Sitemap is to help crawling, finding your site's pages th
 
 For a simple, almost a static website with just few easily discoverable pages, a sitemap may not be necessary at all. If search engines already can get to your pages, you do not really need rah_sitemap, or Sitemaps in general. Once a page is indexed, that's where sitemap's work ends.
 
-Rah_sitemap is particularly useful when your site has pages that are hard to discover due to being loaded using Ajax, there is distinct content with little linking, or pages are nested deep in a complex page structures. Rah_sitemap can also help your site to start up when it has very few external links pointing to its pages.
+Rah_sitemap is particularly useful when your site has pages that are hard to discover due to being loaded using JavaScript, there is distinct content with little linking, or pages are nested deep in a complex page structures. Rah_sitemap can also help your site to start up when it has very few external links pointing to its pages.
 
 It's common misconception to think that Sitemaps guarantee that pages will be indexed. This is not the case. Sitemap is a map. Whether a place is marked on a map doesn't mean someone will actually go there, or when. Like any map, the map is used to find and learn, to increase the future knowledge. Sitemap's update interval also helps to estimate when your site is updated next and when it should be crawled again.
 
@@ -40,7 +40,7 @@ After rah_sitemap is installed, you may want to configure it to fit your site. F
 
 h3. Sending the sitemap to search engines
 
-Once you have a sitemap up and running, you may want to inform search engines about its existence. There are few ways you can do it: "Webmaster Tools":https://www.google.com/webmasters/ for Google, you could use a "robots.txt":https://www.robotstxt.org/ directive or search vendor specific pinging.
+Once you have a sitemap up and running, you may want to inform search engines about its existence. There are few ways you can do it: "Google Search Central":https://developers.google.com/search for Google, you could use a "robots.txt":https://www.robotstxt.org/ directive or search vendor specific pinging.
 
 The recommended way is by using a robots.txt file. To get robots.txt up and running, you will have to add @robots.txt@ file at root of your site's domain, so that its accessible from @https://example.com/robots.txt@. If your Textpattern site has fully functional clean URLs, is installed at the root and you already do not have robots.txt file, rah_sitemap will automatically create the file for you -- or well, serve it dynamically.
 
