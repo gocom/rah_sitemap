@@ -24,7 +24,7 @@
 /**
  * Sections.
  */
-class Rah_Sitemap_Record_SectionRecord implements Rah_Sitemap_RecordInterface
+class Rah_Sitemap_Record_SectionRecord extends Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordInterface
 {
     /**
      * {@inheritdoc}
@@ -44,7 +44,7 @@ class Rah_Sitemap_Record_SectionRecord implements Rah_Sitemap_RecordInterface
             "name != 'default' and rah_sitemap_include_in = 1"
         );
 
-        return ceil($items / self::LIMIT);
+        return $this->countPages($items);
     }
 
     /**
@@ -53,7 +53,6 @@ class Rah_Sitemap_Record_SectionRecord implements Rah_Sitemap_RecordInterface
     public function getUrls(int $page): array
     {
         $urls = [];
-        $offset = max(0, ($page * self::LIMIT) - self::LIMIT);
 
         $rs = safe_rows_start(
             'name',
@@ -61,8 +60,8 @@ class Rah_Sitemap_Record_SectionRecord implements Rah_Sitemap_RecordInterface
             sprintf(
                 '%s order by name asc limit %s, %s',
                 $this->getWhereStatement(),
-                $offset,
-                self::LIMIT
+                $this->getOffset(),
+                $this->getLimit()
             )
         );
 

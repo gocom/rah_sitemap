@@ -15,3 +15,4 @@ rah_sitemap_include_article_categories => Sisällytä artikkelikategoriat?
 rah_sitemap_include_image_categories => Sisällytä kuvakategoriat?
 rah_sitemap_include_file_categories => Sisällytä tiedostokategoriat?
 rah_sitemap_include_link_categories => Sisällytä linkkikategoriat?
+rah_sitemap_limit => URLien määrä per sivukartta

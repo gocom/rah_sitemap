@@ -14,3 +14,4 @@ rah_sitemap_include_article_categories => Include article categories?
 rah_sitemap_include_image_categories => Include image categories?
 rah_sitemap_include_file_categories => Include file categories?
 rah_sitemap_include_link_categories => Include link categories?
+rah_sitemap_limit => Number of URLs per sitemap

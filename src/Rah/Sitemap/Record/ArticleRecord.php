@@ -24,7 +24,7 @@
 /**
  * Articles.
  */
-class Rah_Sitemap_Record_ArticleRecord implements Rah_Sitemap_RecordInterface
+class Rah_Sitemap_Record_ArticleRecord extends Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordInterface
 {
     /**
      * {@inheritdoc}
@@ -44,7 +44,7 @@ class Rah_Sitemap_Record_ArticleRecord implements Rah_Sitemap_RecordInterface
             $this->getWhereStatement()
         );
 
-        return ceil($items / self::LIMIT);
+        return $this->countPages($items);
     }
 
     /**
@@ -53,7 +53,6 @@ class Rah_Sitemap_Record_ArticleRecord implements Rah_Sitemap_RecordInterface
     public function getUrls(int $page): array
     {
         $urls = [];
-        $offset = max(0, ($page * self::LIMIT) - self::LIMIT);
 
         $rs = safe_rows_start(
             '*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod',
@@ -61,8 +60,8 @@ class Rah_Sitemap_Record_ArticleRecord implements Rah_Sitemap_RecordInterface
             sprintf(
                 '%s order by Posted asc limit %s, %s',
                 $this->getWhereStatement(),
-                $offset,
-                self::LIMIT
+                $this->getOffset(),
+                $this->getLimit()
             )
         );
 

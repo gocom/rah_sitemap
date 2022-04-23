@@ -22,30 +22,43 @@
  */
 
 /**
- * Record.
+ * Abstract record.
  */
-interface Rah_Sitemap_RecordInterface
+abstract class Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordInterface
 {
-    /**
-     * Gets name of the sitemap.
-     *
-     * @return string
-     */
-    public function getName(): string;
+    private const DEFAULT_LIMIT = 50000;
 
     /**
-     * Gets number of pages.
+     * Gets limit.
      *
      * @return int
      */
-    public function getPages(): int;
+    protected function getLimit(): int
+    {
+        return max(1, (int) get_pref('rah_sitemap_limit') ?: self::DEFAULT_LIMIT);
+    }
 
     /**
-     * Gets URLs for the given page offset.
+     * Gets offset.
      *
-     * @param int $page
-     *
-     * @return Rah_Sitemap_Url[]
+     * @return int
      */
-    public function getUrls(int $page): array;
+    protected function getOffset(): int
+    {
+        $limit = $this->getLimit();
+
+        return max(0, ($page * $limit) - $limit);
+    }
+
+    /**
+     * Counts number of pages based on the given number of items.
+     *
+     * @param int $itemCount
+     *
+     * @return int
+     */
+    protected function countPages(int $itemCount): int
+    {
+        return (int) ceil($itemCount / $this->getLimit());
+    }
 }

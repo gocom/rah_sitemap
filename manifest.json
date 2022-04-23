@@ -11,6 +11,7 @@
     "code": {"file" : [
         "./src/Rah/Sitemap/ControllerInterface.php",
         "./src/Rah/Sitemap/RecordInterface.php",
+        "./src/Rah/Sitemap/Record/AbstractRecord.php",
         "./src/Rah/Sitemap/Record/ArticleRecord.php",
         "./src/Rah/Sitemap/Record/CategoryRecord.php",
         "./src/Rah/Sitemap/Record/SectionRecord.php",

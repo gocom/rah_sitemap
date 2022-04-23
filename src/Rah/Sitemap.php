@@ -53,17 +53,18 @@ final class Rah_Sitemap
     public function install(): void
     {
         $options = [
-            'exclude_fields' => ['pref_longtext_input', ''],
-            'urls' => ['pref_longtext_input', ''],
-            'future_articles' => ['yesnoradio', 0],
-            'past_articles' => ['yesnoradio', 1],
-            'expired_articles' => ['yesnoradio', 1],
-            'exclude_sticky_articles' => ['yesnoradio', 1],
-            'include_article_categories' => ['yesnoradio', 1],
-            'include_image_categories' => ['yesnoradio', 1],
-            'include_file_categories' => ['yesnoradio', 1],
-            'include_link_categories' => ['yesnoradio', 1],
-            'compress' => ['yesnoradio', 0],
+            'rah_sitemap_exclude_fields' => ['pref_longtext_input', ''],
+            'rah_sitemap_urls' => ['pref_longtext_input', ''],
+            'rah_sitemap_future_articles' => ['yesnoradio', 0],
+            'rah_sitemap_past_articles' => ['yesnoradio', 1],
+            'rah_sitemap_expired_articles' => ['yesnoradio', 1],
+            'rah_sitemap_exclude_sticky_articles' => ['yesnoradio', 1],
+            'rah_sitemap_include_article_categories' => ['yesnoradio', 1],
+            'rah_sitemap_include_image_categories' => ['yesnoradio', 1],
+            'rah_sitemap_include_file_categories' => ['yesnoradio', 1],
+            'rah_sitemap_include_link_categories' => ['yesnoradio', 1],
+            'rah_sitemap_compress' => ['yesnoradio', 0],
+            'rah_sitemap_limit' => ['yesnoradio', 50000],
         ];
 
         if (!in_array('rah_sitemap_include_in', getThings('describe '.safe_pfx('txp_section')))) {
@@ -77,7 +78,7 @@ final class Rah_Sitemap
         $position = 260;
 
         foreach ($options as $name => $value) {
-            create_pref('rah_sitemap_' . $name, $value[1], 'rah_sitemap', PREF_PLUGIN, $value[0], $position++);
+            create_pref($name, $value[1], 'rah_sitemap', PREF_PLUGIN, $value[0], $position++);
         }
     }
 
