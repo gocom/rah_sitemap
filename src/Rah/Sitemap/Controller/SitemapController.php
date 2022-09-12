@@ -104,7 +104,7 @@ final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_Cont
         }
 
         if ($modifiedAt !== null) {
-            $modifiedAt = safe_strftime('iso8601', $modifiedAt);
+            $modifiedAt = safe_strftime('c', $modifiedAt);
         }
 
         return '<url>'.
