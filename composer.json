@@ -19,7 +19,7 @@
     "require": {
         "php": ">=7.4",
         "ext-zlib": "*",
-        "textpattern/lock": ">=4.7.0",
+        "textpattern/lock": ">=4.8.8",
         "textpattern/installer": "*"
     },
     "require-dev": {
