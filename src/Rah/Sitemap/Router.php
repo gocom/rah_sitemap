@@ -97,6 +97,7 @@ final class Rah_Sitemap_Router
                 $controller = new Rah_Sitemap_Controller_SitemapController(
                     $sitemap,
                     new Rah_Sitemap_ResponseFactory(),
+                    new Rah_Sitemap_GetUrlNodeAction(),
                     $page
                 );
 

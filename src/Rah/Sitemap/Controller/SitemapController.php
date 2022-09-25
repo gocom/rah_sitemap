@@ -28,6 +28,7 @@ final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_Cont
 {
     private Rah_Sitemap_RecordInterface $record;
     private Rah_Sitemap_ResponseFactory $responseFactory;
+    private Rah_Sitemap_GetUrlNodeAction $getUrlNodeAction;
     private int $page;
 
     /**
@@ -35,15 +36,18 @@ final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_Cont
      *
      * @param Rah_Sitemap_RecordInterface $record
      * @param Rah_Sitemap_ResponseFactory $responseFactory
+     * @param Rah_Sitemap_GetUrlNodeAction $getUrlNodeAction
      * @param int $page
      */
     public function __construct(
         Rah_Sitemap_RecordInterface $record,
         Rah_Sitemap_ResponseFactory $responseFactory,
+        Rah_Sitemap_GetUrlNodeAction $getUrlNodeAction,
         int $page
     ) {
         $this->record = $record;
         $this->responseFactory = $responseFactory;
+        $this->getUrlNodeAction = $getUrlNodeAction;
         $this->page = $page;
     }
 
@@ -61,7 +65,7 @@ final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_Cont
         $out = [];
 
         foreach ($urls as $url) {
-            $out[] = $this->getUrlNode($url);
+            $out[] = $this->getUrlNodeAction->execute($url);
         }
 
         $xml =
@@ -80,37 +84,5 @@ final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_Cont
             ->setBody($xml);
 
         return $response;
-    }
-
-    /**
-     * Gets URL node.
-     *
-     * @param Rah_Sitemap_Url $url
-     *
-     * @return string
-     */
-    private function getUrlNode(Rah_Sitemap_Url $url): string
-    {
-        $address = $url->getUrl();
-        $modifiedAt = $url->getModifiedAt();
-
-        if (strpos($address, 'http://') !== 0
-            && strpos($address, 'https://') !== 0
-        ) {
-            $address = hu . ltrim($address, '/');
-        }
-
-        if (preg_match('/[\'"<>]/', $address)) {
-            $address = htmlspecialchars($address, ENT_QUOTES);
-        }
-
-        if ($modifiedAt !== null) {
-            $modifiedAt = safe_strftime('c', $modifiedAt);
-        }
-
-        return '<url>'.
-            '<loc>'.$address.'</loc>'.
-            ($modifiedAt ? '<lastmod>'.$modifiedAt.'</lastmod>' : '').
-            '</url>';
     }
 }

@@ -20,6 +20,7 @@
         "./src/Rah/Sitemap/Url.php",
         "./src/Rah/Sitemap/Response.php",
         "./src/Rah/Sitemap/ResponseFactory.php",
+        "./src/Rah/Sitemap/GetUrlNodeAction.php",
         "./src/Rah/Sitemap/SendResponseAction.php",
         "./src/Rah/Sitemap/Controller/IndexController.php",
         "./src/Rah/Sitemap/Controller/RobotsController.php",
