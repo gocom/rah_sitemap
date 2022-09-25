@@ -26,34 +26,42 @@
  */
 final class Rah_Sitemap_Controller_RobotsController implements Rah_Sitemap_ControllerInterface
 {
+    private Rah_Sitemap_ResponseFactory $responseFactory;
     private bool $isClean;
 
     /**
      * Constructor.
      *
+     * @param Rah_Sitemap_ResponseFactory $responseFactory
      * @param bool $isClean
      */
     public function __construct(
+        Rah_Sitemap_ResponseFactory $responseFactory,
         bool $isClean
     ) {
+        $this->responseFactory = $responseFactory;
         $this->isClean = $isClean;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function execute(): void
+    public function execute(): ?Rah_Sitemap_Response
     {
-        ob_clean();
-        txp_status_header('200 OK');
-        header('Content-type: text/plain; charset=utf-8');
+        $response = $this->responseFactory->create();
 
         if ($this->isClean) {
-            echo 'Sitemap: '.hu.'sitemap.xml';
+            $body = 'Sitemap: '.hu.'sitemap.xml';
         } else {
-            echo 'Sitemap: '.hu.'?rah_sitemap=sitemap.xml';
+            $body = 'Sitemap: '.hu.'?rah_sitemap=sitemap.xml';
         }
 
-        exit;
+        $response
+            ->setHeaders([
+                'Content-type' => 'text/plain; charset=utf-8',
+            ])
+            ->setBody($body);
+
+        return $response;
     }
 }

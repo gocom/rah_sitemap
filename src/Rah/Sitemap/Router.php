@@ -53,10 +53,11 @@ final class Rah_Sitemap_Router
     {
         if ($path === 'robots.txt') {
             $controller = new Rah_Sitemap_Controller_RobotsController(
+                new Rah_Sitemap_ResponseFactory(),
                 $this->isClean
             );
 
-            $controller->execute();
+            $this->sendResponse($controller->execute());
 
             return;
         }
@@ -82,10 +83,11 @@ final class Rah_Sitemap_Router
         if (!$name) {
             $controller = new Rah_Sitemap_Controller_IndexController(
                 $recordPool,
+                new Rah_Sitemap_ResponseFactory(),
                 $this->isClean
             );
 
-            $controller->execute();
+            $this->sendResponse($controller->execute());
         }
 
         foreach ($recordPool->getSitemaps() as $sitemap) {
@@ -94,13 +96,30 @@ final class Rah_Sitemap_Router
 
                 $controller = new Rah_Sitemap_Controller_SitemapController(
                     $sitemap,
+                    new Rah_Sitemap_ResponseFactory(),
                     $page
                 );
 
-                $controller->execute();
+                $this->sendResponse($controller->execute());
             }
         }
 
         txp_die(gTxt('404_not_found'), '404');
+    }
+
+    /**
+     * Sends response.
+     *
+     * @param Rah_Sitemap_Response|null $response
+     *
+     * @return void
+     */
+    private function sendResponse(?Rah_Sitemap_Response $response): void
+    {
+        if ($response) {
+            $action = new Rah_Sitemap_SendResponseAction();
+
+            $action->execute($response);
+        }
     }
 }

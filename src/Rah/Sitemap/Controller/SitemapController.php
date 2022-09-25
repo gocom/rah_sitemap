@@ -27,31 +27,35 @@
 final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_ControllerInterface
 {
     private Rah_Sitemap_RecordInterface $record;
+    private Rah_Sitemap_ResponseFactory $responseFactory;
     private int $page;
 
     /**
      * Constructor.
      *
      * @param Rah_Sitemap_RecordInterface $record
+     * @param Rah_Sitemap_ResponseFactory $responseFactory
      * @param int $page
      */
     public function __construct(
         Rah_Sitemap_RecordInterface $record,
+        Rah_Sitemap_ResponseFactory $responseFactory,
         int $page
     ) {
         $this->record = $record;
+        $this->responseFactory = $responseFactory;
         $this->page = $page;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function execute(): void
+    public function execute(): ?Rah_Sitemap_Response
     {
         $urls = $this->record->getUrls($this->page);
 
         if (!$urls) {
-            return;
+            return null;
         }
 
         $out = [];
@@ -62,23 +66,20 @@ final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_Cont
 
         $xml =
             '<?xml version="1.0" encoding="utf-8"?>'.
-            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'.
+            '<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">'.
             implode('', $out).
             '</urlset>';
 
-        ob_clean();
-        txp_status_header('200 OK');
-        header('Content-type: text/xml; charset=utf-8');
+        $response = $this->responseFactory->create();
 
-        if (get_pref('rah_sitemap_compress') &&
-            strpos(serverSet('HTTP_ACCEPT_ENCODING'), 'gzip') !== false
-        ) {
-            header('Content-Encoding: gzip');
-            $xml = gzencode($xml);
-        }
+        $response
+            ->setHeaders([
+                'Content-type' => 'text/xml; charset=utf-8',
+            ])
+            ->setCompress(true)
+            ->setBody($xml);
 
-        echo $xml;
-        exit;
+        return $response;
     }
 
     /**

@@ -22,14 +22,17 @@
  */
 
 /**
- * Controller.
+ * Response factory.
  */
-interface Rah_Sitemap_ControllerInterface
+final class Rah_Sitemap_ResponseFactory
 {
     /**
-     * Constructs and returns response.
+     * Creates a new response instance.
      *
-     * @return Rah_Sitemap_Response|null
+     * @return Rah_Sitemap_Response
      */
-    public function execute(): ?Rah_Sitemap_Response;
+    public function create(): Rah_Sitemap_Response
+    {
+        return new Rah_Sitemap_Response();
+    }
 }
