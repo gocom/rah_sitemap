@@ -26,9 +26,9 @@
  */
 final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_ControllerInterface
 {
+    private const DATE_FORMAT = 'Y-m-d\TH:i:sP';
     private Rah_Sitemap_RecordInterface $record;
     private int $page;
-    private const DATE_FORMAT = 'Y-m-d\TH:i:sP';
 
     /**
      * Constructor.
@@ -105,7 +105,7 @@ final class Rah_Sitemap_Controller_SitemapController implements Rah_Sitemap_Cont
         }
 
         if ($modifiedAt !== null) {
-            $modifiedAt = safe_strftime(self::DATE_FORMAT, $modifiedAt);
+            $modifiedAt = date(self::DATE_FORMAT, $modifiedAt);
         }
 
         return '<url>'.
