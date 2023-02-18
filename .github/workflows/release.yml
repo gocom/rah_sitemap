@@ -22,7 +22,7 @@ jobs:
                 id: changelog
                 run: |
                     echo "contents<<CHANGELOGEOF" >> $GITHUB_OUTPUT
-                    sed -e '1,/h2. Changelog/d' README.textile | sed -e '1,/h3./d' -e '/h3./,$d' >> $GITHUB_OUTPUT
+                    sed -e '1,/h2. Changelog/d' README.textile | sed -e '1,/h3./d' -e '/h3./,$d' | sed 's/@/`/g' >> $GITHUB_OUTPUT
                     echo "CHANGELOGEOF" >> $GITHUB_OUTPUT
 
             -   name: Create Release
