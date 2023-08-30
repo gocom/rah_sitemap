@@ -111,6 +111,10 @@ As rah_sitemap integrates well with Textpattern's core, it uses the same URL fun
 
 h2. Changelog
 
+h3. Version 4.0.2 - 2023/08/30
+
+* Fixed: "Exclude articles based on fields" setting, caused by regression in version 3.0.0. Articles can once again be excluded from the feed using field-value filters.
+
 h3. Version 4.0.1 - 2023/02/18
 
 * Fixed: issues with lastmod date generation caused by Textpattern 4.8.8 core issues. Date format string would be passed down to the wrong date function on certain host system, based on it's supported features. Mitigated the issue by using PHP's @date@ function directly instead of Textpattern's @safe_strftime@.

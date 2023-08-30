@@ -84,17 +84,26 @@ class Rah_Sitemap_Record_ArticleRecord extends Rah_Sitemap_Record_AbstractRecord
      */
     private function getWhereStatement(): string
     {
-        $articleFields = [];
+        $articleFields = $this->getArticleFields();
         $sql = ['Status >= 4'];
 
-        foreach (do_list(get_pref('rah_sitemap_exclude_fields')) as $field) {
-            if ($field) {
-                $f = explode(':', $field);
-                $n = strtolower(trim($f[0]));
+        foreach (do_list(get_pref('rah_sitemap_exclude_fields')) as $pair) {
+            if ($pair) {
+                $parts = explode(':', $pair, 2);
 
-                if (isset($articleFields[$n])) {
-                    $value = doSlash(trim(implode(':', array_slice($f, 1))));
-                    $sql[] = $articleFields[$n]." NOT LIKE '".$value."'";
+                if (count($parts) === 2) {
+                    $name = strtolower(trim($parts[0]));
+                    $column = $articleFields[$name] ?? null;
+
+                    if ($column) {
+                        $value = doSlash(trim($parts[1]));
+
+                        $sql[] = sprintf(
+                            "%s NOT LIKE '%s'",
+                            $column,
+                            $value
+                        );
+                    }
                 }
             }
         }
@@ -116,5 +125,29 @@ class Rah_Sitemap_Record_ArticleRecord extends Rah_Sitemap_Record_AbstractRecord
         }
 
         return implode(' and ', $sql);
+    }
+
+    /**
+     * Gets an array of article field names that can be used for filtering.
+     *
+     * Key is lowercase column name, value is database column name in its
+     * original casing.
+     *
+     * @return array<string, string>
+     */
+    private function getArticleFields(): array
+    {
+        $columns = (array) @getThings('describe '.safe_pfx('textpattern'));
+        $fields = [];
+
+        foreach ($columns as $name) {
+            $fields[strtolower($name)] = $name;
+        }
+
+        foreach (getCustomFields() as $id => $name) {
+            $fields[$name] = 'custom_'.intval($id);
+        }
+
+        return $fields;
     }
 }
