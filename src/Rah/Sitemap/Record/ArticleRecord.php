@@ -4,7 +4,7 @@
  * rah_sitemap - XML sitemap plugin for Textpattern CMS
  * https://github.com/gocom/rah_sitemap
  *
- * Copyright (C) 2022 Jukka Svahn
+ * Copyright (C) 2026 Jukka Svahn
  *
  * This file is part of rah_sitemap.
  *
@@ -53,28 +53,35 @@ class Rah_Sitemap_Record_ArticleRecord extends Rah_Sitemap_Record_AbstractRecord
     public function getUrls(int $page): array
     {
         $urls = [];
+        $chunk = 1;
 
-        $rs = safe_rows_start(
-            '*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod',
-            'textpattern',
-            sprintf(
-                '%s order by Posted asc limit %s, %s',
-                $this->getWhereStatement(),
-                $this->getOffset($page),
-                $this->getLimit()
-            )
-        );
+        while ($limit = $this->getChunkedLimit($chunk)) {
+            $rs = safe_rows_start(
+                'ID, Title, url_title, Section, Category1, Category2, Posted, unix_timestamp(Posted) as uPosted, Expires, unix_timestamp(LastMod) as uLastMod',
+                'textpattern',
+                sprintf(
+                    '%s order by Posted asc limit %s, %s',
+                    $this->getWhereStatement(),
+                    $this->getChunkedOffset($page, 1),
+                    $limit
+                )
+            );
 
-        if ($rs) {
+            if (!$rs || !numRows($rs)) {
+                break;
+            }
+
             while ($a = nextRow($rs)) {
-                $urls[] = new Rah_Sitemap_Url(
+                $urls[$a['ID']] = new Rah_Sitemap_Url(
                     permlinkurl($a),
-                    (int) max($a['uLastMod'], $a['posted'])
+                    (int) max($a['uLastMod'], $a['uPosted'])
                 );
             }
+
+            $chunk++;
         }
 
-        return $urls;
+        return array_values($urls);
     }
 
     /**

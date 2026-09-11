@@ -4,7 +4,7 @@
  * rah_sitemap - XML sitemap plugin for Textpattern CMS
  * https://github.com/gocom/rah_sitemap
  *
- * Copyright (C) 2022 Jukka Svahn
+ * Copyright (C) 2026 Jukka Svahn
  *
  * This file is part of rah_sitemap.
  *
@@ -53,29 +53,36 @@ class Rah_Sitemap_Record_SectionRecord extends Rah_Sitemap_Record_AbstractRecord
     public function getUrls(int $page): array
     {
         $urls = [];
+        $chunk = 1;
 
-        $rs = safe_rows_start(
-            'name',
-            'txp_section',
-            sprintf(
-                '%s order by name asc limit %s, %s',
-                $this->getWhereStatement(),
-                $this->getOffset($page),
-                $this->getLimit()
-            )
-        );
+        while ($limit = $this->getChunkedLimit($chunk)) {
+            $rs = safe_rows_start(
+                'name',
+                'txp_section',
+                sprintf(
+                    '%s order by name asc limit %s, %s',
+                    $this->getWhereStatement(),
+                    $this->getChunkedOffset($page, $chunk),
+                    $limit
+                )
+            );
 
-        if ($rs) {
+            if (!$rs || !numRows($rs)) {
+                break;
+            }
+
             while ($a = nextRow($rs)) {
-                $urls[] = new Rah_Sitemap_Url(
+                $urls[$a['name']] = new Rah_Sitemap_Url(
                     pagelinkurl([
                         's' => $a['name'],
                     ])
                 );
             }
+
+            $chunk++;
         }
 
-        return $urls;
+        return array_values($urls);
     }
 
     /**

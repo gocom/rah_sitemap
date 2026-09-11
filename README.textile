@@ -84,6 +84,14 @@ h3. Exclude sticky articles?
 
 If set to Yes, sticky articles are not visible in the sitemap.
 
+h3. Number of URLs per sitemap
+
+How many URLs a single rendered sitemap will contain. If all items, such as articles, do not fit into a single sitemap, they are split into multiple separate individual sitemaps, that are then included in the rendered sitemap index listing. Default limit is 50000, which is the Sitemaps.org spec's maximum allowed limit.
+
+h3. Number of records buffered from database at once
+
+How many rows are buffered from the database at once. Rows are buffered in chunks to limit memory usage, working around underlying system limitations. Textpattern CMS unfortunately does not fully support unbuffered queries, and as such we can not iterate rows by-row, but are required to buffered rows in chunks to mitigate greedy loading limitations. The lower the number, the less rows are buffered at once, lowering peak memory usage, but also slowing sitemap rendering due to increased number of executed queries. Default limit is 1000.
+
 h2. For developers
 
 Rah_sitemap offers small set of tools for developers. These tools allow other Textpattern plugins to extend rah_sitemap's functionality by adding new URLs to the sitemap. The plugin is packaged in a class structure that can be extended if needed, and introduces new Textpattern callback events.
@@ -110,6 +118,12 @@ If you are supplying a custom URL function for Textpattern, please note that the
 As rah_sitemap integrates well with Textpattern's core, it uses the same URL functions as Textpattern. If an URL given to the sitemap doesn't meet those specification, the sitemap will become invalid.
 
 h2. Changelog
+
+h3. Version 4.0.3 - upcoming
+
+* Fixed: reduced peak memory usage, especially when rendering sitemaps for sites' with thousands of articles containing a lot of textual content and fields. Thank you, "revdazza":https://github.com/revdazza.
+* Rows are now buffered in chunks from Textpattern's database. The chunk size is configurable in the plugin's preferences with **Number of records buffered from database at once** settings.
+* Only the bare minimum necessary columns are loaded from the database when rendering article sitemap; Only article fields expected by Textpattern's core URL builder are loaded, normalizing the fields to a consistent set and reducing the buffer's memory usage.
 
 h3. Version 4.0.2 - 2023/08/30
 

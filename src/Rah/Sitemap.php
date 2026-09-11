@@ -4,7 +4,7 @@
  * rah_sitemap - XML sitemap plugin for Textpattern CMS
  * https://github.com/gocom/rah_sitemap
  *
- * Copyright (C) 2022 Jukka Svahn
+ * Copyright (C) 2026 Jukka Svahn
  *
  * This file is part of rah_sitemap.
  *
@@ -68,6 +68,7 @@ final class Rah_Sitemap
             'rah_sitemap_include_link_categories' => ['yesnoradio', 1],
             'rah_sitemap_compress' => ['yesnoradio', 0],
             'rah_sitemap_limit' => ['text_input', 50000],
+            'rah_sitemap_chunk_size' => ['text_input', 1000],
         ];
 
         if (!in_array('rah_sitemap_include_in', getThings('describe '.safe_pfx('txp_section')))) {

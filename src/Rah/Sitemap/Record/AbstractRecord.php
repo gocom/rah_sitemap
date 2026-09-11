@@ -4,7 +4,7 @@
  * rah_sitemap - XML sitemap plugin for Textpattern CMS
  * https://github.com/gocom/rah_sitemap
  *
- * Copyright (C) 2022 Jukka Svahn
+ * Copyright (C) 2026 Jukka Svahn
  *
  * This file is part of rah_sitemap.
  *
@@ -27,6 +27,7 @@
 abstract class Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordInterface
 {
     private const DEFAULT_LIMIT = 50000;
+    private const DEFAULT_CHUNK_SIZE = 5000;
 
     /**
      * Gets limit.
@@ -36,6 +37,16 @@ abstract class Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordIn
     protected function getLimit(): int
     {
         return max(1, (int) get_pref('rah_sitemap_limit') ?: self::DEFAULT_LIMIT);
+    }
+
+    /**
+     * Gets chunk size.
+     *
+     * @return int
+     */
+    protected function getChunkSize(): int
+    {
+        return max(1, (int) get_pref('rah_sitemap_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
     }
 
     /**
@@ -62,5 +73,55 @@ abstract class Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordIn
     protected function countPages(int $itemCount): int
     {
         return (int) ceil($itemCount / $this->getLimit());
+    }
+
+    /**
+     * Gets chunked limit.
+     *
+     * Allows buffering rows from the database in smaller chunks to
+     * limit peak memory usage.
+     *
+     * Will return NULL, if we have reached the last chunk and there is
+     * nothing more to return.
+     *
+     * @param int $chunk
+     *
+     * @return int|null
+     */
+    protected function getChunkedLimit(int $chunk): ?int
+    {
+        $limit = $this->getLimit();
+        $chunkSize = min($limit, $this->getChunkSize());
+        $chunkOffset = max(0, ($chunkSize * $chunk) - $chunkSize);
+
+        if ($chunkOffset >= $limit) {
+            return null;
+        }
+
+        $left = $limit - $chunkOffset;
+
+        if ($left < $chunkSize) {
+            return $left;
+        }
+
+        return $chunkSize;
+    }
+
+    /**
+     * Gets chunked offset.
+     *
+     * Allows buffering rows from the database in smaller chunks to
+     * limit peak memory usage.
+     *
+     * @param int $page
+     * @param int $chunk
+     *
+     * @return int
+     */
+    protected function getChunkedOffset(int $page, int $chunk): int
+    {
+        $chunkSize = $this->getChunkSize();
+
+        return max(0, $this->getOffset($page) + ($chunk * $chunkSize) - $chunkSize);
     }
 }
