@@ -57,7 +57,8 @@ class Rah_Sitemap_Record_ArticleRecord extends Rah_Sitemap_Record_AbstractRecord
 
         while ($limit = $this->getChunkedLimit($chunk)) {
             $rs = safe_rows_start(
-                'ID, Title, url_title, Section, Category1, Category2, Posted, unix_timestamp(Posted) as uPosted, Expires, unix_timestamp(LastMod) as uLastMod',
+                'ID, Title, url_title, Section, Category1, Category2, Posted, '.
+                'unix_timestamp(Posted) as uPosted, Expires, unix_timestamp(LastMod) as uLastMod',
                 'textpattern',
                 sprintf(
                     '%s order by Posted asc limit %s, %s',
