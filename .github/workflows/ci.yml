@@ -11,23 +11,23 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Lint
-        run: make lint
+      - name: Test
+        run: make test
 
       - name: Build
         id: build
         uses: gocom/action-textpattern-package-plugin@master
 
       - name: Upload Compressed Plugin Installer Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.build.outputs.name }}_sha${{ github.sha }}_zip.txt
           path: ${{ github.workspace }}/${{ steps.build.outputs.compressed }}
 
       - name: Upload Uncompressed Plugin Installer Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.build.outputs.name }}_sha${{ github.sha }}.txt
           path: ${{ github.workspace }}/${{ steps.build.outputs.uncompressed }}

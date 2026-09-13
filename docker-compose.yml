@@ -1,15 +1,20 @@
 services:
-    php:
-        image: composer:2.8
-        volumes:
-            - .:/app
-            - ${COMPOSER_HOME:-$HOME/.composer}:/composer
-        networks:
-            - app
-        environment:
-            - COMPOSER_ROOT_VERSION=dev-master
-            - COMPOSER_HOME=/composer
+  php:
+    build: ./dev/docker/image/php
+    volumes:
+      - .:/app
+      - ${COMPOSER_HOME:-$HOME/.composer}:/composer
+    networks:
+      - app
+    environment:
+      - XDEBUG_CONFIG
+      - XDEBUG_MODE
+      - XDEBUG_TRIGGER
+      - PHP_IDE_CONFIG
+      - COMPOSER_ALLOW_SUPERUSER=1
+      - COMPOSER_ROOT_VERSION=dev-master
+      - COMPOSER_HOME=/composer
 
 networks:
-    app:
-        driver: bridge
+  app:
+    driver: bridge

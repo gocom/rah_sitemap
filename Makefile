@@ -1,4 +1,4 @@
-.PHONY: all clean compile help lint lint-fix shell test
+.PHONY: all clean compile help lint lint-fix shell test test-static test-unit
 
 HOST_UID ?= `id -u`
 HOST_GID ?= `id -g`
@@ -24,7 +24,14 @@ compile: vendor
 shell: vendor
 	$(PHP) bash
 
-test: lint
+test: vendor
+	$(PHP) composer test
+
+test-static: vendor
+	$(PHP) composer test:static
+
+test-unit: vendor
+	$(PHP) composer test:unit
 
 help:
 	@echo "Manage project"

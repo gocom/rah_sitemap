@@ -1,0 +1,8 @@
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Constant [a-zA-Z0-9\\_]+ not found#'
+        - '#Empty array passed to foreach#'
+        - '#Function [a-zA-Z0-9\\_]+ not found#'
+        - '#Method [a-zA-Z0-9\\_\(\):]+ has no return type specified#'
+        - '#Method [a-zA-Z0-9\\_\(\):]+ has parameter [a-zA-Z0-9\\_$]+ with no value type specified in iterable type array.#'

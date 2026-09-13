@@ -46,7 +46,9 @@ abstract class Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordIn
      */
     protected function getChunkSize(): int
     {
-        return max(1, (int) get_pref('rah_sitemap_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
+        $chunkSize = max(1, (int) get_pref('rah_sitemap_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
+
+        return min($this->getLimit(), $chunkSize);
     }
 
     /**
@@ -91,7 +93,7 @@ abstract class Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordIn
     protected function getChunkedLimit(int $chunk): ?int
     {
         $limit = $this->getLimit();
-        $chunkSize = min($limit, $this->getChunkSize());
+        $chunkSize = $this->getChunkSize();
         $chunkOffset = max(0, ($chunkSize * $chunk) - $chunkSize);
 
         if ($chunkOffset >= $limit) {

@@ -47,6 +47,8 @@ class Rah_Sitemap_Record_SiteRecord implements Rah_Sitemap_RecordInterface
      */
     public function getUrls(int $page): array
     {
+        $urlset = [];
+
         $urls = [
             new Rah_Sitemap_Url(
                 hu
