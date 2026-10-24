@@ -27,7 +27,7 @@
 abstract class Rah_Sitemap_Record_AbstractRecord implements Rah_Sitemap_RecordInterface
 {
     private const DEFAULT_LIMIT = 50000;
-    private const DEFAULT_CHUNK_SIZE = 5000;
+    private const DEFAULT_CHUNK_SIZE = 1000;
 
     /**
      * Gets limit.
